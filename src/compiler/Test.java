@@ -11,6 +11,7 @@ public class Test {
     public static void main(String[] args) throws Exception {
 
 		// ciao mondo
+		// ciao fede, stai tranquillo che funziona
     	String fileName = "res/prova.fool";
 
     	CharStream chars = CharStreams.fromFileName(fileName);
