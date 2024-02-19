@@ -1,129 +1,126 @@
-package src.svm;
-
-import gen.svm.SVMParser;
-
+package svm;
 public class ExecuteVM {
-
+    
     public static final int CODESIZE = 10000;
     public static final int MEMSIZE = 10000;
-
-    private final int[] code;
-    private final int[] memory = new int[MEMSIZE];
-
+    
+    private int[] code;
+    private int[] memory = new int[MEMSIZE];
+    
     private int ip = 0;
     private int sp = MEMSIZE;
-
-    private int hp = 0;
-    private int fp = MEMSIZE;
-    private int ra;
+    
+    private int hp = 0;       
+    private int fp = MEMSIZE; 
+    private int ra;           
     private int tm;
-
+    
     public ExecuteVM(int[] code) {
-        this.code = code;
+      this.code = code;
     }
-
+    
     public void cpu() {
-        while (true) {
-            int bytecode = this.code[this.ip++]; // fetch
-            int v1, v2;
-            int address;
-            switch (bytecode) {
-                case SVMParser.PUSH:
-                    this.push(this.code[this.ip++]);
-                    break;
-                case SVMParser.POP:
-                    this.pop();
-                    break;
-                case SVMParser.ADD:
-                    v1 = this.pop();
-                    v2 = this.pop();
-                    this.push(v2 + v1);
-                    break;
-                case SVMParser.MULT:
-                    v1 = this.pop();
-                    v2 = this.pop();
-                    this.push(v2 * v1);
-                    break;
-                case SVMParser.DIV:
-                    v1 = this.pop();
-                    v2 = this.pop();
-                    this.push(v2 / v1);
-                    break;
-                case SVMParser.SUB:
-                    v1 = this.pop();
-                    v2 = this.pop();
-                    this.push(v2 - v1);
-                    break;
-                case SVMParser.STOREW: //
-                    address = this.pop();
-                    this.memory[address] = this.pop();
-                    break;
-                case SVMParser.LOADW: //
-                    this.push(this.memory[this.pop()]);
-                    break;
-                case SVMParser.BRANCH:
-                    address = this.code[this.ip];
-                    this.ip = address;
-                    break;
-                case SVMParser.BRANCHEQ:
-                    address = this.code[this.ip++];
-                    v1 = this.pop();
-                    v2 = this.pop();
-                    if (v2 == v1) this.ip = address;
-                    break;
-                case SVMParser.BRANCHLESSEQ:
-                    address = this.code[this.ip++];
-                    v1 = this.pop();
-                    v2 = this.pop();
-                    if (v2 <= v1) this.ip = address;
-                    break;
-                case SVMParser.JS: //
-                    address = this.pop();
-                    this.ra = this.ip;
-                    this.ip = address;
-                    break;
-                case SVMParser.STORERA: //
-                    this.ra = this.pop();
-                    break;
-                case SVMParser.LOADRA: //
-                    this.push(this.ra);
-                    break;
-                case SVMParser.STORETM:
-                    this.tm = this.pop();
-                    break;
-                case SVMParser.LOADTM:
-                    this.push(this.tm);
-                    break;
-                case SVMParser.LOADFP: //
-                    this.push(this.fp);
-                    break;
-                case SVMParser.STOREFP: //
-                    this.fp = this.pop();
-                    break;
-                case SVMParser.COPYFP: //
-                    this.fp = this.sp;
-                    break;
-                case SVMParser.STOREHP: //
-                    this.hp = this.pop();
-                    break;
-                case SVMParser.LOADHP: //
-                    this.push(this.hp);
-                    break;
-                case SVMParser.PRINT:
-                    System.out.println((this.sp < MEMSIZE) ? this.memory[this.sp] : "Empty stack!");
-                    break;
-                case SVMParser.HALT:
-                    return;
-            }
+      while ( true ) {
+        int bytecode = code[ip++]; // fetch
+        int v1,v2;
+        int address;
+        switch ( bytecode ) {
+          case SVMParser.PUSH:
+            push( code[ip++] );
+            break;
+          case SVMParser.POP:
+            pop();
+            break;
+          case SVMParser.ADD :
+            v1=pop();
+            v2=pop();
+            push(v2 + v1);
+            break;
+          case SVMParser.MULT :
+            v1=pop();
+            v2=pop();
+            push(v2 * v1);
+            break;
+          case SVMParser.DIV :
+            v1=pop();
+            v2=pop();
+            push(v2 / v1);
+            break;
+          case SVMParser.SUB :
+            v1=pop();
+            v2=pop();
+            push(v2 - v1);
+            break;
+          case SVMParser.STOREW : //
+            address = pop();
+            memory[address] = pop();    
+            break;
+          case SVMParser.LOADW : //
+            push(memory[pop()]);
+            break;
+          case SVMParser.BRANCH : 
+            address = code[ip];
+            ip = address;
+            break;
+          case SVMParser.BRANCHEQ :
+            address = code[ip++];
+            v1=pop();
+            v2=pop();
+            if (v2 == v1) ip = address;
+            break;
+          case SVMParser.BRANCHLESSEQ :
+            address = code[ip++];
+            v1=pop();
+            v2=pop();
+            if (v2 <= v1) ip = address;
+            break;
+          case SVMParser.JS : //
+            address = pop();
+            ra = ip;
+            ip = address;
+            break;
+         case SVMParser.STORERA : //
+            ra=pop();
+            break;
+         case SVMParser.LOADRA : //
+            push(ra);
+            break;
+         case SVMParser.STORETM : 
+            tm=pop();
+            break;
+         case SVMParser.LOADTM : 
+            push(tm);
+            break;
+         case SVMParser.LOADFP : //
+            push(fp);
+            break;
+         case SVMParser.STOREFP : //
+            fp=pop();
+            break;
+         case SVMParser.COPYFP : //
+            fp=sp;
+            break;
+         case SVMParser.STOREHP : //
+            hp=pop();
+            break;
+         case SVMParser.LOADHP : //
+            push(hp);
+            break;
+         case SVMParser.PRINT :
+            System.out.println((sp<MEMSIZE)?memory[sp]:"Empty stack!");
+            break;
+         case SVMParser.HALT :
+            return;
         }
-    }
-
+      }
+    } 
+    
     private int pop() {
-        return this.memory[this.sp++];
+      return memory[sp++];
     }
-
+    
     private void push(int v) {
-        this.memory[--this.sp] = v;
+      memory[--sp] = v;
     }
-
+    
 }

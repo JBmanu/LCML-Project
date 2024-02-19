@@ -1,5 +1,5 @@
-// Generated from /Users/manuelbuizo/Desktop/uni/Corso LCML/Project-LCML/src/svm/SVM.g4 by ANTLR 4.13.1
-package gen.svm;
+// Generated from /Users/manuelbuizo/Desktop/uni/Corso LCML/LCML-Project/src/svm/SVM.g4 by ANTLR 4.13.1
+package svm;
 
 import java.util.*;
 
@@ -8,8 +8,6 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
-import src.svm.ExecuteVM;
-
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -99,7 +97,7 @@ public class SVMParser extends Parser {
 	public ATN getATN() { return _ATN; }
 
 	 
-	public int[] code = new int[ExecuteVM.CODESIZE];
+	public int[] code = new int[ExecuteVM.CODESIZE];    
 	private int i = 0;
 	private Map<String,Integer> labelDef = new HashMap<>();
 	private Map<Integer,String> labelRef = new HashMap<>();

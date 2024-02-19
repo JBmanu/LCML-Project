@@ -1,5 +1,5 @@
-// Generated from /Users/manuelbuizo/Desktop/uni/Corso LCML/Project-LCML/src/svm/SVM.g4 by ANTLR 4.13.1
-package gen.svm;
+// Generated from /Users/manuelbuizo/Desktop/uni/Corso LCML/LCML-Project/src/svm/SVM.g4 by ANTLR 4.13.1
+package svm;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;

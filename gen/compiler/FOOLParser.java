@@ -1,5 +1,5 @@
-// Generated from /Users/manuelbuizo/Desktop/uni/Corso LCML/Project-LCML/src/compiler/FOOL.g4 by ANTLR 4.13.1
-package gen.compiler;
+// Generated from /Users/manuelbuizo/Desktop/uni/Corso LCML/LCML-Project/src/compiler/FOOL.g4 by ANTLR 4.13.1
+package compiler;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
