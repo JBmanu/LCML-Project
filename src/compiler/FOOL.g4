@@ -23,7 +23,9 @@ exp     : exp TIMES exp #times
         | exp SPLIT  exp #split
         | exp PLUS  exp #plus
         | exp MINUS  exp #minus
-        | exp EQ  exp   #eq 
+        | exp EQ  exp   #eq
+        | exp LE exp #le
+        | exp GE exp #ge
         | LPAR exp RPAR #pars
     	| MINUS? NUM #integer
 	    | TRUE #true     
@@ -53,7 +55,9 @@ CRPAR	: '}' ;
 SEMIC 	: ';' ;
 COLON   : ':' ; 
 COMMA	: ',' ;
-EQ	    : '==' ;	
+EQ	    : '==' ;
+LE      : '<=' ;
+GE      : '>=' ;
 ASS	    : '=' ;
 TRUE	: 'true' ;
 FALSE	: 'false' ;

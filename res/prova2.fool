@@ -1,5 +1,5 @@
 let 
-  var x:int = n*1;
+  var x:int = (3-1)/2;
   var b:bool = true;
 in
-  print (x);
+  print (5<=5);

@@ -42,6 +42,10 @@ instruction :
                         labelRef.put(i++,$l.text);}
 	  | BRANCHLESSEQ l=LABEL {code[i++] = BRANCHLESSEQ;
                           labelRef.put(i++,$l.text);}
+      | BRANCHGREATEREQ l=LABEL {code[i++] = BRANCHGREATEREQ; labelRef.put(i++,$l.text);}
+      | NOT                     {code[i++] = NOT;}
+      | AND                     {code[i++] = AND;}
+      | OR                      {code[i++] = OR;}
 	  | JS              {code[i++] = JS;}		     //
 	  | LOADRA          {code[i++] = LOADRA;}    //
 	  | STORERA         {code[i++] = STORERA;}   //
@@ -70,7 +74,11 @@ STOREW	 : 'sw' ;
 LOADW	 : 'lw' ;	
 BRANCH	 : 'b' ;	
 BRANCHEQ : 'beq' ;	
-BRANCHLESSEQ:'bleq' ;	
+BRANCHLESSEQ:'bleq' ;
+BRANCHGREATEREQ : 'bgeq' ;
+NOT             : 'not' ;
+AND             : 'and' ;
+OR              : 'or' ;
 JS	 : 'js' ;	
 LOADRA	 : 'lra' ;	
 STORERA  : 'sra' ;	 
