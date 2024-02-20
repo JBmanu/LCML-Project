@@ -7,8 +7,8 @@ lfp
 push -2
 add
 lw
-push 5
-beq label2
+push 7
+bleq label2
 push 0
 b label3
 label2:

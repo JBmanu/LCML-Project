@@ -1,6 +1,8 @@
 package compiler.lib;
 
 public class FOOLlib {
+	private static int labCount = 0;
+	public static int typeErrors = 0;
 
 	public static String extractNodeName(String s) { // s is in the form compiler.AST$NameNode
     	return s.substring(s.lastIndexOf('$')+1,s.length()-4);
@@ -13,8 +15,6 @@ public class FOOLlib {
 	public static String lowerizeFirstChar(String s) {
     	return Character.toLowerCase(s.charAt(0))+s.substring(1,s.length());
     }
-    
-	public static int typeErrors = 0;
 
 	// crea un'unica stringa a partire da un insieme di stringhe concatenadole e 
 	// introducendo, all'interno, dei newline "\n" come separatore tra le stringhe
@@ -24,8 +24,6 @@ public class FOOLlib {
 			if (lines[i]!=null) code = (code==null?"":code+"\n")+lines[i]; 
 		return code;
 	}
-
-	private static int labCount = 0;
 
 	public static String freshLabel() {
 		return "label"+(labCount++);

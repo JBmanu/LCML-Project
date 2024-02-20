@@ -58,17 +58,17 @@ public class ExecuteVM {
           case SVMParser.LOADW : //
             push(memory[pop()]);
             break;
-          case SVMParser.BRANCH : 
+          case SVMParser.BRANCH : //b
             address = code[ip];
             ip = address;
             break;
-          case SVMParser.BRANCHEQ :
+          case SVMParser.BRANCHEQ : // ==
             address = code[ip++];
             v1=pop();
             v2=pop();
             if (v2 == v1) ip = address;
             break;
-          case SVMParser.BRANCHLESSEQ :
+          case SVMParser.BRANCHLESSEQ : // <=
             address = code[ip++];
             v1=pop();
             v2=pop();
