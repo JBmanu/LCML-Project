@@ -58,6 +58,7 @@ public class BaseASTVisitor<S,E extends Exception> {
 	public S visitNode(IfNode n) throws E {throw new UnimplException();}
 	public S visitNode(EqualNode n) throws E {throw new UnimplException();}
 	public S visitNode(EqualMinusNode n) throws E {throw new UnimplException();}
+	public S visitNode(EqualPlusNode n) throws E {throw new UnimplException();}
 	public S visitNode(TimesNode n) throws E {throw new UnimplException();}
 	public S visitNode(PlusNode n) throws E {throw new UnimplException();}
 	public S visitNode(CallNode n) throws E {throw new UnimplException();}

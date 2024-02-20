@@ -82,10 +82,18 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 
 	@Override
 	public Node visitMinuseq(MinuseqContext c) {
-		Node n = new EqualNode(visit(c.exp(0)), visit(c.exp(1)));
+		if (print) printVarAndProdName(c);
+		Node n = new EqualMinusNode(visit(c.exp(0)), visit(c.exp(1)));
 		n.setLine(c.MINUSEQ().getSymbol().getLine());
 		return n;
 	}
+
+	/*@Override
+	public Node visitPlusEq(MinuseqContext c) {
+		Node n = new EqualPlusNode(visit(c.exp(0)), visit(c.exp(1)));
+		n.setLine(c.MINUSEQ().getSymbol().getLine());
+		return n;
+	}*/
 
 	@Override
 	public Node visitVardec(VardecContext c) {
