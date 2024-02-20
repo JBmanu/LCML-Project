@@ -17,10 +17,10 @@ public class FOOLParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		PLUS=1, MINUS=2, TIMES=3, LPAR=4, RPAR=5, CLPAR=6, CRPAR=7, SEMIC=8, COLON=9, 
-		COMMA=10, EQ=11, ASS=12, TRUE=13, FALSE=14, IF=15, THEN=16, ELSE=17, PRINT=18, 
-		LET=19, IN=20, VAR=21, FUN=22, INT=23, BOOL=24, NUM=25, ID=26, WHITESP=27, 
-		COMMENT=28, ERR=29;
+		PLUS=1, MINUS=2, TIMES=3, SPLIT=4, LPAR=5, RPAR=6, CLPAR=7, CRPAR=8, SEMIC=9, 
+		COLON=10, COMMA=11, EQ=12, ASS=13, TRUE=14, FALSE=15, IF=16, THEN=17, 
+		ELSE=18, PRINT=19, LET=20, IN=21, VAR=22, FUN=23, INT=24, BOOL=25, NUM=26, 
+		ID=27, WHITESP=28, COMMENT=29, ERR=30;
 	public static final int
 		RULE_prog = 0, RULE_progbody = 1, RULE_dec = 2, RULE_exp = 3, RULE_type = 4;
 	private static String[] makeRuleNames() {
@@ -32,18 +32,18 @@ public class FOOLParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'+'", "'-'", "'*'", "'('", "')'", "'{'", "'}'", "';'", "':'", 
-			"','", "'=='", "'='", "'true'", "'false'", "'if'", "'then'", "'else'", 
+			null, "'+'", "'-'", "'*'", "'/'", "'('", "')'", "'{'", "'}'", "';'", 
+			"':'", "','", "'=='", "'='", "'true'", "'false'", "'if'", "'then'", "'else'", 
 			"'print'", "'let'", "'in'", "'var'", "'fun'", "'int'", "'bool'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "PLUS", "MINUS", "TIMES", "LPAR", "RPAR", "CLPAR", "CRPAR", "SEMIC", 
-			"COLON", "COMMA", "EQ", "ASS", "TRUE", "FALSE", "IF", "THEN", "ELSE", 
-			"PRINT", "LET", "IN", "VAR", "FUN", "INT", "BOOL", "NUM", "ID", "WHITESP", 
-			"COMMENT", "ERR"
+			null, "PLUS", "MINUS", "TIMES", "SPLIT", "LPAR", "RPAR", "CLPAR", "CRPAR", 
+			"SEMIC", "COLON", "COMMA", "EQ", "ASS", "TRUE", "FALSE", "IF", "THEN", 
+			"ELSE", "PRINT", "LET", "IN", "VAR", "FUN", "INT", "BOOL", "NUM", "ID", 
+			"WHITESP", "COMMENT", "ERR"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -505,6 +505,137 @@ public class FOOLParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
+	public static class MinusContext extends ExpContext {
+		public List<ExpContext> exp() {
+			return getRuleContexts(ExpContext.class);
+		}
+		public ExpContext exp(int i) {
+			return getRuleContext(ExpContext.class,i);
+		}
+		public TerminalNode MINUS() { return getToken(FOOLParser.MINUS, 0); }
+		public MinusContext(ExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterMinus(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitMinus(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitMinus(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ParsContext extends ExpContext {
+		public TerminalNode LPAR() { return getToken(FOOLParser.LPAR, 0); }
+		public ExpContext exp() {
+			return getRuleContext(ExpContext.class,0);
+		}
+		public TerminalNode RPAR() { return getToken(FOOLParser.RPAR, 0); }
+		public ParsContext(ExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterPars(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitPars(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitPars(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FalseContext extends ExpContext {
+		public TerminalNode FALSE() { return getToken(FOOLParser.FALSE, 0); }
+		public FalseContext(ExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterFalse(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitFalse(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitFalse(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class IntegerContext extends ExpContext {
+		public TerminalNode NUM() { return getToken(FOOLParser.NUM, 0); }
+		public TerminalNode MINUS() { return getToken(FOOLParser.MINUS, 0); }
+		public IntegerContext(ExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterInteger(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitInteger(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitInteger(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class EqContext extends ExpContext {
+		public List<ExpContext> exp() {
+			return getRuleContexts(ExpContext.class);
+		}
+		public ExpContext exp(int i) {
+			return getRuleContext(ExpContext.class,i);
+		}
+		public TerminalNode EQ() { return getToken(FOOLParser.EQ, 0); }
+		public EqContext(ExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterEq(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitEq(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitEq(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class PlusContext extends ExpContext {
+		public List<ExpContext> exp() {
+			return getRuleContexts(ExpContext.class);
+		}
+		public ExpContext exp(int i) {
+			return getRuleContext(ExpContext.class,i);
+		}
+		public TerminalNode PLUS() { return getToken(FOOLParser.PLUS, 0); }
+		public PlusContext(ExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterPlus(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitPlus(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitPlus(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class CallContext extends ExpContext {
 		public TerminalNode ID() { return getToken(FOOLParser.ID, 0); }
 		public TerminalNode LPAR() { return getToken(FOOLParser.LPAR, 0); }
@@ -531,30 +662,6 @@ public class FOOLParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitCall(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class MinusContext extends ExpContext {
-		public List<ExpContext> exp() {
-			return getRuleContexts(ExpContext.class);
-		}
-		public ExpContext exp(int i) {
-			return getRuleContext(ExpContext.class,i);
-		}
-		public TerminalNode MINUS() { return getToken(FOOLParser.MINUS, 0); }
-		public MinusContext(ExpContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterMinus(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitMinus(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitMinus(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -606,24 +713,26 @@ public class FOOLParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
-	public static class ParsContext extends ExpContext {
-		public TerminalNode LPAR() { return getToken(FOOLParser.LPAR, 0); }
-		public ExpContext exp() {
-			return getRuleContext(ExpContext.class,0);
+	public static class SplitContext extends ExpContext {
+		public List<ExpContext> exp() {
+			return getRuleContexts(ExpContext.class);
 		}
-		public TerminalNode RPAR() { return getToken(FOOLParser.RPAR, 0); }
-		public ParsContext(ExpContext ctx) { copyFrom(ctx); }
+		public ExpContext exp(int i) {
+			return getRuleContext(ExpContext.class,i);
+		}
+		public TerminalNode SPLIT() { return getToken(FOOLParser.SPLIT, 0); }
+		public SplitContext(ExpContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterPars(this);
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterSplit(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitPars(this);
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitSplit(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitPars(this);
+			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitSplit(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -646,43 +755,6 @@ public class FOOLParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
-	public static class FalseContext extends ExpContext {
-		public TerminalNode FALSE() { return getToken(FOOLParser.FALSE, 0); }
-		public FalseContext(ExpContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterFalse(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitFalse(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitFalse(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class IntegerContext extends ExpContext {
-		public TerminalNode NUM() { return getToken(FOOLParser.NUM, 0); }
-		public TerminalNode MINUS() { return getToken(FOOLParser.MINUS, 0); }
-		public IntegerContext(ExpContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterInteger(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitInteger(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitInteger(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
 	public static class IdContext extends ExpContext {
 		public TerminalNode ID() { return getToken(FOOLParser.ID, 0); }
 		public IdContext(ExpContext ctx) { copyFrom(ctx); }
@@ -697,30 +769,6 @@ public class FOOLParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitId(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class EqContext extends ExpContext {
-		public List<ExpContext> exp() {
-			return getRuleContexts(ExpContext.class);
-		}
-		public ExpContext exp(int i) {
-			return getRuleContext(ExpContext.class,i);
-		}
-		public TerminalNode EQ() { return getToken(FOOLParser.EQ, 0); }
-		public EqContext(ExpContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterEq(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitEq(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitEq(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -755,30 +803,6 @@ public class FOOLParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitIf(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class PlusContext extends ExpContext {
-		public List<ExpContext> exp() {
-			return getRuleContexts(ExpContext.class);
-		}
-		public ExpContext exp(int i) {
-			return getRuleContext(ExpContext.class,i);
-		}
-		public TerminalNode PLUS() { return getToken(FOOLParser.PLUS, 0); }
-		public PlusContext(ExpContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterPlus(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitPlus(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitPlus(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -916,7 +940,7 @@ public class FOOLParser extends Parser {
 				setState(109);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 100982804L) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 201965604L) != 0)) {
 					{
 					setState(101);
 					exp(0);
@@ -945,7 +969,7 @@ public class FOOLParser extends Parser {
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(128);
+			setState(131);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -953,7 +977,7 @@ public class FOOLParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(126);
+					setState(129);
 					_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
 					case 1:
@@ -961,53 +985,65 @@ public class FOOLParser extends Parser {
 						_localctx = new TimesContext(new ExpContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_exp);
 						setState(114);
-						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
+						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
 						setState(115);
 						match(TIMES);
 						setState(116);
-						exp(13);
+						exp(14);
 						}
 						break;
 					case 2:
 						{
-						_localctx = new PlusContext(new ExpContext(_parentctx, _parentState));
+						_localctx = new SplitContext(new ExpContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_exp);
 						setState(117);
-						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
+						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
 						setState(118);
-						match(PLUS);
+						match(SPLIT);
 						setState(119);
-						exp(12);
+						exp(13);
 						}
 						break;
 					case 3:
 						{
-						_localctx = new MinusContext(new ExpContext(_parentctx, _parentState));
+						_localctx = new PlusContext(new ExpContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_exp);
 						setState(120);
-						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
+						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
 						setState(121);
-						match(MINUS);
+						match(PLUS);
 						setState(122);
-						exp(11);
+						exp(12);
 						}
 						break;
 					case 4:
 						{
-						_localctx = new EqContext(new ExpContext(_parentctx, _parentState));
+						_localctx = new MinusContext(new ExpContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_exp);
 						setState(123);
-						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
+						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
 						setState(124);
-						match(EQ);
+						match(MINUS);
 						setState(125);
+						exp(11);
+						}
+						break;
+					case 5:
+						{
+						_localctx = new EqContext(new ExpContext(_parentctx, _parentState));
+						pushNewRecursionContext(_localctx, _startState, RULE_exp);
+						setState(126);
+						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
+						setState(127);
+						match(EQ);
+						setState(128);
 						exp(10);
 						}
 						break;
 					}
 					} 
 				}
-				setState(130);
+				setState(133);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
 			}
@@ -1077,14 +1113,14 @@ public class FOOLParser extends Parser {
 		TypeContext _localctx = new TypeContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_type);
 		try {
-			setState(133);
+			setState(136);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INT:
 				_localctx = new IntTypeContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(131);
+				setState(134);
 				match(INT);
 				}
 				break;
@@ -1092,7 +1128,7 @@ public class FOOLParser extends Parser {
 				_localctx = new BoolTypeContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(132);
+				setState(135);
 				match(BOOL);
 				}
 				break;
@@ -1121,19 +1157,21 @@ public class FOOLParser extends Parser {
 	private boolean exp_sempred(ExpContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0:
-			return precpred(_ctx, 12);
+			return precpred(_ctx, 13);
 		case 1:
-			return precpred(_ctx, 11);
+			return precpred(_ctx, 12);
 		case 2:
-			return precpred(_ctx, 10);
+			return precpred(_ctx, 11);
 		case 3:
+			return precpred(_ctx, 10);
+		case 4:
 			return precpred(_ctx, 9);
 		}
 		return true;
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u001d\u0088\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001"+
+		"\u0004\u0001\u001e\u008b\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001"+
 		"\u0002\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004"+
 		"\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0001\u0001\u0001\u0004\u0001"+
 		"\u0010\b\u0001\u000b\u0001\f\u0001\u0011\u0001\u0001\u0001\u0001\u0001"+
@@ -1153,69 +1191,72 @@ public class FOOLParser extends Parser {
 		"\u0003\u0001\u0003\u0001\u0003\u0005\u0003i\b\u0003\n\u0003\f\u0003l\t"+
 		"\u0003\u0003\u0003n\b\u0003\u0001\u0003\u0003\u0003q\b\u0003\u0001\u0003"+
 		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
-		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0005\u0003"+
-		"\u007f\b\u0003\n\u0003\f\u0003\u0082\t\u0003\u0001\u0004\u0001\u0004\u0003"+
-		"\u0004\u0086\b\u0004\u0001\u0004\u0000\u0001\u0006\u0005\u0000\u0002\u0004"+
-		"\u0006\b\u0000\u0000\u0098\u0000\n\u0001\u0000\u0000\u0000\u0002\u001a"+
-		"\u0001\u0000\u0000\u0000\u0004E\u0001\u0000\u0000\u0000\u0006p\u0001\u0000"+
-		"\u0000\u0000\b\u0085\u0001\u0000\u0000\u0000\n\u000b\u0003\u0002\u0001"+
-		"\u0000\u000b\f\u0005\u0000\u0000\u0001\f\u0001\u0001\u0000\u0000\u0000"+
-		"\r\u000f\u0005\u0013\u0000\u0000\u000e\u0010\u0003\u0004\u0002\u0000\u000f"+
-		"\u000e\u0001\u0000\u0000\u0000\u0010\u0011\u0001\u0000\u0000\u0000\u0011"+
-		"\u000f\u0001\u0000\u0000\u0000\u0011\u0012\u0001\u0000\u0000\u0000\u0012"+
-		"\u0013\u0001\u0000\u0000\u0000\u0013\u0014\u0005\u0014\u0000\u0000\u0014"+
-		"\u0015\u0003\u0006\u0003\u0000\u0015\u0016\u0005\b\u0000\u0000\u0016\u001b"+
-		"\u0001\u0000\u0000\u0000\u0017\u0018\u0003\u0006\u0003\u0000\u0018\u0019"+
-		"\u0005\b\u0000\u0000\u0019\u001b\u0001\u0000\u0000\u0000\u001a\r\u0001"+
-		"\u0000\u0000\u0000\u001a\u0017\u0001\u0000\u0000\u0000\u001b\u0003\u0001"+
-		"\u0000\u0000\u0000\u001c\u001d\u0005\u0015\u0000\u0000\u001d\u001e\u0005"+
-		"\u001a\u0000\u0000\u001e\u001f\u0005\t\u0000\u0000\u001f \u0003\b\u0004"+
-		"\u0000 !\u0005\f\u0000\u0000!\"\u0003\u0006\u0003\u0000\"#\u0005\b\u0000"+
-		"\u0000#F\u0001\u0000\u0000\u0000$%\u0005\u0016\u0000\u0000%&\u0005\u001a"+
-		"\u0000\u0000&\'\u0005\t\u0000\u0000\'(\u0003\b\u0004\u0000(5\u0005\u0004"+
-		"\u0000\u0000)*\u0005\u001a\u0000\u0000*+\u0005\t\u0000\u0000+2\u0003\b"+
-		"\u0004\u0000,-\u0005\n\u0000\u0000-.\u0005\u001a\u0000\u0000./\u0005\t"+
-		"\u0000\u0000/1\u0003\b\u0004\u00000,\u0001\u0000\u0000\u000014\u0001\u0000"+
-		"\u0000\u000020\u0001\u0000\u0000\u000023\u0001\u0000\u0000\u000036\u0001"+
-		"\u0000\u0000\u000042\u0001\u0000\u0000\u00005)\u0001\u0000\u0000\u0000"+
-		"56\u0001\u0000\u0000\u000067\u0001\u0000\u0000\u00007@\u0005\u0005\u0000"+
-		"\u00008:\u0005\u0013\u0000\u00009;\u0003\u0004\u0002\u0000:9\u0001\u0000"+
-		"\u0000\u0000;<\u0001\u0000\u0000\u0000<:\u0001\u0000\u0000\u0000<=\u0001"+
-		"\u0000\u0000\u0000=>\u0001\u0000\u0000\u0000>?\u0005\u0014\u0000\u0000"+
-		"?A\u0001\u0000\u0000\u0000@8\u0001\u0000\u0000\u0000@A\u0001\u0000\u0000"+
-		"\u0000AB\u0001\u0000\u0000\u0000BC\u0003\u0006\u0003\u0000CD\u0005\b\u0000"+
-		"\u0000DF\u0001\u0000\u0000\u0000E\u001c\u0001\u0000\u0000\u0000E$\u0001"+
-		"\u0000\u0000\u0000F\u0005\u0001\u0000\u0000\u0000GH\u0006\u0003\uffff"+
-		"\uffff\u0000HI\u0005\u0004\u0000\u0000IJ\u0003\u0006\u0003\u0000JK\u0005"+
-		"\u0005\u0000\u0000Kq\u0001\u0000\u0000\u0000LN\u0005\u0002\u0000\u0000"+
-		"ML\u0001\u0000\u0000\u0000MN\u0001\u0000\u0000\u0000NO\u0001\u0000\u0000"+
-		"\u0000Oq\u0005\u0019\u0000\u0000Pq\u0005\r\u0000\u0000Qq\u0005\u000e\u0000"+
-		"\u0000RS\u0005\u000f\u0000\u0000ST\u0003\u0006\u0003\u0000TU\u0005\u0010"+
-		"\u0000\u0000UV\u0005\u0006\u0000\u0000VW\u0003\u0006\u0003\u0000WX\u0005"+
-		"\u0007\u0000\u0000XY\u0005\u0011\u0000\u0000YZ\u0005\u0006\u0000\u0000"+
-		"Z[\u0003\u0006\u0003\u0000[\\\u0005\u0007\u0000\u0000\\q\u0001\u0000\u0000"+
-		"\u0000]^\u0005\u0012\u0000\u0000^_\u0005\u0004\u0000\u0000_`\u0003\u0006"+
-		"\u0003\u0000`a\u0005\u0005\u0000\u0000aq\u0001\u0000\u0000\u0000bq\u0005"+
-		"\u001a\u0000\u0000cd\u0005\u001a\u0000\u0000dm\u0005\u0004\u0000\u0000"+
-		"ej\u0003\u0006\u0003\u0000fg\u0005\n\u0000\u0000gi\u0003\u0006\u0003\u0000"+
-		"hf\u0001\u0000\u0000\u0000il\u0001\u0000\u0000\u0000jh\u0001\u0000\u0000"+
-		"\u0000jk\u0001\u0000\u0000\u0000kn\u0001\u0000\u0000\u0000lj\u0001\u0000"+
-		"\u0000\u0000me\u0001\u0000\u0000\u0000mn\u0001\u0000\u0000\u0000no\u0001"+
-		"\u0000\u0000\u0000oq\u0005\u0005\u0000\u0000pG\u0001\u0000\u0000\u0000"+
-		"pM\u0001\u0000\u0000\u0000pP\u0001\u0000\u0000\u0000pQ\u0001\u0000\u0000"+
-		"\u0000pR\u0001\u0000\u0000\u0000p]\u0001\u0000\u0000\u0000pb\u0001\u0000"+
-		"\u0000\u0000pc\u0001\u0000\u0000\u0000q\u0080\u0001\u0000\u0000\u0000"+
-		"rs\n\f\u0000\u0000st\u0005\u0003\u0000\u0000t\u007f\u0003\u0006\u0003"+
-		"\ruv\n\u000b\u0000\u0000vw\u0005\u0001\u0000\u0000w\u007f\u0003\u0006"+
-		"\u0003\fxy\n\n\u0000\u0000yz\u0005\u0002\u0000\u0000z\u007f\u0003\u0006"+
-		"\u0003\u000b{|\n\t\u0000\u0000|}\u0005\u000b\u0000\u0000}\u007f\u0003"+
-		"\u0006\u0003\n~r\u0001\u0000\u0000\u0000~u\u0001\u0000\u0000\u0000~x\u0001"+
-		"\u0000\u0000\u0000~{\u0001\u0000\u0000\u0000\u007f\u0082\u0001\u0000\u0000"+
-		"\u0000\u0080~\u0001\u0000\u0000\u0000\u0080\u0081\u0001\u0000\u0000\u0000"+
-		"\u0081\u0007\u0001\u0000\u0000\u0000\u0082\u0080\u0001\u0000\u0000\u0000"+
-		"\u0083\u0086\u0005\u0017\u0000\u0000\u0084\u0086\u0005\u0018\u0000\u0000"+
-		"\u0085\u0083\u0001\u0000\u0000\u0000\u0085\u0084\u0001\u0000\u0000\u0000"+
-		"\u0086\t\u0001\u0000\u0000\u0000\u000e\u0011\u001a25<@EMjmp~\u0080\u0085";
+		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
+		"\u0001\u0003\u0001\u0003\u0005\u0003\u0082\b\u0003\n\u0003\f\u0003\u0085"+
+		"\t\u0003\u0001\u0004\u0001\u0004\u0003\u0004\u0089\b\u0004\u0001\u0004"+
+		"\u0000\u0001\u0006\u0005\u0000\u0002\u0004\u0006\b\u0000\u0000\u009c\u0000"+
+		"\n\u0001\u0000\u0000\u0000\u0002\u001a\u0001\u0000\u0000\u0000\u0004E"+
+		"\u0001\u0000\u0000\u0000\u0006p\u0001\u0000\u0000\u0000\b\u0088\u0001"+
+		"\u0000\u0000\u0000\n\u000b\u0003\u0002\u0001\u0000\u000b\f\u0005\u0000"+
+		"\u0000\u0001\f\u0001\u0001\u0000\u0000\u0000\r\u000f\u0005\u0014\u0000"+
+		"\u0000\u000e\u0010\u0003\u0004\u0002\u0000\u000f\u000e\u0001\u0000\u0000"+
+		"\u0000\u0010\u0011\u0001\u0000\u0000\u0000\u0011\u000f\u0001\u0000\u0000"+
+		"\u0000\u0011\u0012\u0001\u0000\u0000\u0000\u0012\u0013\u0001\u0000\u0000"+
+		"\u0000\u0013\u0014\u0005\u0015\u0000\u0000\u0014\u0015\u0003\u0006\u0003"+
+		"\u0000\u0015\u0016\u0005\t\u0000\u0000\u0016\u001b\u0001\u0000\u0000\u0000"+
+		"\u0017\u0018\u0003\u0006\u0003\u0000\u0018\u0019\u0005\t\u0000\u0000\u0019"+
+		"\u001b\u0001\u0000\u0000\u0000\u001a\r\u0001\u0000\u0000\u0000\u001a\u0017"+
+		"\u0001\u0000\u0000\u0000\u001b\u0003\u0001\u0000\u0000\u0000\u001c\u001d"+
+		"\u0005\u0016\u0000\u0000\u001d\u001e\u0005\u001b\u0000\u0000\u001e\u001f"+
+		"\u0005\n\u0000\u0000\u001f \u0003\b\u0004\u0000 !\u0005\r\u0000\u0000"+
+		"!\"\u0003\u0006\u0003\u0000\"#\u0005\t\u0000\u0000#F\u0001\u0000\u0000"+
+		"\u0000$%\u0005\u0017\u0000\u0000%&\u0005\u001b\u0000\u0000&\'\u0005\n"+
+		"\u0000\u0000\'(\u0003\b\u0004\u0000(5\u0005\u0005\u0000\u0000)*\u0005"+
+		"\u001b\u0000\u0000*+\u0005\n\u0000\u0000+2\u0003\b\u0004\u0000,-\u0005"+
+		"\u000b\u0000\u0000-.\u0005\u001b\u0000\u0000./\u0005\n\u0000\u0000/1\u0003"+
+		"\b\u0004\u00000,\u0001\u0000\u0000\u000014\u0001\u0000\u0000\u000020\u0001"+
+		"\u0000\u0000\u000023\u0001\u0000\u0000\u000036\u0001\u0000\u0000\u0000"+
+		"42\u0001\u0000\u0000\u00005)\u0001\u0000\u0000\u000056\u0001\u0000\u0000"+
+		"\u000067\u0001\u0000\u0000\u00007@\u0005\u0006\u0000\u00008:\u0005\u0014"+
+		"\u0000\u00009;\u0003\u0004\u0002\u0000:9\u0001\u0000\u0000\u0000;<\u0001"+
+		"\u0000\u0000\u0000<:\u0001\u0000\u0000\u0000<=\u0001\u0000\u0000\u0000"+
+		"=>\u0001\u0000\u0000\u0000>?\u0005\u0015\u0000\u0000?A\u0001\u0000\u0000"+
+		"\u0000@8\u0001\u0000\u0000\u0000@A\u0001\u0000\u0000\u0000AB\u0001\u0000"+
+		"\u0000\u0000BC\u0003\u0006\u0003\u0000CD\u0005\t\u0000\u0000DF\u0001\u0000"+
+		"\u0000\u0000E\u001c\u0001\u0000\u0000\u0000E$\u0001\u0000\u0000\u0000"+
+		"F\u0005\u0001\u0000\u0000\u0000GH\u0006\u0003\uffff\uffff\u0000HI\u0005"+
+		"\u0005\u0000\u0000IJ\u0003\u0006\u0003\u0000JK\u0005\u0006\u0000\u0000"+
+		"Kq\u0001\u0000\u0000\u0000LN\u0005\u0002\u0000\u0000ML\u0001\u0000\u0000"+
+		"\u0000MN\u0001\u0000\u0000\u0000NO\u0001\u0000\u0000\u0000Oq\u0005\u001a"+
+		"\u0000\u0000Pq\u0005\u000e\u0000\u0000Qq\u0005\u000f\u0000\u0000RS\u0005"+
+		"\u0010\u0000\u0000ST\u0003\u0006\u0003\u0000TU\u0005\u0011\u0000\u0000"+
+		"UV\u0005\u0007\u0000\u0000VW\u0003\u0006\u0003\u0000WX\u0005\b\u0000\u0000"+
+		"XY\u0005\u0012\u0000\u0000YZ\u0005\u0007\u0000\u0000Z[\u0003\u0006\u0003"+
+		"\u0000[\\\u0005\b\u0000\u0000\\q\u0001\u0000\u0000\u0000]^\u0005\u0013"+
+		"\u0000\u0000^_\u0005\u0005\u0000\u0000_`\u0003\u0006\u0003\u0000`a\u0005"+
+		"\u0006\u0000\u0000aq\u0001\u0000\u0000\u0000bq\u0005\u001b\u0000\u0000"+
+		"cd\u0005\u001b\u0000\u0000dm\u0005\u0005\u0000\u0000ej\u0003\u0006\u0003"+
+		"\u0000fg\u0005\u000b\u0000\u0000gi\u0003\u0006\u0003\u0000hf\u0001\u0000"+
+		"\u0000\u0000il\u0001\u0000\u0000\u0000jh\u0001\u0000\u0000\u0000jk\u0001"+
+		"\u0000\u0000\u0000kn\u0001\u0000\u0000\u0000lj\u0001\u0000\u0000\u0000"+
+		"me\u0001\u0000\u0000\u0000mn\u0001\u0000\u0000\u0000no\u0001\u0000\u0000"+
+		"\u0000oq\u0005\u0006\u0000\u0000pG\u0001\u0000\u0000\u0000pM\u0001\u0000"+
+		"\u0000\u0000pP\u0001\u0000\u0000\u0000pQ\u0001\u0000\u0000\u0000pR\u0001"+
+		"\u0000\u0000\u0000p]\u0001\u0000\u0000\u0000pb\u0001\u0000\u0000\u0000"+
+		"pc\u0001\u0000\u0000\u0000q\u0083\u0001\u0000\u0000\u0000rs\n\r\u0000"+
+		"\u0000st\u0005\u0003\u0000\u0000t\u0082\u0003\u0006\u0003\u000euv\n\f"+
+		"\u0000\u0000vw\u0005\u0004\u0000\u0000w\u0082\u0003\u0006\u0003\rxy\n"+
+		"\u000b\u0000\u0000yz\u0005\u0001\u0000\u0000z\u0082\u0003\u0006\u0003"+
+		"\f{|\n\n\u0000\u0000|}\u0005\u0002\u0000\u0000}\u0082\u0003\u0006\u0003"+
+		"\u000b~\u007f\n\t\u0000\u0000\u007f\u0080\u0005\f\u0000\u0000\u0080\u0082"+
+		"\u0003\u0006\u0003\n\u0081r\u0001\u0000\u0000\u0000\u0081u\u0001\u0000"+
+		"\u0000\u0000\u0081x\u0001\u0000\u0000\u0000\u0081{\u0001\u0000\u0000\u0000"+
+		"\u0081~\u0001\u0000\u0000\u0000\u0082\u0085\u0001\u0000\u0000\u0000\u0083"+
+		"\u0081\u0001\u0000\u0000\u0000\u0083\u0084\u0001\u0000\u0000\u0000\u0084"+
+		"\u0007\u0001\u0000\u0000\u0000\u0085\u0083\u0001\u0000\u0000\u0000\u0086"+
+		"\u0089\u0005\u0018\u0000\u0000\u0087\u0089\u0005\u0019\u0000\u0000\u0088"+
+		"\u0086\u0001\u0000\u0000\u0000\u0088\u0087\u0001\u0000\u0000\u0000\u0089"+
+		"\t\u0001\u0000\u0000\u0000\u000e\u0011\u001a25<@EMjmp\u0081\u0083\u0088";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

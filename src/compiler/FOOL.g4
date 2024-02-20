@@ -20,6 +20,7 @@ dec : VAR ID COLON type ASS exp SEMIC  #vardec
     ;
            
 exp     : exp TIMES exp #times
+        | exp SPLIT  exp #split
         | exp PLUS  exp #plus
         | exp MINUS  exp #minus
         | exp EQ  exp   #eq 
@@ -44,6 +45,7 @@ type    : INT #intType
 PLUS  	: '+' ;
 MINUS	: '-' ; 
 TIMES   : '*' ;
+SPLIT   : '/';
 LPAR	: '(' ;
 RPAR	: ')' ;
 CLPAR	: '{' ;
