@@ -1,7 +1,7 @@
 push 0
-push 1
 push 5
-add
+push 1
+sub
 push 1
 lfp
 push -3
@@ -21,8 +21,6 @@ lfp
 push -2
 add
 lw
-push 1
-add
 label1:
 print
 halt

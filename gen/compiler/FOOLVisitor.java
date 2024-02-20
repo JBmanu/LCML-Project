@@ -1,4 +1,4 @@
-// Generated from /Users/manuelbuizo/Desktop/uni/Corso LCML/LCML-Project/src/compiler/FOOL.g4 by ANTLR 4.13.1
+// Generated from C:/Users/lucac/OneDrive/Desktop/Computer/Università/magistrale/LCMC/progettoFinale/src/compiler/FOOL.g4 by ANTLR 4.13.1
 package compiler;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -51,6 +51,13 @@ public interface FOOLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCall(FOOLParser.CallContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code minus}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMinus(FOOLParser.MinusContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code print}
 	 * labeled alternative in {@link FOOLParser#exp}.
