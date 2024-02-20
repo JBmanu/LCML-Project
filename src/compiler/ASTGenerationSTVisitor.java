@@ -96,6 +96,14 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	}
 
 	@Override
+	public Node visitMinus(MinusContext c) {
+		if (print) printVarAndProdName(c);
+		Node n = new MinusNode(visit(c.exp(0)), visit(c.exp(1)));
+		n.setLine(c.MINUS().getSymbol().getLine());
+		return n;
+	}
+
+	@Override
 	public Node visitVardec(VardecContext c) {
 		if (print) printVarAndProdName(c);
 		Node n = null;
