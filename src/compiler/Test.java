@@ -15,10 +15,9 @@ public class Test {
 	static SymbolTableASTVisitor symtableVisitor;
 	static SVMLexer lexerASM;
 	static SVMParser parserASM;
-	static final String FILENAME = "res/prova.fool";
+	static final String FILENAME = "res/prova2.fool";
 
     public static void main(String[] args) throws Exception {
-
 		setFoolToCompile();
 		generateLexerAndCheckErrors();
 		generateAST();

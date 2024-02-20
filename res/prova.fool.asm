@@ -1,10 +1,8 @@
 push 0
 push 5
-push 2
-add
 push function1
 lfp
-push 1
+push 0
 lfp
 stm
 ltm

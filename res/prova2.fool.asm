@@ -4,9 +4,16 @@ push 5
 add
 push 1
 lfp
-push -3
+push -2
 add
 lw
+push 5
+beq label2
+push 0
+b label3
+label2:
+push 1
+label3:
 push 1
 beq label0
 lfp
