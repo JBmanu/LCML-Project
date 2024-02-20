@@ -21,7 +21,9 @@ dec : VAR ID COLON type ASS exp SEMIC  #vardec
            
 exp     : exp TIMES exp #times
         | exp PLUS  exp #plus
-        | exp EQ  exp   #eq 
+        | exp EQ  exp   #eq
+        | exp MINUSEQ exp #minuseq
+        | exp PLUSEQ exp #pluseq
         | LPAR exp RPAR #pars
     	| MINUS? NUM #integer
 	    | TRUE #true     
@@ -50,7 +52,9 @@ CRPAR	: '}' ;
 SEMIC 	: ';' ;
 COLON   : ':' ; 
 COMMA	: ',' ;
-EQ	    : '==' ;	
+EQ	    : '==' ;
+MINUSEQ : '<=' ;
+PLUSEQ  : '>=' ;
 ASS	    : '=' ;
 TRUE	: 'true' ;
 FALSE	: 'false' ;
