@@ -8,7 +8,7 @@ push -2
 add
 lw
 push 7
-bleq label2
+bmeq label2
 push 0
 b label3
 label2:

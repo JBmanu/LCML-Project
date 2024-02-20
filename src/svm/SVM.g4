@@ -42,6 +42,8 @@ instruction :
                         labelRef.put(i++,$l.text);}
 	  | BRANCHLESSEQ l=LABEL {code[i++] = BRANCHLESSEQ;
                           labelRef.put(i++,$l.text);}
+      | BRANCHMOREEQ l=LABEL {code[i++] = BRANCHMOREEQ;
+                            labelRef.put(i++,$l.text);}
 	  | JS              {code[i++] = JS;}		     //
 	  | LOADRA          {code[i++] = LOADRA;}    //
 	  | STORERA         {code[i++] = STORERA;}   //
@@ -70,7 +72,8 @@ STOREW	 : 'sw' ;
 LOADW	 : 'lw' ;	
 BRANCH	 : 'b' ;	
 BRANCHEQ : 'beq' ;	
-BRANCHLESSEQ:'bleq' ;	
+BRANCHLESSEQ:'bleq' ;
+BRANCHMOREEQ:'bmeq' ;
 JS	 : 'js' ;	
 LOADRA	 : 'lra' ;	
 STORERA  : 'sra' ;	 
