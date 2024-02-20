@@ -34,9 +34,9 @@ public class Test {
 
 	static void setFoolToCompile() throws IOException {
 		CharStream chars = CharStreams.fromFileName(FILENAME);
-		FOOLLexer lexer = new FOOLLexer(chars);
+		lexer = new FOOLLexer(chars);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		FOOLParser parser = new FOOLParser(tokens);
+		parser = new FOOLParser(tokens);
 	}
 
 	static void generateLexerAndCheckErrors(){
