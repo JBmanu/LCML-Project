@@ -74,26 +74,6 @@ public class ExecuteVM {
             v2=pop();
             if (v2 <= v1) ip = address;
             break;
-          case SVMParser.BRANCHGREATEREQ:
-              address = code[ip++];
-              v1 = pop();
-              v2 = pop();
-              if (v2 >= v1) ip = address;
-              break;
-          case SVMParser.NOT:
-              v1 = pop();
-              push(v1 == 0 ? 1 : 0);
-              break;
-          case SVMParser.AND:
-              v1 = pop();
-              v2 = pop();
-              push((v1 != 0 && v2 != 0) ? 1 : 0);
-              break;
-          case SVMParser.OR:
-              v1 = pop();
-              v2 = pop();
-              push((v1 != 0 || v2 != 0) ? 1 : 0);
-              break;
           case SVMParser.JS : //
             address = pop();
             ra = ip;
