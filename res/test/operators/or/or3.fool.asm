@@ -1,15 +1,15 @@
 push 0
 push 1
 push 1
-beq label14
+beq label18
 push 0
 push 1
-beq label14
+beq label18
 push 0
-b label15
-label14:
+b label19
+label18:
 push 1
-label15:
+label19:
 lfp
 push -2
 add
