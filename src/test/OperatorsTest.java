@@ -26,7 +26,6 @@ public class OperatorsTest {
 
     // FOOL
     private FOOLLexer lexer;
-    private CommonTokenStream tokens;
     private FOOLParser parser;
     private ParseTree st;
     private final ASTGenerationSTVisitor visitor = new ASTGenerationSTVisitor();
@@ -35,7 +34,6 @@ public class OperatorsTest {
 
     // ASM
     private SVMLexer lexerASM;
-    private CommonTokenStream tokensASM;
     private SVMParser parserASM;
 
 
@@ -55,7 +53,7 @@ public class OperatorsTest {
                 parser.getNumberOfSyntaxErrors() + " syntax errors.\n");
     }
 
-    private Node generateASTAndGetRoot(FOOLParser parser, FOOLLexer lexer) {
+    private Node generateASTAndGetRoot() {
         System.out.println("Generating AST.");
         Node ast = this.visitor.visit(this.st);
         System.out.println();
@@ -108,8 +106,8 @@ public class OperatorsTest {
     private void assemblingGeneratedCode(String fileName) {
         System.out.println("Assembling generated code.");
         this.lexerASM = new SVMLexer(this.getCharStreams(fileName + ".asm"));
-        this.tokensASM = new CommonTokenStream(this.lexerASM);
-        this.parserASM = new SVMParser(this.tokensASM);
+        CommonTokenStream tokensASM = new CommonTokenStream(this.lexerASM);
+        this.parserASM = new SVMParser(tokensASM);
 
         this.parserASM.assembly();
     }
@@ -127,12 +125,12 @@ public class OperatorsTest {
 
     private void buildASTAndSVMAndCheckErrors(String fileName) {
         this.lexer = new FOOLLexer(this.getCharStreams(fileName));
-        this.tokens = new CommonTokenStream(this.lexer);
-        this.parser = new FOOLParser(this.tokens);
+        CommonTokenStream tokens = new CommonTokenStream(this.lexer);
+        this.parser = new FOOLParser(tokens);
 
         this.generateST(this.parser, this.lexer);
 
-        Node ast = this.generateASTAndGetRoot(this.parser, this.lexer);
+        Node ast = this.generateASTAndGetRoot();
         this.enrichASTSymbolTable(ast);
         this.checkingTypes(ast);
 
@@ -145,8 +143,8 @@ public class OperatorsTest {
     }
 
     @Test
-    public void testOperators() {
-        String fileName = ROOT_OPERATORS_TEST_FILES + "simple.fool";
+    public void testMinusOperator() {
+        String fileName = ROOT_OPERATORS_TEST_FILES + "minus.fool";
         this.buildASTAndSVMAndCheckErrors(fileName);
         this.runningSVM();
     }
