@@ -92,6 +92,36 @@ public class OperatorsTest {
 
     // testing greaterEquals 4 >= 5
     @Test
+    public void testGreaterEqualsOperator2() {
+        String fileName = ROOT_GE_TEST_FILES + "greaterEquals.fool";
+
+        ToolsForTest tools = new ToolsForTest();
+        tools.createFOOLFile(fileName, "let var x:bool = 4 >= 5; in print(x);");
+        tools.buildASTAndSVMAndCheckErrors(fileName, false);
+        tools.runningSVM();
+    }
+
+    // testing greaterEquals 4 >= 4
+    @Test
+    public void testGreaterEqualsOperator3() {
+        String fileName = ROOT_GE_TEST_FILES + "greaterEquals2.fool";
+
+        ToolsForTest tools = new ToolsForTest();
+        tools.createFOOLFile(fileName, "let var x:bool = 4 >= 4; in print(x);");
+        tools.buildASTAndSVMAndCheckErrors(fileName, false);
+        tools.runningSVM();
+    }
+
+    // testing greaterEquals 5 >= 4
+    @Test
+    public void testGreaterEqualsOperator4() {
+        String fileName = ROOT_GE_TEST_FILES + "greaterEquals3.fool";
+
+        ToolsForTest tools = new ToolsForTest();
+        tools.createFOOLFile(fileName, "let var x:bool = 5 >= 4; in print(x);");
+        tools.buildASTAndSVMAndCheckErrors(fileName, false);
+        tools.runningSVM();
+    }
 
 
 
