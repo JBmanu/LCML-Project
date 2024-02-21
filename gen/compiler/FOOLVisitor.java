@@ -52,20 +52,6 @@ public interface FOOLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMinus(FOOLParser.MinusContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code pluseq}
-	 * labeled alternative in {@link FOOLParser#exp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPluseq(FOOLParser.PluseqContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code minuseq}
-	 * labeled alternative in {@link FOOLParser#exp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMinuseq(FOOLParser.MinuseqContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code pars}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree
@@ -129,12 +115,26 @@ public interface FOOLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTimes(FOOLParser.TimesContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code minoreq}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMinoreq(FOOLParser.MinoreqContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code true}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitTrue(FOOLParser.TrueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code greatereq}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGreatereq(FOOLParser.GreatereqContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code id}
 	 * labeled alternative in {@link FOOLParser#exp}.

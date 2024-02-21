@@ -18,9 +18,9 @@ public class FOOLParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		PLUS=1, MINUS=2, TIMES=3, DIVISION=4, LPAR=5, RPAR=6, CLPAR=7, CRPAR=8, 
-		SEMIC=9, COLON=10, COMMA=11, EQ=12, MINUSEQ=13, PLUSEQ=14, ASS=15, TRUE=16, 
-		FALSE=17, IF=18, THEN=19, ELSE=20, PRINT=21, LET=22, IN=23, VAR=24, FUN=25, 
-		INT=26, BOOL=27, NUM=28, ID=29, WHITESP=30, COMMENT=31, ERR=32;
+		SEMIC=9, COLON=10, COMMA=11, EQ=12, MINOREQ=13, GREATEREQ=14, ASS=15, 
+		TRUE=16, FALSE=17, IF=18, THEN=19, ELSE=20, PRINT=21, LET=22, IN=23, VAR=24, 
+		FUN=25, INT=26, BOOL=27, NUM=28, ID=29, WHITESP=30, COMMENT=31, ERR=32;
 	public static final int
 		RULE_prog = 0, RULE_progbody = 1, RULE_dec = 2, RULE_exp = 3, RULE_type = 4;
 	private static String[] makeRuleNames() {
@@ -42,7 +42,7 @@ public class FOOLParser extends Parser {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, "PLUS", "MINUS", "TIMES", "DIVISION", "LPAR", "RPAR", "CLPAR", 
-			"CRPAR", "SEMIC", "COLON", "COMMA", "EQ", "MINUSEQ", "PLUSEQ", "ASS", 
+			"CRPAR", "SEMIC", "COLON", "COMMA", "EQ", "MINOREQ", "GREATEREQ", "ASS", 
 			"TRUE", "FALSE", "IF", "THEN", "ELSE", "PRINT", "LET", "IN", "VAR", "FUN", 
 			"INT", "BOOL", "NUM", "ID", "WHITESP", "COMMENT", "ERR"
 		};
@@ -530,54 +530,6 @@ public class FOOLParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
-	public static class PluseqContext extends ExpContext {
-		public List<ExpContext> exp() {
-			return getRuleContexts(ExpContext.class);
-		}
-		public ExpContext exp(int i) {
-			return getRuleContext(ExpContext.class,i);
-		}
-		public TerminalNode PLUSEQ() { return getToken(FOOLParser.PLUSEQ, 0); }
-		public PluseqContext(ExpContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterPluseq(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitPluseq(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitPluseq(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class MinuseqContext extends ExpContext {
-		public List<ExpContext> exp() {
-			return getRuleContexts(ExpContext.class);
-		}
-		public ExpContext exp(int i) {
-			return getRuleContext(ExpContext.class,i);
-		}
-		public TerminalNode MINUSEQ() { return getToken(FOOLParser.MINUSEQ, 0); }
-		public MinuseqContext(ExpContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterMinuseq(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitMinuseq(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitMinuseq(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
 	public static class ParsContext extends ExpContext {
 		public TerminalNode LPAR() { return getToken(FOOLParser.LPAR, 0); }
 		public ExpContext exp() {
@@ -786,6 +738,30 @@ public class FOOLParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
+	public static class MinoreqContext extends ExpContext {
+		public List<ExpContext> exp() {
+			return getRuleContexts(ExpContext.class);
+		}
+		public ExpContext exp(int i) {
+			return getRuleContext(ExpContext.class,i);
+		}
+		public TerminalNode MINOREQ() { return getToken(FOOLParser.MINOREQ, 0); }
+		public MinoreqContext(ExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterMinoreq(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitMinoreq(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitMinoreq(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class TrueContext extends ExpContext {
 		public TerminalNode TRUE() { return getToken(FOOLParser.TRUE, 0); }
 		public TrueContext(ExpContext ctx) { copyFrom(ctx); }
@@ -800,6 +776,30 @@ public class FOOLParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitTrue(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class GreatereqContext extends ExpContext {
+		public List<ExpContext> exp() {
+			return getRuleContexts(ExpContext.class);
+		}
+		public ExpContext exp(int i) {
+			return getRuleContext(ExpContext.class,i);
+		}
+		public TerminalNode GREATEREQ() { return getToken(FOOLParser.GREATEREQ, 0); }
+		public GreatereqContext(ExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterGreatereq(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitGreatereq(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitGreatereq(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1091,24 +1091,24 @@ public class FOOLParser extends Parser {
 						break;
 					case 6:
 						{
-						_localctx = new MinuseqContext(new ExpContext(_parentctx, _parentState));
+						_localctx = new MinoreqContext(new ExpContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_exp);
 						setState(129);
 						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
 						setState(130);
-						match(MINUSEQ);
+						match(MINOREQ);
 						setState(131);
 						exp(11);
 						}
 						break;
 					case 7:
 						{
-						_localctx = new PluseqContext(new ExpContext(_parentctx, _parentState));
+						_localctx = new GreatereqContext(new ExpContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_exp);
 						setState(132);
 						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
 						setState(133);
-						match(PLUSEQ);
+						match(GREATEREQ);
 						setState(134);
 						exp(10);
 						}

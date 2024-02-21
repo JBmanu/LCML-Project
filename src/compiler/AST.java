@@ -89,19 +89,19 @@ public class AST {
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
 	}
 
-	public static class EqualMinusNode extends Node {
+	public static class MinorEqualNode extends Node {
 		final Node left;
 		final Node right;
-		EqualMinusNode(Node l, Node r) {left = l; right = r;}
+		MinorEqualNode(Node l, Node r) {left = l; right = r;}
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
 	}
 
-	public static class EqualPlusNode extends Node {
+	public static class GreaterEqualNode extends Node {
 		final Node left;
 		final Node right;
-		EqualPlusNode(Node l, Node r) {left = l; right = r;}
+		GreaterEqualNode(Node l, Node r) {left = l; right = r;}
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}

@@ -24,8 +24,8 @@ exp     : exp TIMES exp #times
         | exp PLUS  exp #plus
         | exp MINUS  exp #minus
         | exp EQ  exp   #eq
-        | exp MINUSEQ exp #minuseq
-        | exp PLUSEQ exp #pluseq
+        | exp MINOREQ exp #minoreq
+        | exp GREATEREQ exp #greatereq
         | LPAR exp RPAR #pars
     	| MINUS? NUM #integer
 	    | TRUE #true     
@@ -56,8 +56,8 @@ SEMIC 	: ';' ;
 COLON   : ':' ; 
 COMMA	: ',' ;
 EQ	    : '==' ;
-MINUSEQ : '<=' ;
-PLUSEQ  : '>=' ;
+MINOREQ : '<=' ;
+GREATEREQ  : '>=' ;
 ASS	    : '=' ;
 TRUE	: 'true' ;
 FALSE	: 'false' ;

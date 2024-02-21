@@ -42,13 +42,11 @@ instruction :
                         labelRef.put(i++,$l.text);}
 	  | BRANCHLESSEQ l=LABEL {code[i++] = BRANCHLESSEQ;
                           labelRef.put(i++,$l.text);}
-      | BRANCHMOREEQ l=LABEL {code[i++] = BRANCHMOREEQ;
-                            labelRef.put(i++,$l.text);}
 	  | JS              {code[i++] = JS;}		     //
 	  | LOADRA          {code[i++] = LOADRA;}    //
 	  | STORERA         {code[i++] = STORERA;}   //
-	  | LOADTM          {code[i++] = LOADTM;}   
-	  | STORETM         {code[i++] = STORETM;}   
+	  | LOADTM          {code[i++] = LOADTM;}
+	  | STORETM         {code[i++] = STORETM;}
 	  | LOADFP          {code[i++] = LOADFP;}   //
 	  | STOREFP         {code[i++] = STOREFP;}   //
 	  | COPYFP          {code[i++] = COPYFP;}   //
@@ -57,36 +55,35 @@ instruction :
 	  | PRINT           {code[i++] = PRINT;}
 	  | HALT            {code[i++] = HALT;}
 	  ;
-	  
+
 /*------------------------------------------------------------------
  * LEXER RULES
  *------------------------------------------------------------------*/
 
-PUSH	 : 'push' ; 	
-POP	 : 'pop' ; 	
-ADD	 : 'add' ;  	
-SUB	 : 'sub' ;	
-MULT	 : 'mult' ;  	
-DIV	 : 'div' ;	
-STOREW	 : 'sw' ; 	
-LOADW	 : 'lw' ;	
-BRANCH	 : 'b' ;	
-BRANCHEQ : 'beq' ;	
+PUSH	 : 'push' ;
+POP	 : 'pop' ;
+ADD	 : 'add' ;
+SUB	 : 'sub' ;
+MULT	 : 'mult' ;
+DIV	 : 'div' ;
+STOREW	 : 'sw' ;
+LOADW	 : 'lw' ;
+BRANCH	 : 'b' ;
+BRANCHEQ : 'beq' ;
 BRANCHLESSEQ:'bleq' ;
-BRANCHMOREEQ:'bmeq' ;
-JS	 : 'js' ;	
-LOADRA	 : 'lra' ;	
-STORERA  : 'sra' ;	 
-LOADTM	 : 'ltm' ;	
-STORETM  : 'stm' ;	
-LOADFP	 : 'lfp' ;	
-STOREFP	 : 'sfp' ;	
-COPYFP   : 'cfp' ;      
-LOADHP	 : 'lhp' ;	
-STOREHP	 : 'shp' ;	
-PRINT	 : 'print' ;	
-HALT	 : 'halt' ;	
- 
+JS	 : 'js' ;
+LOADRA	 : 'lra' ;
+STORERA  : 'sra' ;
+LOADTM	 : 'ltm' ;
+STORETM  : 'stm' ;
+LOADFP	 : 'lfp' ;
+STOREFP	 : 'sfp' ;
+COPYFP   : 'cfp' ;
+LOADHP	 : 'lhp' ;
+STOREHP	 : 'shp' ;
+PRINT	 : 'print' ;
+HALT	 : 'halt' ;
+
 COL	 : ':' ;
 LABEL	 : ('a'..'z'|'A'..'Z')('a'..'z' | 'A'..'Z' | '0'..'9')* ;
 INTEGER	 : '0' | ('-')?(('1'..'9')('0'..'9')*) ;
@@ -95,5 +92,4 @@ COMMENT : '/*' .*? '*/' -> channel(HIDDEN) ;
 
 WHITESP  : (' '|'\t'|'\n'|'\r')+ -> channel(HIDDEN) ;
 
-ERR	     : . { System.out.println("Invalid char: "+getText()+" at line "+getLine()); lexicalErrors++; } -> channel(HIDDEN); 
-
+ERR	     : . { System.out.println("Invalid char: "+getText()+" at line "+getLine()); lexicalErrors++; } -> channel(HIDDEN);

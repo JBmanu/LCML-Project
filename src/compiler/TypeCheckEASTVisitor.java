@@ -93,7 +93,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	}
 
 	@Override
-	public TypeNode visitNode(EqualMinusNode n) throws TypeException {
+	public TypeNode visitNode(MinorEqualNode n) throws TypeException {
 		if (print) printNode(n);
 		TypeNode l = visit(n.left);
 		TypeNode r = visit(n.right);
@@ -103,7 +103,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	}
 
 	@Override
-	public TypeNode visitNode(EqualPlusNode n) throws TypeException {
+	public TypeNode visitNode(GreaterEqualNode n) throws TypeException {
 		if (print) printNode(n);
 		TypeNode l = visit(n.left);
 		TypeNode r = visit(n.right);

@@ -18,9 +18,9 @@ public class FOOLLexer extends Lexer {
 		new PredictionContextCache();
 	public static final int
 		PLUS=1, MINUS=2, TIMES=3, DIVISION=4, LPAR=5, RPAR=6, CLPAR=7, CRPAR=8, 
-		SEMIC=9, COLON=10, COMMA=11, EQ=12, MINUSEQ=13, PLUSEQ=14, ASS=15, TRUE=16, 
-		FALSE=17, IF=18, THEN=19, ELSE=20, PRINT=21, LET=22, IN=23, VAR=24, FUN=25, 
-		INT=26, BOOL=27, NUM=28, ID=29, WHITESP=30, COMMENT=31, ERR=32;
+		SEMIC=9, COLON=10, COMMA=11, EQ=12, MINOREQ=13, GREATEREQ=14, ASS=15, 
+		TRUE=16, FALSE=17, IF=18, THEN=19, ELSE=20, PRINT=21, LET=22, IN=23, VAR=24, 
+		FUN=25, INT=26, BOOL=27, NUM=28, ID=29, WHITESP=30, COMMENT=31, ERR=32;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
@@ -32,7 +32,7 @@ public class FOOLLexer extends Lexer {
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"PLUS", "MINUS", "TIMES", "DIVISION", "LPAR", "RPAR", "CLPAR", "CRPAR", 
-			"SEMIC", "COLON", "COMMA", "EQ", "MINUSEQ", "PLUSEQ", "ASS", "TRUE", 
+			"SEMIC", "COLON", "COMMA", "EQ", "MINOREQ", "GREATEREQ", "ASS", "TRUE", 
 			"FALSE", "IF", "THEN", "ELSE", "PRINT", "LET", "IN", "VAR", "FUN", "INT", 
 			"BOOL", "NUM", "ID", "WHITESP", "COMMENT", "ERR"
 		};
@@ -51,7 +51,7 @@ public class FOOLLexer extends Lexer {
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, "PLUS", "MINUS", "TIMES", "DIVISION", "LPAR", "RPAR", "CLPAR", 
-			"CRPAR", "SEMIC", "COLON", "COMMA", "EQ", "MINUSEQ", "PLUSEQ", "ASS", 
+			"CRPAR", "SEMIC", "COLON", "COMMA", "EQ", "MINOREQ", "GREATEREQ", "ASS", 
 			"TRUE", "FALSE", "IF", "THEN", "ELSE", "PRINT", "LET", "IN", "VAR", "FUN", 
 			"INT", "BOOL", "NUM", "ID", "WHITESP", "COMMENT", "ERR"
 		};

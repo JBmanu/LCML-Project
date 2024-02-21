@@ -72,13 +72,13 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 		return n;
 	}
 
-	@Override
-	public Node visitPlus(PlusContext c) {
+	/*@Override
+	public Node visitGreater(PlusContext c) {
 		if (print) printVarAndProdName(c);
 		Node n = new PlusNode(visit(c.exp(0)), visit(c.exp(1)));
 		n.setLine(c.PLUS().getSymbol().getLine());	
         return n;		
-	}
+	}*/
 
 	@Override
 	public Node visitEq(EqContext c) {
@@ -89,17 +89,17 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	}
 
 	@Override
-	public Node visitMinuseq(MinuseqContext c) {
+	public Node visitMinoreq(MinoreqContext c) {
 		if (print) printVarAndProdName(c);
-		Node n = new EqualMinusNode(visit(c.exp(0)), visit(c.exp(1)));
-		n.setLine(c.MINUSEQ().getSymbol().getLine());
+		Node n = new MinorEqualNode(visit(c.exp(0)), visit(c.exp(1)));
+		n.setLine(c.MINOREQ().getSymbol().getLine());
 		return n;
 	}
 
 	@Override
-	public Node visitPluseq(PluseqContext c) {
-		Node n = new EqualPlusNode(visit(c.exp(0)), visit(c.exp(1)));
-		n.setLine(c.PLUSEQ().getSymbol().getLine());
+	public Node visitGreatereq(GreatereqContext c) {
+		Node n = new GreaterEqualNode(visit(c.exp(0)), visit(c.exp(1)));
+		n.setLine(c.GREATEREQ().getSymbol().getLine());
 		return n;
 	}
 

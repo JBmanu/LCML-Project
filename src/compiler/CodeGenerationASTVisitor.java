@@ -116,7 +116,7 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 	}
 
 	@Override
-	public String visitNode(EqualMinusNode n) {
+	public String visitNode(MinorEqualNode n) {
 		if (print) printNode(n);
 		String l1 = freshLabel();
 		String l2 = freshLabel();
@@ -133,19 +133,21 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 	}
 
 	@Override
-	public String visitNode(EqualPlusNode n) {
+	public String visitNode(GreaterEqualNode n) {
 		if (print) printNode(n);
-		String l1 = freshLabel();
-		String l2 = freshLabel();
+		final String falseLabel = freshLabel();
+		final String endLabel = freshLabel();
 		return nlJoin(
-				visit(n.left),
-				visit(n.right),
-				"bmeq "+l1,
-				"push 0",
-				"b "+l2,
-				l1+":",
-				"push 1",
-				l2+":"
+				visit(n.left),        // generate code for left expression
+				visit(n.right),              // generate code for right expression
+				"push " + 1,                       // push 1
+				"sub",                            // subtract 1 from right value
+				"bleq " + falseLabel, // if left value is not less or equal than right value, jump to false label
+				"push " + 1,                       // push 1 (the result)
+				"b " + endLabel,              // jump to end label
+				falseLabel + ":",               // false label
+				"push " + 0,                       // push 0 (the result)
+				endLabel + ":"                  // end label
 		);
 	}
 

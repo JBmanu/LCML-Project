@@ -78,30 +78,6 @@ public interface FOOLListener extends ParseTreeListener {
 	 */
 	void exitMinus(FOOLParser.MinusContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code pluseq}
-	 * labeled alternative in {@link FOOLParser#exp}.
-	 * @param ctx the parse tree
-	 */
-	void enterPluseq(FOOLParser.PluseqContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code pluseq}
-	 * labeled alternative in {@link FOOLParser#exp}.
-	 * @param ctx the parse tree
-	 */
-	void exitPluseq(FOOLParser.PluseqContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code minuseq}
-	 * labeled alternative in {@link FOOLParser#exp}.
-	 * @param ctx the parse tree
-	 */
-	void enterMinuseq(FOOLParser.MinuseqContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code minuseq}
-	 * labeled alternative in {@link FOOLParser#exp}.
-	 * @param ctx the parse tree
-	 */
-	void exitMinuseq(FOOLParser.MinuseqContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code pars}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree
@@ -210,6 +186,18 @@ public interface FOOLListener extends ParseTreeListener {
 	 */
 	void exitTimes(FOOLParser.TimesContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code minoreq}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void enterMinoreq(FOOLParser.MinoreqContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code minoreq}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void exitMinoreq(FOOLParser.MinoreqContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code true}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree
@@ -221,6 +209,18 @@ public interface FOOLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTrue(FOOLParser.TrueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code greatereq}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void enterGreatereq(FOOLParser.GreatereqContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code greatereq}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void exitGreatereq(FOOLParser.GreatereqContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code id}
 	 * labeled alternative in {@link FOOLParser#exp}.
