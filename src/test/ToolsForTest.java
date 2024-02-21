@@ -48,26 +48,26 @@ public class ToolsForTest {
     private void generateST(FOOLParser parser, FOOLLexer lexer) {
         System.out.println("Generating ST via lexer and parser.");
         this.st = parser.prog();
-        System.out.println("You had " + lexer.lexicalErrors + " lexical errors and " +
-                parser.getNumberOfSyntaxErrors() + " syntax errors.\n");
+//        System.out.println("You had " + lexer.lexicalErrors + " lexical errors and " +
+//                parser.getNumberOfSyntaxErrors() + " syntax errors.\n");
     }
 
     private Node generateASTAndGetRoot() {
         System.out.println("Generating AST.");
         Node ast = this.visitor.visit(this.st);
-        System.out.println();
+//        System.out.println();
         return ast;
     }
 
     private void enrichASTSymbolTable(Node ast, boolean printAST) {
-        System.out.println("Enriching AST via symbol table.");
+//        System.out.println("Enriching AST via symbol table.");
         this.symtableVisitor.visit(ast);
-        System.out.println("You had " + this.symtableVisitor.stErrors + " symbol table errors.\n");
+//        System.out.println("You had " + this.symtableVisitor.stErrors + " symbol table errors.\n");
 
         if (!printAST) return;
         System.out.println("Visualizing Enriched AST.");
         new PrintEASTVisitor().visit(ast);
-        System.out.println();
+//        System.out.println();
     }
 
     private void checkingTypes(Node ast) {
@@ -81,12 +81,12 @@ public class ToolsForTest {
         } catch (TypeException e) {
             System.out.println("Type checking error in main program expression: " + e.text);
         }
-        System.out.println("You had " + FOOLlib.typeErrors + " type checking errors.\n");
+//        System.out.println("You had " + FOOLlib.typeErrors + " type checking errors.\n");
     }
 
     private int getFrontEndErrors() {
         int frontEndErrors = this.lexer.lexicalErrors + this.parser.getNumberOfSyntaxErrors() + this.symtableVisitor.stErrors + FOOLlib.typeErrors;
-        System.out.println("You had a total of " + frontEndErrors + " front-end errors.\n");
+//        System.out.println("You had a total of " + frontEndErrors + " front-end errors.\n");
         return frontEndErrors;
     }
 
@@ -97,7 +97,7 @@ public class ToolsForTest {
             BufferedWriter out = new BufferedWriter(new FileWriter(fileName + ".asm"));
             out.write(code);
             out.close();
-            System.out.println();
+//            System.out.println();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -113,7 +113,7 @@ public class ToolsForTest {
     }
 
     private int getErrorLexerAsm() {
-        System.out.println("You had: " + this.lexerASM.lexicalErrors + " lexical errors and " + this.parserASM.getNumberOfSyntaxErrors() + " syntax errors.\n");
+//        System.out.println("You had: " + this.lexerASM.lexicalErrors + " lexical errors and " + this.parserASM.getNumberOfSyntaxErrors() + " syntax errors.\n");
         return this.lexerASM.lexicalErrors + this.parserASM.getNumberOfSyntaxErrors();
     }
 
