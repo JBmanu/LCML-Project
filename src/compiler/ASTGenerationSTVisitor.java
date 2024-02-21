@@ -57,15 +57,21 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	}
 
 	@Override
-	public Node visitTimes(TimesContext c) {
+	public Node visitTimes_div(Times_divContext c) {
 		if (print) printVarAndProdName(c);
+
+
+
 		Node n = new TimesNode(visit(c.exp(0)), visit(c.exp(1)));
 		n.setLine(c.TIMES().getSymbol().getLine());		// setLine added
         return n;		
 	}
 
 	@Override
-	public Node visitPlus(PlusContext c) {
+	public Node visitPlus_minus(Plus_minusContext c) {
+
+
+
 		if (print) printVarAndProdName(c);
 		Node n = new PlusNode(visit(c.exp(0)), visit(c.exp(1)));
 		n.setLine(c.PLUS().getSymbol().getLine());	
@@ -73,11 +79,27 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	}
 
 	@Override
-	public Node visitEq(EqContext c) {
+	public Node visitEq_le_ge(Eq_le_geContext c) {
+
+
+
 		if (print) printVarAndProdName(c);
 		Node n = new EqualNode(visit(c.exp(0)), visit(c.exp(1)));
 		n.setLine(c.EQ().getSymbol().getLine());		
         return n;		
+	}
+
+	@Override
+	public Node visitOr_and(FOOLParser.Or_andContext ctx) {
+
+
+
+		return visitChildren(ctx);
+	}
+
+	@Override
+	public Node visitNot(FOOLParser.NotContext ctx) {
+		return visitChildren(ctx);
 	}
 
 	@Override
