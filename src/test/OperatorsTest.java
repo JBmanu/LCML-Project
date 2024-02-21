@@ -3,6 +3,9 @@ package test;
 import org.junit.jupiter.api.Test;
 
 public class OperatorsTest {
+    // 0=FALSE
+    // 1=TRUE
+
     private static final String ROOT_MINUS_TEST_FILES = "res/test/operators/minus/";
     private static final String ROOT_DIV_TEST_FILES = "res/test/operators/div/";
     private static final String ROOT_GE_TEST_FILES = "res/test/operators/greaterEquals/";
@@ -53,5 +56,43 @@ public class OperatorsTest {
         tools.buildASTAndSVMAndCheckErrors(fileName, false);
         tools.runningSVM();
     }
+
+    // testing lessEquals 4 <= 2
+    @Test
+    public void testLessEqualsOperator() {
+        String fileName = ROOT_LE_TEST_FILES + "lessEquals.fool";
+
+        ToolsForTest tools = new ToolsForTest();
+        tools.createFOOLFile(fileName, "let var x:bool = 4 <= 2; in print(x);");
+        tools.buildASTAndSVMAndCheckErrors(fileName, false);
+        tools.runningSVM();
+    }
+
+    // testing lessEquals 4 <= 5
+    @Test
+    public void testLessEqualsOperator2() {
+        String fileName = ROOT_LE_TEST_FILES + "lessEquals2.fool";
+
+        ToolsForTest tools = new ToolsForTest();
+        tools.createFOOLFile(fileName, "let var x:bool = 4 <= 5; in print(x);");
+        tools.buildASTAndSVMAndCheckErrors(fileName, false);
+        tools.runningSVM();
+    }
+
+    // testing greaterEquals 4 <= 4
+    @Test
+    public void testGreaterEqualsOperator() {
+        String fileName = ROOT_LE_TEST_FILES + "lessEquals3.fool";
+
+        ToolsForTest tools = new ToolsForTest();
+        tools.createFOOLFile(fileName, "let var x:bool = 4 <= 4; in print(x);");
+        tools.buildASTAndSVMAndCheckErrors(fileName, false);
+        tools.runningSVM();
+    }
+
+    // testing greaterEquals 4 >= 5
+    @Test
+
+
 
 }
