@@ -1,4 +1,7 @@
 let 
-  var x:int = 10-2;
+    var x:int = 10--2;
+    var y:int = -2-4;
+    var z:int = 2-4;
+    var a:int = 5-2;
 in
-  print (x);
+    print(y);
