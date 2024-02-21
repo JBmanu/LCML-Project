@@ -123,6 +123,49 @@ public class OperatorsTest {
         tools.runningSVM();
     }
 
+    // testing or var x:bool = false||false
+    @Test
+    public void testOrOperator() {
+        String fileName = ROOT_OR_TEST_FILES + "or.fool";
+
+        ToolsForTest tools = new ToolsForTest();
+        tools.createFOOLFile(fileName, "let var x:bool = false||false; in print(x);");
+        tools.buildASTAndSVMAndCheckErrors(fileName, false);
+        tools.runningSVM();
+    }
+
+    // testing or var x:bool = false||true
+    @Test
+    public void testOrOperator2() {
+        String fileName = ROOT_OR_TEST_FILES + "or2.fool";
+
+        ToolsForTest tools = new ToolsForTest();
+        tools.createFOOLFile(fileName, "let var x:bool = false||true; in print(x);");
+        tools.buildASTAndSVMAndCheckErrors(fileName, false);
+        tools.runningSVM();
+    }
+
+    // testing or var x:bool = true||false
+    @Test
+    public void testOrOperator3() {
+        String fileName = ROOT_OR_TEST_FILES + "or3.fool";
+
+        ToolsForTest tools = new ToolsForTest();
+        tools.createFOOLFile(fileName, "let var x:bool = true||false; in print(x);");
+        tools.buildASTAndSVMAndCheckErrors(fileName, false);
+        tools.runningSVM();
+    }
+
+    // testing or var x:bool = true||true
+    @Test
+    public void testOrOperator4() {
+        String fileName = ROOT_OR_TEST_FILES + "or4.fool";
+
+        ToolsForTest tools = new ToolsForTest();
+        tools.createFOOLFile(fileName, "let var x:bool = true||true; in print(x);");
+        tools.buildASTAndSVMAndCheckErrors(fileName, false);
+        tools.runningSVM();
+    }
 
 
 }
