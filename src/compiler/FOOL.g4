@@ -26,6 +26,9 @@ exp     : exp TIMES exp #times
         | exp EQ  exp   #eq
         | exp LE exp #le
         | exp GE exp #ge
+        | exp AND exp #and
+        | exp OR exp #or
+        | NOT exp #not
         | LPAR exp RPAR #pars
     	| MINUS? NUM #integer
 	    | TRUE #true     
@@ -58,6 +61,9 @@ COMMA	: ',' ;
 EQ	    : '==' ;
 LE      : '<=' ;
 GE      : '>=' ;
+AND     : '&&' ;
+OR      : '||';
+NOT     : '!' ;
 ASS	    : '=' ;
 TRUE	: 'true' ;
 FALSE	: 'false' ;
