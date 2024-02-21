@@ -16,6 +16,7 @@ import svm.SVMLexer;
 import svm.SVMParser;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -142,11 +143,31 @@ public class OperatorsTest {
         assertEquals(0, this.getErrorLexerAsm());
     }
 
+    private void createFOOLFile(String fileName, String text) {
+        try {
+            File file = new File(fileName);
+
+            if (!file.exists()) file.createNewFile();
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            bw.write(text);
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void testMinusOperator() {
         String fileName = ROOT_OPERATORS_TEST_FILES + "minus.fool";
+        this.createFOOLFile(fileName, "let var x:int = 5 - 3; in print(x);");
+
         this.buildASTAndSVMAndCheckErrors(fileName);
         this.runningSVM();
+
+
+
     }
 
 
