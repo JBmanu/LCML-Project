@@ -10,7 +10,7 @@ import svm.*;
 public class Test {
     public static void main(String[] args) throws Exception {
 
-    	String fileName = "res/prova.fool";
+    	String fileName = "res/test/operators/simple.fool";
 
     	CharStream chars = CharStreams.fromFileName(fileName);
     	FOOLLexer lexer = new FOOLLexer(chars);
@@ -76,7 +76,6 @@ public class Test {
     	System.out.println("Running generated code via Stack Virtual Machine.");
     	ExecuteVM vm = new ExecuteVM(parserASM.code);
     	vm.cpu();
-
     }
 }
 
