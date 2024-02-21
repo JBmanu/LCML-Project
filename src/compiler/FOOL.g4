@@ -26,6 +26,9 @@ exp     : exp TIMES exp #times
         | exp EQ  exp   #eq
         | exp MINOREQ exp #minoreq
         | exp GREATEREQ exp #greatereq
+        | exp AND exp #and
+        | exp OR exp #or
+        | exp NOT exp #not
         | LPAR exp RPAR #pars
     	| MINUS? NUM #integer
 	    | TRUE #true     
@@ -59,6 +62,9 @@ EQ	    : '==' ;
 MINOREQ : '<=' ;
 GREATEREQ  : '>=' ;
 ASS	    : '=' ;
+AND     : '&&' ;
+OR      : '||' ;
+NOT     : '!' ;
 TRUE	: 'true' ;
 FALSE	: 'false' ;
 IF	    : 'if' ;

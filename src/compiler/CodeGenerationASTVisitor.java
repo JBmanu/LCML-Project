@@ -135,19 +135,19 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 	@Override
 	public String visitNode(GreaterEqualNode n) {
 		if (print) printNode(n);
-		final String falseLabel = freshLabel();
-		final String endLabel = freshLabel();
+		final String l1 = freshLabel();
+		final String l2 = freshLabel();
 		return nlJoin(
 				visit(n.left),        // generate code for left expression
 				visit(n.right),              // generate code for right expression
-				"push " + 1,                       // push 1
-				"sub",                            // subtract 1 from right value
-				"bleq " + falseLabel, // if left value is not less or equal than right value, jump to false label
-				"push " + 1,                       // push 1 (the result)
-				"b " + endLabel,              // jump to end label
-				falseLabel + ":",               // false label
-				"push " + 0,                       // push 0 (the result)
-				endLabel + ":"                  // end label
+				"push " + 1,                // push 1
+				"sub",                      // subtract 1 from right value
+				"bleq " + l1, 		// if left value is not less or equal than right value, jump to false label
+				"push " + 1,                // push 1 (the result)
+				"b " + l2,            // jump to end label
+				l1 + ":",           // false label
+				"push " + 0,                // push 0 (the result)
+				l2 + ":"              // end label
 		);
 	}
 
@@ -188,6 +188,74 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 				visit(n.left),
 				visit(n.right),
 				"div"
+		);
+	}
+
+	public String visitNode(final NotNode node) {
+		if (print) printNode(node);
+		final String itWasFalseLabel = freshLabel();
+		final String endLabel = freshLabel();
+		return nlJoin(
+				visit(node.exp),          // generate code for expression
+				"push " + 0,                       // push 0
+				"beq " + itWasFalseLabel, // if value is 0, jump to itWasFalseLabel
+				"push " + 0,                       // push 0 (the result)
+				"b " + endLabel,              // jump to end label
+				itWasFalseLabel + ":",          // itWasFalseLabel
+				"push " + 1,                       // push 1 (the result)
+				endLabel + ":"                  // end label
+		);
+	}
+
+	/**
+	 * Generate code for the OrNode node.
+	 *
+	 * @param node the OrNode node
+	 * @return the code generated for the OrNode node
+	 */
+	@Override
+	public String visitNode(final OrNode node) {
+		if (print) printNode(node);
+		final String trueLabel = freshLabel();
+		final String endLabel = freshLabel();
+		return nlJoin(
+				visit(node.left),    // generate code for left expression
+				"push " + 1,                   // push 1
+				"beq " + trueLabel,   // if value is 1, jump to true label
+				visit(node.right),          // generate code for right expression
+				"push " + 1,                   // push 1
+				"beq " + trueLabel,   // if value is 1, jump to true label
+				"push " + 0,                   // push 0 (the result)
+				"b " + endLabel,          // jump to end label
+				trueLabel + ":",            // true label
+				"push " + 1,                   // push 1 (the result)
+				endLabel + ":"              // end label
+		);
+	}
+
+	/**
+	 * Generate code for the AndNode node.
+	 *
+	 * @param node the AndNode node
+	 * @return the code generated for the AndNode node
+	 */
+	@Override
+	public String visitNode(final AndNode node) {
+		if (print) printNode(node);
+		final String falseLabel = freshLabel();
+		final String endLabel = freshLabel();
+		return nlJoin(
+				visit(node.left),    // generate code for left expression
+				"push " + 0,                   // push 0
+				"beq " + falseLabel,  // if value is 0, jump to false label
+				visit(node.right),          // generate code for right expression
+				"push " + 0,                   // push 0
+				"beq " + falseLabel,  // if value is 0, jump to false label
+				"push " + 1,                   // push 1 (the result)
+				"b " + endLabel,          // jump to end label
+				falseLabel + ":",           // false label
+				"push " + 0,                   // push 0 (the result)
+				endLabel + ":"              // end label
 		);
 	}
 

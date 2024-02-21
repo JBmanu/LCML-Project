@@ -151,6 +151,62 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 		return new IntTypeNode();
 	}
 
+	/**
+	 * Visit a NotNode node and check its type.
+	 * Visit the expression and check that its type is boolean.
+	 * Return boolean.
+	 *
+	 * @param node the NotNode node to visit
+	 * @return boolean
+	 * @throws TypeException if the type of the expression is not boolean
+	 */
+	@Override
+	public TypeNode visitNode(final NotNode node) throws TypeException {
+		if (print) printNode(node);
+		if (!(isSubtype(visit(node.exp), new BoolTypeNode()))) {
+			throw new TypeException("Non boolean in not", node.getLine());
+		}
+		return new BoolTypeNode();
+	}
+
+	/**
+	 * Visit a OrNode node and check its type.
+	 * Visit the left and right expressions and check that their types are boolean.
+	 * Return boolean.
+	 *
+	 * @param node the OrNode node to visit
+	 * @return boolean
+	 * @throws TypeException if the types of the expressions are not boolean
+	 */
+	@Override
+	public TypeNode visitNode(final OrNode node) throws TypeException {
+		if (print) printNode(node);
+		if (!(isSubtype(visit(node.left), new BoolTypeNode())
+				&& isSubtype(visit(node.right), new BoolTypeNode()))) {
+			throw new TypeException("Non booleans in or", node.getLine());
+		}
+		return new BoolTypeNode();
+	}
+
+	/**
+	 * Visit a AndNode node and check its type.
+	 * Visit the left and right expressions and check that their types are boolean.
+	 * Return boolean.
+	 *
+	 * @param node the AndNode node to visit
+	 * @return boolean
+	 * @throws TypeException if the types of the expressions are not boolean
+	 */
+	@Override
+	public TypeNode visitNode(final AndNode node) throws TypeException {
+		if (print) printNode(node);
+		if (!(isSubtype(visit(node.left), new BoolTypeNode())
+				&& isSubtype(visit(node.right), new BoolTypeNode()))) {
+			throw new TypeException("Non booleans in and", node.getLine());
+		}
+		return new BoolTypeNode();
+	}
+
 	@Override
 	public TypeNode visitNode(CallNode n) throws TypeException {
 		if (print) printNode(n,n.id);

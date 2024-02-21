@@ -160,6 +160,51 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		return null;
 	}
 
+
+	/**
+	 * Visit a NotNode.
+	 * Visit the expression.
+	 *
+	 * @param node the NotNode to visit
+	 * @return null
+	 */
+	@Override
+	public Void visitNode(final NotNode node) {
+		if (print) printNode(node);
+		visit(node.exp);
+		return null;
+	}
+
+	/**
+	 * Visit a OrNode.
+	 * Visit the left and right expression.
+	 *
+	 * @param node the OrNode to visit
+	 * @return null
+	 */
+	@Override
+	public Void visitNode(final OrNode node) {
+		if (print) printNode(node);
+		visit(node.left);
+		visit(node.right);
+		return null;
+	}
+
+	/**
+	 * Visit a AndNode.
+	 * Visit the left and right expression.
+	 *
+	 * @param node the AndNode to visit
+	 * @return null
+	 */
+	@Override
+	public Void visitNode(final AndNode node) {
+		if (print) printNode(node);
+		visit(node.left);
+		visit(node.right);
+		return null;
+	}
+
 	@Override
 	public Void visitNode(CallNode n) {
 		if (print) printNode(n);

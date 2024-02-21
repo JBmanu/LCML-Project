@@ -85,4 +85,16 @@ public class BaseASTVisitor<S,E extends Exception> {
 	public S visitNode(MinorEqualNode n) throws E {
 		throw new UnimplException();
 	}
+
+	public S visitNode(NotNode n) throws E {
+		throw new UnimplException();
+	}
+
+	public S visitNode(OrNode n) throws E {
+		throw new UnimplException();
+	}
+
+	public S visitNode(AndNode n) throws E {
+		throw new UnimplException();
+	}
 }
