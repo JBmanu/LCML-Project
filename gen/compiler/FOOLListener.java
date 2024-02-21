@@ -174,6 +174,18 @@ public interface FOOLListener extends ParseTreeListener {
 	 */
 	void exitDivision(FOOLParser.DivisionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code not}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void enterNot(FOOLParser.NotContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code not}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void exitNot(FOOLParser.NotContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code print}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree
@@ -197,18 +209,6 @@ public interface FOOLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTimes(FOOLParser.TimesContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code not}
-	 * labeled alternative in {@link FOOLParser#exp}.
-	 * @param ctx the parse tree
-	 */
-	void enterNot(FOOLParser.NotContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code not}
-	 * labeled alternative in {@link FOOLParser#exp}.
-	 * @param ctx the parse tree
-	 */
-	void exitNot(FOOLParser.NotContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code and}
 	 * labeled alternative in {@link FOOLParser#exp}.

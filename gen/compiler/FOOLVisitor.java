@@ -108,6 +108,13 @@ public interface FOOLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDivision(FOOLParser.DivisionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code not}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNot(FOOLParser.NotContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code print}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree
@@ -121,13 +128,6 @@ public interface FOOLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTimes(FOOLParser.TimesContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code not}
-	 * labeled alternative in {@link FOOLParser#exp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNot(FOOLParser.NotContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code and}
 	 * labeled alternative in {@link FOOLParser#exp}.
