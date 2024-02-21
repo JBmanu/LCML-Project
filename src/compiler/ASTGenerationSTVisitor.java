@@ -65,6 +65,14 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	}
 
 	@Override
+	public Node visitDivision(DivisionContext c) {
+		if (print) printVarAndProdName(c);
+		Node n = new DivisionNode(visit(c.exp(0)), visit(c.exp(1)));
+		n.setLine(c.DIVISION().getSymbol().getLine());		// setLine added
+		return n;
+	}
+
+	@Override
 	public Node visitPlus(PlusContext c) {
 		if (print) printVarAndProdName(c);
 		Node n = new PlusNode(visit(c.exp(0)), visit(c.exp(1)));

@@ -179,6 +179,15 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 		);
 	}
 
+	@Override
+	public String visitNode(DivisionNode n) {
+		if (print) printNode(n);
+		return nlJoin(
+				visit(n.left),
+				visit(n.right),
+				"div"
+		);
+	}
 
 	@Override
 	public String visitNode(CallNode n) {

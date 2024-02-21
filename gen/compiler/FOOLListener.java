@@ -174,6 +174,18 @@ public interface FOOLListener extends ParseTreeListener {
 	 */
 	void exitCall(FOOLParser.CallContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code division}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void enterDivision(FOOLParser.DivisionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code division}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void exitDivision(FOOLParser.DivisionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code print}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree

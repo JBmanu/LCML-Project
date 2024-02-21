@@ -1,13 +1,13 @@
 push 0
 push 5
 push 1
-sub
+div
 push 1
 lfp
 push -2
 add
 lw
-push 4
+push 5
 beq label2
 push 0
 b label3
