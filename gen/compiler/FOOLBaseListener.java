@@ -1,4 +1,4 @@
-// Generated from D:/UNIBO/LCMC/LCML-Project/src/compiler/FOOL.g4 by ANTLR 4.13.1
+// Generated from /Users/manuelbuizo/Desktop/uni/LCMC/LCML-Project/src/compiler/FOOL.g4 by ANTLR 4.13.1
 package compiler;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -53,6 +53,30 @@ public class FOOLBaseListener implements FOOLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCldec(FOOLParser.CldecContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCldec(FOOLParser.CldecContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMethdec(FOOLParser.MethdecContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethdec(FOOLParser.MethdecContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterVardec(FOOLParser.VardecContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -77,13 +101,25 @@ public class FOOLBaseListener implements FOOLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEq_le_ge(FOOLParser.Eq_le_geContext ctx) { }
+	@Override public void enterNew(FOOLParser.NewContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEq_le_ge(FOOLParser.Eq_le_geContext ctx) { }
+	@Override public void exitNew(FOOLParser.NewContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterComp(FOOLParser.CompContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitComp(FOOLParser.CompContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -101,25 +137,13 @@ public class FOOLBaseListener implements FOOLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOr_and(FOOLParser.Or_andContext ctx) { }
+	@Override public void enterTimes_Div(FOOLParser.Times_DivContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOr_and(FOOLParser.Or_andContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTimes_div(FOOLParser.Times_divContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTimes_div(FOOLParser.Times_divContext ctx) { }
+	@Override public void exitTimes_Div(FOOLParser.Times_DivContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -137,6 +161,30 @@ public class FOOLBaseListener implements FOOLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAnd_Or(FOOLParser.And_OrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnd_Or(FOOLParser.And_OrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPlus_Minus(FOOLParser.Plus_MinusContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPlus_Minus(FOOLParser.Plus_MinusContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterInteger(FOOLParser.IntegerContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -144,18 +192,6 @@ public class FOOLBaseListener implements FOOLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitInteger(FOOLParser.IntegerContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPlus_minus(FOOLParser.Plus_minusContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPlus_minus(FOOLParser.Plus_minusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -197,6 +233,18 @@ public class FOOLBaseListener implements FOOLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNull(FOOLParser.NullContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNull(FOOLParser.NullContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTrue(FOOLParser.TrueContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -216,6 +264,18 @@ public class FOOLBaseListener implements FOOLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitId(FOOLParser.IdContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDotCall(FOOLParser.DotCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDotCall(FOOLParser.DotCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -252,6 +312,18 @@ public class FOOLBaseListener implements FOOLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolType(FOOLParser.BoolTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIdType(FOOLParser.IdTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIdType(FOOLParser.IdTypeContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

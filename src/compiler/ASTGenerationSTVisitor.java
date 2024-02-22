@@ -92,7 +92,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitEq_le_ge(Eq_le_geContext c) {
+    public Node visitComp(CompContext c) {
         if (print) printVarAndProdName(c);
 
         if (c.EQ() != null) {
