@@ -15,8 +15,8 @@ public class OperatorsTest {
     private static final String ROOT_OR_TEST_FILES = "res/test/operators/or/";
 
     @Test
-    public void testMinusOperator() {
-        String fileName = ROOT_MINUS_TEST_FILES + "minus.fool";
+    public void test5Minus3() {
+        String fileName = ROOT_MINUS_TEST_FILES + "5minus3.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:int = 5 - 3; in print(x);");
@@ -26,8 +26,8 @@ public class OperatorsTest {
 
     // testing 10 --2
     @Test
-    public void testDoubleMinusOperator() {
-        String fileName = ROOT_MINUS_TEST_FILES + "doubleMinus.fool";
+    public void test10DoubleMinus2() {
+        String fileName = ROOT_MINUS_TEST_FILES + "10doubleMinus2.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:int = 10 - -2; in print(x);");
@@ -37,8 +37,8 @@ public class OperatorsTest {
 
     // testing 10 / 5
     @Test
-    public void testDivOperator() {
-        String fileName = ROOT_DIV_TEST_FILES + "div.fool";
+    public void test10Div5() {
+        String fileName = ROOT_DIV_TEST_FILES + "10div5.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:int = 10 / 5; in print(x);");
@@ -48,8 +48,8 @@ public class OperatorsTest {
 
     // testing 10 / 3
     @Test
-    public void testDivOperator2() {
-        String fileName = ROOT_DIV_TEST_FILES + "div2.fool";
+    public void test10Div3() {
+        String fileName = ROOT_DIV_TEST_FILES + "10div3.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:int = 10 / 3; in print(x);");
@@ -59,8 +59,8 @@ public class OperatorsTest {
 
     // testing lessEquals 4 <= 2
     @Test
-    public void testLessEqualsOperator() {
-        String fileName = ROOT_LE_TEST_FILES + "lessEquals.fool";
+    public void test4LessEquals2() {
+        String fileName = ROOT_LE_TEST_FILES + "4lessEquals2.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = 4 <= 2; in print(x);");
@@ -70,8 +70,8 @@ public class OperatorsTest {
 
     // testing lessEquals 4 <= 5
     @Test
-    public void testLessEqualsOperator2() {
-        String fileName = ROOT_LE_TEST_FILES + "lessEquals2.fool";
+    public void test4LessEquals5() {
+        String fileName = ROOT_LE_TEST_FILES + "4lessEquals5.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = 4 <= 5; in print(x);");
@@ -79,10 +79,10 @@ public class OperatorsTest {
         tools.runningSVM();
     }
 
-    // testing greaterEquals 4 <= 4
+    // testing lessEquals 4 <= 4
     @Test
-    public void testGreaterEqualsOperator() {
-        String fileName = ROOT_LE_TEST_FILES + "lessEquals3.fool";
+    public void test4LessEquals4() {
+        String fileName = ROOT_LE_TEST_FILES + "4lessEquals4.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = 4 <= 4; in print(x);");
@@ -92,8 +92,8 @@ public class OperatorsTest {
 
     // testing greaterEquals 4 >= 5
     @Test
-    public void testGreaterEqualsOperator2() {
-        String fileName = ROOT_GE_TEST_FILES + "greaterEquals.fool";
+    public void test4GreaterEquals5() {
+        String fileName = ROOT_GE_TEST_FILES + "4greaterEquals5.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = 4 >= 5; in print(x);");
@@ -103,8 +103,8 @@ public class OperatorsTest {
 
     // testing greaterEquals 4 >= 4
     @Test
-    public void testGreaterEqualsOperator3() {
-        String fileName = ROOT_GE_TEST_FILES + "greaterEquals2.fool";
+    public void test4GreaterEquals4() {
+        String fileName = ROOT_GE_TEST_FILES + "4greaterEquals4.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = 4 >= 4; in print(x);");
@@ -114,8 +114,8 @@ public class OperatorsTest {
 
     // testing greaterEquals 5 >= 4
     @Test
-    public void testGreaterEqualsOperator4() {
-        String fileName = ROOT_GE_TEST_FILES + "greaterEquals3.fool";
+    public void test5GreaterEquals4() {
+        String fileName = ROOT_GE_TEST_FILES + "5greaterEquals4.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = 5 >= 4; in print(x);");
@@ -125,8 +125,8 @@ public class OperatorsTest {
 
     // testing or var x:bool = false||false
     @Test
-    public void testOrOperator() {
-        String fileName = ROOT_OR_TEST_FILES + "or.fool";
+    public void testFalseOrFalse() {
+        String fileName = ROOT_OR_TEST_FILES + "falseOrFalse.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = false||false; in print(x);");
@@ -136,8 +136,8 @@ public class OperatorsTest {
 
     // testing or var x:bool = false||true
     @Test
-    public void testOrOperator2() {
-        String fileName = ROOT_OR_TEST_FILES + "or2.fool";
+    public void testFalseOrTrue() {
+        String fileName = ROOT_OR_TEST_FILES + "falseOrTrue.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = false||true; in print(x);");
@@ -147,8 +147,8 @@ public class OperatorsTest {
 
     // testing or var x:bool = true||false
     @Test
-    public void testOrOperator3() {
-        String fileName = ROOT_OR_TEST_FILES + "or3.fool";
+    public void testTrueOrFalse() {
+        String fileName = ROOT_OR_TEST_FILES + "TrueOrFalse.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = true||false; in print(x);");
@@ -158,8 +158,8 @@ public class OperatorsTest {
 
     // testing or var x:bool = true||true
     @Test
-    public void testOrOperator4() {
-        String fileName = ROOT_OR_TEST_FILES + "or4.fool";
+    public void testTrueOrTrue() {
+        String fileName = ROOT_OR_TEST_FILES + "trueOrTrue.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = true||true; in print(x);");
@@ -169,8 +169,8 @@ public class OperatorsTest {
 
     // testing and var x:bool = false&&false
     @Test
-    public void testAndOperator() {
-        String fileName = ROOT_AND_TEST_FILES + "and.fool";
+    public void testFalseAndFalse() {
+        String fileName = ROOT_AND_TEST_FILES + "falseAndFalse.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = false&&false; in print(x);");
@@ -180,8 +180,8 @@ public class OperatorsTest {
 
     // testing and var x:bool = false&&true
     @Test
-    public void testAndOperator2() {
-        String fileName = ROOT_AND_TEST_FILES + "and2.fool";
+    public void testFalseAndTrue() {
+        String fileName = ROOT_AND_TEST_FILES + "falseAndTrue.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = false&&true; in print(x);");
@@ -191,8 +191,8 @@ public class OperatorsTest {
 
     // testing and var x:bool = true&&false
     @Test
-    public void testAndOperator3() {
-        String fileName = ROOT_AND_TEST_FILES + "and3.fool";
+    public void testTrueAndFalse() {
+        String fileName = ROOT_AND_TEST_FILES + "trueAndFalse.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = true&&false; in print(x);");
@@ -202,8 +202,8 @@ public class OperatorsTest {
 
     // testing and var x:bool = true&&true
     @Test
-    public void testAndOperator4() {
-        String fileName = ROOT_AND_TEST_FILES + "and4.fool";
+    public void testTrueAndTrue() {
+        String fileName = ROOT_AND_TEST_FILES + "trueAndTrue.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = true&&true; in print(x);");
@@ -213,8 +213,8 @@ public class OperatorsTest {
 
     // testing not var x:bool = !true
     @Test
-    public void testNotOperator() {
-        String fileName = ROOT_NOT_TEST_FILES + "not.fool";
+    public void testNotTrue() {
+        String fileName = ROOT_NOT_TEST_FILES + "notTrue.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = !true; in print(x);");
@@ -224,8 +224,8 @@ public class OperatorsTest {
 
     // testing not var x:bool = !false
     @Test
-    public void testNotOperator2() {
-        String fileName = ROOT_NOT_TEST_FILES + "not2.fool";
+    public void testNotFalse() {
+        String fileName = ROOT_NOT_TEST_FILES + "notFalse.fool";
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = !false; in print(x);");

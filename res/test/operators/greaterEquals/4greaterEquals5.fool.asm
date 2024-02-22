@@ -1,12 +1,12 @@
 push 0
+push 5
 push 4
-push 2
-bleq label10
+bleq label22
 push 0
-b label11
-label10:
+b label23
+label22:
 push 1
-label11:
+label23:
 lfp
 push -2
 add

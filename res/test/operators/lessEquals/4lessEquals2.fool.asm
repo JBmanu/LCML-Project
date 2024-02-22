@@ -1,7 +1,7 @@
 push 0
-push 0
-push 0
-beq label6
+push 4
+push 2
+bleq label6
 push 0
 b label7
 label6:
