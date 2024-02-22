@@ -62,7 +62,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitTimes_div(Times_divContext c) {
+    public Node visitTimes_Div(Times_DivContext c) {
         if (print) printVarAndProdName(c);
 
         if (c.TIMES() != null) {
@@ -77,7 +77,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitPlus_minus(Plus_minusContext c) {
+    public Node visitPlus_Minus(Plus_MinusContext c) {
         if (print) printVarAndProdName(c);
 
         if (c.PLUS() != null) {
@@ -111,7 +111,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitOr_and(FOOLParser.Or_andContext c) {
+    public Node visitAnd_Or(FOOLParser.And_OrContext c) {
         if (print) printVarAndProdName(c);
 
         if (c.OR() != null) {

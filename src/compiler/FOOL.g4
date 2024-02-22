@@ -32,22 +32,22 @@ dec : VAR ID COLON type ASS exp SEMIC #vardec
           SEMIC #fundec
     ;
 
-exp     : exp (TIMES | DIV) exp     #times_Div
-        | exp (PLUS | MINUS) exp    #plus_Minus
-        | exp (EQ | GE | LE) exp    #comp
-        | exp (AND | OR) exp        #and_Or
-	    | NOT exp           #not
-        | LPAR exp RPAR     #pars
-    	| MINUS?            #integer
-	    | TRUE              #true
-	    | FALSE             #false
-	    | NULL              #null
-	    | NEW ID LPAR (exp (COMMA exp)* )? RPAR             #new
-	    | IF exp THEN CLPAR exp CRPAR ELSE CLPAR exp CRPAR  #if
-	    | PRINT LPAR exp RPAR   #print
-        | ID                    #id
-	    | ID LPAR (exp (COMMA exp)* )? RPAR             #call
-	    | ID DOT ID LPAR (exp (COMMA exp)* )? RPAR      #dotCall
+exp     : exp (TIMES | DIV) exp #times_Div
+        | exp (PLUS | MINUS) exp #plus_Minus
+        | exp (EQ | GE | LE) exp #comp
+        | exp (AND | OR) exp #and_Or
+	    | NOT exp #not
+        | LPAR exp RPAR #pars
+    	| MINUS? NUM #integer
+	    | TRUE #true
+	    | FALSE #false
+	    | NULL #null
+	    | NEW ID LPAR (exp (COMMA exp)* )? RPAR #new
+	    | IF exp THEN CLPAR exp CRPAR ELSE CLPAR exp CRPAR #if
+	    | PRINT LPAR exp RPAR #print
+        | ID #id
+	    | ID LPAR (exp (COMMA exp)* )? RPAR #call
+	    | ID DOT ID LPAR (exp (COMMA exp)* )? RPAR #dotCall
         ;
 
 
