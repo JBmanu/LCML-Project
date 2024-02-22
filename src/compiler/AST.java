@@ -333,17 +333,17 @@ public class AST {
     // OO nodes
     public static class ClassNode extends DecNode {
         final String classId;
-        final List<FieldNode> declist;
-        final List<FunNode> metlist;
+        final List<FieldNode> fields;
+        final List<MethodNode> methods;
 
         final Optional<String> parentId;
         STentry parentEntry;
 
-        ClassNode(String classId, final Optional<String> parentId, List<FieldNode> dl, List<FunNode> ml) {
+        ClassNode(String classId, final Optional<String> parentId, List<FieldNode> fn, List<MethodNode> mn) {
             this.classId = classId;
             this.parentId = parentId;
-            this.declist = Collections.unmodifiableList(dl);
-            this.metlist = Collections.unmodifiableList(ml);
+            this.fields = Collections.unmodifiableList(fn);
+            this.methods = Collections.unmodifiableList(mn);
         }
 
         public void setTypeNode(TypeNode type) {

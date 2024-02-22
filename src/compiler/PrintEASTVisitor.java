@@ -1,203 +1,283 @@
 package compiler;
 
 import compiler.AST.*;
-import compiler.lib.*;
-import compiler.exc.*;
+import compiler.exc.VoidException;
+import compiler.lib.BaseEASTVisitor;
+import compiler.lib.Node;
+import compiler.lib.TypeNode;
 
-public class PrintEASTVisitor extends BaseEASTVisitor<Void,VoidException> {
+public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
 
-	public PrintEASTVisitor() { super(false,true); }
+    public PrintEASTVisitor() {
+        super(false, true);
+    }
 
-	@Override
-	public Void visitNode(ProgLetInNode n) {
-		printNode(n);
-		for (Node dec : n.declist) visit(dec);
-		visit(n.exp);
-		return null;
-	}
+    @Override
+    public Void visitNode(ProgLetInNode n) {
+        printNode(n);
+        for (Node dec : n.declist) visit(dec);
+        visit(n.exp);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(ProgNode n) {
-		printNode(n);
-		visit(n.exp);
-		return null;
-	}
+    @Override
+    public Void visitNode(ProgNode n) {
+        printNode(n);
+        visit(n.exp);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(FunNode n) {
-		printNode(n,n.id);
-		visit(n.retType);
-		for (ParNode par : n.parlist) visit(par);
-		for (Node dec : n.declist) visit(dec);
-		visit(n.exp);
-		return null;
-	}
+    @Override
+    public Void visitNode(FunNode n) {
+        printNode(n, n.id);
+        visit(n.retType);
+        for (ParNode par : n.parlist) visit(par);
+        for (Node dec : n.declist) visit(dec);
+        visit(n.exp);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(ParNode n) {
-		printNode(n,n.id);
-		visit(n.getType());
-		return null;
-	}
+    @Override
+    public Void visitNode(ParNode n) {
+        printNode(n, n.id);
+        visit(n.getType());
+        return null;
+    }
 
-	@Override
-	public Void visitNode(VarNode n) {
-		printNode(n,n.id);
-		visit(n.getType());
-		visit(n.exp);
-		return null;
-	}
+    @Override
+    public Void visitNode(VarNode n) {
+        printNode(n, n.id);
+        visit(n.getType());
+        visit(n.exp);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(PrintNode n) {
-		printNode(n);
-		visit(n.exp);
-		return null;
-	}
+    @Override
+    public Void visitNode(PrintNode n) {
+        printNode(n);
+        visit(n.exp);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(IfNode n) {
-		printNode(n);
-		visit(n.cond);
-		visit(n.th);
-		visit(n.el);
-		return null;
-	}
+    @Override
+    public Void visitNode(IfNode n) {
+        printNode(n);
+        visit(n.cond);
+        visit(n.th);
+        visit(n.el);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(EqualNode n) {
-		printNode(n);
-		visit(n.left);
-		visit(n.right);
-		return null;
-	}
+    @Override
+    public Void visitNode(EqualNode n) {
+        printNode(n);
+        visit(n.left);
+        visit(n.right);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(TimesNode n) {
-		printNode(n);
-		visit(n.left);
-		visit(n.right);
-		return null;
-	}
+    @Override
+    public Void visitNode(TimesNode n) {
+        printNode(n);
+        visit(n.left);
+        visit(n.right);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(PlusNode n) {
-		printNode(n);
-		visit(n.left);
-		visit(n.right);
-		return null;
-	}
+    @Override
+    public Void visitNode(PlusNode n) {
+        printNode(n);
+        visit(n.left);
+        visit(n.right);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(CallNode n) {
-		printNode(n,n.id+" at nestinglevel "+n.nl); 
-		visit(n.entry);
-		for (Node arg : n.arglist) visit(arg);
-		return null;
-	}
+    @Override
+    public Void visitNode(CallNode n) {
+        printNode(n, n.id + " at nestinglevel " + n.nl);
+        visit(n.entry);
+        for (Node arg : n.arglist) visit(arg);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(IdNode n) {
-		printNode(n,n.id+" at nestinglevel "+n.nl); 
-		visit(n.entry);
-		return null;
-	}
+    @Override
+    public Void visitNode(IdNode n) {
+        printNode(n, n.id + " at nestinglevel " + n.nl);
+        visit(n.entry);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(BoolNode n) {
-		printNode(n,n.val.toString());
-		return null;
-	}
+    @Override
+    public Void visitNode(BoolNode n) {
+        printNode(n, n.val.toString());
+        return null;
+    }
 
-	@Override
-	public Void visitNode(IntNode n) {
-		printNode(n,n.val.toString());
-		return null;
-	}
-	
-	@Override
-	public Void visitNode(ArrowTypeNode n) {
-		printNode(n);
-		for (Node par: n.parlist) visit(par);
-		visit(n.ret,"->"); //marks return type
-		return null;
-	}
+    @Override
+    public Void visitNode(IntNode n) {
+        printNode(n, n.val.toString());
+        return null;
+    }
 
-	@Override
-	public Void visitNode(BoolTypeNode n) {
-		printNode(n);
-		return null;
-	}
+    @Override
+    public Void visitNode(ArrowTypeNode n) {
+        printNode(n);
+        for (Node par : n.parlist) visit(par);
+        visit(n.ret, "->"); //marks return type
+        return null;
+    }
 
-	@Override
-	public Void visitNode(IntTypeNode n) {
-		printNode(n);
-		return null;
-	}
-	
-	@Override
-	public Void visitSTentry(STentry entry) {
-		printSTentry("nestlev "+entry.nl);
-		printSTentry("type");
-		visit(entry.type);
-		printSTentry("offset "+entry.offset);
-		return null;
-	}
+    @Override
+    public Void visitNode(BoolTypeNode n) {
+        printNode(n);
+        return null;
+    }
 
-	// new Nodes
-	@Override
-	public Void visitNode(MinusNode n) {
-		printNode(n);
-		visit(n.left);
-		visit(n.right);
-		return null;
-	}
+    @Override
+    public Void visitNode(IntTypeNode n) {
+        printNode(n);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(DivNode n) {
-		printNode(n);
-		visit(n.left);
-		visit(n.right);
-		return null;
-	}
+    @Override
+    public Void visitSTentry(STentry entry) {
+        printSTentry("nestlev " + entry.nl);
+        printSTentry("type");
+        visit(entry.type);
+        printSTentry("offset " + entry.offset);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(LessEqualNode n) {
-		printNode(n);
-		visit(n.left);
-		visit(n.right);
-		return null;
-	}
+    // new Nodes
+    @Override
+    public Void visitNode(MinusNode n) {
+        printNode(n);
+        visit(n.left);
+        visit(n.right);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(GreaterEqualNode n) {
-		printNode(n);
-		visit(n.left);
-		visit(n.right);
-		return null;
-	}
+    @Override
+    public Void visitNode(DivNode n) {
+        printNode(n);
+        visit(n.left);
+        visit(n.right);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(AndNode n) {
-		printNode(n);
-		visit(n.left);
-		visit(n.right);
-		return null;
-	}
+    @Override
+    public Void visitNode(LessEqualNode n) {
+        printNode(n);
+        visit(n.left);
+        visit(n.right);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(OrNode n) {
-		printNode(n);
-		visit(n.left);
-		visit(n.right);
-		return null;
-	}
+    @Override
+    public Void visitNode(GreaterEqualNode n) {
+        printNode(n);
+        visit(n.left);
+        visit(n.right);
+        return null;
+    }
 
-	@Override
-	public Void visitNode(NotNode n) {
-		printNode(n);
-		visit(n.exp);
-		return null;
-	}
+    @Override
+    public Void visitNode(AndNode n) {
+        printNode(n);
+        visit(n.left);
+        visit(n.right);
+        return null;
+    }
 
+    @Override
+    public Void visitNode(OrNode n) {
+        printNode(n);
+        visit(n.left);
+        visit(n.right);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(NotNode n) {
+        printNode(n);
+        visit(n.exp);
+        return null;
+    }
+
+    // OO nodes
+    @Override
+    public Void visitNode(ClassNode n) {
+        printNode(n, n.classId + " extends " + n.parentId.orElse("nothing"));
+        n.fields.forEach(this::visit);
+        n.methods.forEach(this::visit);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(FieldNode n) {
+        printNode(n, n.id + " Offset: " + n.offset);
+        visit(n.getType());
+        return null;
+    }
+
+    @Override
+    public Void visitNode(MethodNode n) {
+        printNode(n, n.id + " Offset: " + n.offset);
+        visit(n.retType);
+        for (ParNode par : n.parlist) visit(par);
+        for (Node dec : n.declist) visit(dec);
+        visit(n.exp);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(ClassCallNode n) {
+        printNode(n, n.objectId + "." + n.id + " at nestinglevel: " + n.nl);
+        visit(n.objectEntry);
+        visit(n.entry);
+        for (Node arg : n.arglist) visit(arg);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(NewNode n) {
+        printNode(n, n.id + " at nestinglevel: " + n.entry.nl);
+        for(Node node : n.args) visit(node);
+        visit(n.entry);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(EmptyNode n) {
+        printNode(n);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(ClassTypeNode n) {
+        printNode(n);
+        for (TypeNode field : n.fields) visit(field);
+        for (MethodTypeNode method : n.methods) visit(method);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(MethodTypeNode n) {
+        printNode(n);
+        for (Node par : n.parlist) visit(par);
+        visit(n.ret, "->"); //marks return type
+        return null;
+    }
+
+    @Override
+    public Void visitNode(RefTypeNode n) {
+        printNode(n, n.typeId);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(EmptyTypeNode n) {
+        printNode(n);
+        return null;
+    }
 }
