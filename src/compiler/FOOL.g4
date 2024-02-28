@@ -28,7 +28,7 @@ exp     : exp TIMES exp #times
         | exp GREATEREQ exp #greatereq
         | exp AND exp #and
         | exp OR exp #or
-        | NOT exp #not
+        | NOT exp #notlex
         | LPAR exp RPAR #pars
     	| MINUS? NUM #integer
 	    | TRUE #true     

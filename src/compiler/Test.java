@@ -10,6 +10,7 @@ import svm.*;
 public class Test {
 	static FOOLParser parser;
 	static FOOLLexer lexer;
+	static ASTGenerationSTVisitor visitor;
 	static ParseTree st;
 	static Node ast;
 	static SymbolTableASTVisitor symtableVisitor;
@@ -47,7 +48,7 @@ public class Test {
 
 	static void generateAST(){
 		System.out.println("Generating AST.");
-		ASTGenerationSTVisitor visitor = new ASTGenerationSTVisitor(); // use true to visualize the ST
+		visitor = new ASTGenerationSTVisitor(); // use true to visualize the ST
 		ast = visitor.visit(st);
 		System.out.println("");
 

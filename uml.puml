@@ -1,0 +1,296 @@
+@startuml
+
+
+class compiler.SymbolTableASTVisitor {
+- List<Map<String,STentry>> symTable
+- int nestingLevel
+- int decOffset
+~ int stErrors
+- STentry stLookup(String)
++ Void visitNode(ProgLetInNode)
++ Void visitNode(ProgNode)
++ Void visitNode(FunNode)
++ Void visitNode(VarNode)
++ Void visitNode(PrintNode)
++ Void visitNode(IfNode)
++ Void visitNode(EqualNode)
++ Void visitNode(MinorEqualNode)
++ Void visitNode(GreaterEqualNode)
++ Void visitNode(TimesNode)
++ Void visitNode(DivisionNode)
++ Void visitNode(PlusNode)
++ Void visitNode(MinusNode)
++ Void visitNode(NotNode)
++ Void visitNode(OrNode)
++ Void visitNode(AndNode)
++ Void visitNode(CallNode)
++ Void visitNode(IdNode)
++ Void visitNode(BoolNode)
++ Void visitNode(IntNode)
+}
+
+
+class compiler.ASTGenerationSTVisitor {
+~ String indent
++ boolean print
+- void printVarAndProdName(ParserRuleContext)
++ Node visit(ParseTree)
++ Node visitProg(ProgContext)
++ Node visitLetInProg(LetInProgContext)
++ Node visitNoDecProg(NoDecProgContext)
++ Node visitTimes(TimesContext)
++ Node visitDivision(DivisionContext)
++ Node visitEq(EqContext)
++ Node visitMinoreq(MinoreqContext)
++ Node visitGreatereq(GreatereqContext)
++ Node visitMinus(MinusContext)
++ Node visitNot(NotContext)
++ Node visitAnd(AndContext)
++ Node visitOr(OrContext)
++ Node visitVardec(VardecContext)
++ Node visitFundec(FundecContext)
++ Node visitIntType(IntTypeContext)
++ Node visitBoolType(BoolTypeContext)
++ Node visitInteger(IntegerContext)
++ Node visitTrue(TrueContext)
++ Node visitFalse(FalseContext)
++ Node visitIf(IfContext)
++ Node visitPrint(PrintContext)
++ Node visitPars(ParsContext)
++ Node visitId(IdContext)
++ Node visitCall(CallContext)
+}
+
+
+class compiler.PrintEASTVisitor {
++ Void visitNode(ProgLetInNode)
++ Void visitNode(ProgNode)
++ Void visitNode(FunNode)
++ Void visitNode(ParNode)
++ Void visitNode(VarNode)
++ Void visitNode(PrintNode)
++ Void visitNode(IfNode)
++ Void visitNode(EqualNode)
++ Void visitNode(MinorEqualNode)
++ Void visitNode(GreaterEqualNode)
++ Void visitNode(TimesNode)
++ Void visitNode(DivisionNode)
++ Void visitNode(PlusNode)
++ Void visitNode(MinusNode)
++ Void visitNode(NotNode)
++ Void visitNode(OrNode)
++ Void visitNode(AndNode)
++ Void visitNode(CallNode)
++ Void visitNode(IdNode)
++ Void visitNode(BoolNode)
++ Void visitNode(IntNode)
++ Void visitNode(ArrowTypeNode)
++ Void visitNode(BoolTypeNode)
++ Void visitNode(IntTypeNode)
++ Void visitSTentry(STentry)
+}
+
+class compiler.TypeCheckEASTVisitor {
+- TypeNode ckvisit(TypeNode)
++ TypeNode visitNode(ProgLetInNode)
++ TypeNode visitNode(ProgNode)
++ TypeNode visitNode(FunNode)
++ TypeNode visitNode(VarNode)
++ TypeNode visitNode(PrintNode)
++ TypeNode visitNode(IfNode)
++ TypeNode visitNode(EqualNode)
++ TypeNode visitNode(MinorEqualNode)
++ TypeNode visitNode(GreaterEqualNode)
++ TypeNode visitNode(TimesNode)
++ TypeNode visitNode(DivisionNode)
++ TypeNode visitNode(PlusNode)
++ TypeNode visitNode(MinusNode)
++ TypeNode visitNode(NotNode)
++ TypeNode visitNode(OrNode)
++ TypeNode visitNode(AndNode)
++ TypeNode visitNode(CallNode)
++ TypeNode visitNode(IdNode)
++ TypeNode visitNode(BoolNode)
++ TypeNode visitNode(IntNode)
++ TypeNode visitNode(ArrowTypeNode)
++ TypeNode visitNode(BoolTypeNode)
++ TypeNode visitNode(IntTypeNode)
++ TypeNode visitSTentry(STentry)
+}
+
+abstract class compiler.lib.DecNode {
+# TypeNode type
++ TypeNode getType()
+}
+
+
+abstract class compiler.lib.Node {
+~ int line
++ void setLine(int)
++ int getLine()
+}
+
+
+interface compiler.lib.Visitable {
+~ S accept(BaseASTVisitor<S,E>)
+}
+
+class compiler.CodeGenerationASTVisitor {
++ String visitNode(ProgLetInNode)
++ String visitNode(ProgNode)
++ String visitNode(FunNode)
++ String visitNode(VarNode)
++ String visitNode(PrintNode)
++ String visitNode(IfNode)
++ String visitNode(EqualNode)
++ String visitNode(MinorEqualNode)
++ String visitNode(GreaterEqualNode)
++ String visitNode(TimesNode)
++ String visitNode(PlusNode)
++ String visitNode(MinusNode)
++ String visitNode(DivisionNode)
++ String visitNode(NotNode)
++ String visitNode(OrNode)
++ String visitNode(AndNode)
++ String visitNode(CallNode)
++ String visitNode(IdNode)
++ String visitNode(BoolNode)
++ String visitNode(IntNode)
+}
+
+class compiler.STentry {
+~ int nl
+~ TypeNode type
+~ int offset
++ S accept(BaseASTVisitor<S,E>)
+}
+
+
+
+class compiler.TypeRels {
++ {static} boolean isSubtype(TypeNode,TypeNode)
+}
+
+class compiler.lib.BaseASTVisitor {
+- boolean incomplExc
+# boolean print
+# String indent
+# void printNode(Node)
+# void printNode(Node,String)
++ S visit(Visitable)
++ S visit(Visitable,String)
+~ S visitByAcc(Visitable)
++ S visitNode(ProgLetInNode)
++ S visitNode(ProgNode)
++ S visitNode(FunNode)
++ S visitNode(ParNode)
++ S visitNode(VarNode)
++ S visitNode(PrintNode)
++ S visitNode(IfNode)
++ S visitNode(EqualNode)
++ S visitNode(TimesNode)
++ S visitNode(PlusNode)
++ S visitNode(CallNode)
++ S visitNode(IdNode)
++ S visitNode(BoolNode)
++ S visitNode(IntNode)
++ S visitNode(ArrowTypeNode)
++ S visitNode(BoolTypeNode)
++ S visitNode(IntTypeNode)
++ S visitNode(DivisionNode)
++ S visitNode(MinusNode)
++ S visitNode(GreaterEqualNode)
++ S visitNode(MinorEqualNode)
++ S visitNode(NotNode)
++ S visitNode(OrNode)
++ S visitNode(AndNode)
+}
+
+
+class compiler.lib.FOOLlib {
+- {static} int labCount
++ {static} int typeErrors
+- {static} int funlabCount
+- {static} String funCode
++ {static} String extractNodeName(String)
++ {static} String extractCtxName(String)
++ {static} String lowerizeFirstChar(String)
++ {static} String nlJoin(String)
++ {static} String freshLabel()
++ {static} String freshFunLabel()
++ {static} void putCode(String)
++ {static} String getCode()
+}
+
+
+class compiler.Test {
+~ {static} FOOLParser parser
+~ {static} FOOLLexer lexer
+~ {static} ParseTree st
+~ {static} Node ast
+~ {static} SymbolTableASTVisitor symtableVisitor
+~ {static} SVMLexer lexerASM
+~ {static} SVMParser parserASM
+~ {static} String FILENAME
++ {static} void main(String[])
+~ {static} void setFoolToCompile()
+~ {static} void generateLexerAndCheckErrors()
+~ {static} void generateAST()
+~ {static} void viewAST()
+~ {static} void checkTypes()
+~ {static} void ifErrorsFoundedExit()
+~ {static} void generateCode()
+~ {static} void assembleASM()
+~ {static} void debug()
+~ {static} void executeVMAndCompute()
+}
+
+
+class compiler.AST {
+}
+
+
+class compiler.AST$ExampleNode {
+~ Node exp
++ S accept(BaseASTVisitor<S,E>)
+}
+
+
+
+class compiler.lib.BaseEASTVisitor {
+# void printSTentry(String)
++ S visitSTentry(STentry)
+}
+
+abstract class compiler.lib.TypeNode {
+}
+
+compiler.BaseASTVisitor <|-- compiler.SymbolTableASTVisitor
+compiler.SymbolTableASTVisitor --o compiler.STentry
+compiler.FOOLBaseVisitor <|-- compiler.ASTGenerationSTVisitor
+
+compiler.lib.BaseEASTVisitor <|-- compiler.PrintEASTVisitor
+compiler.lib.BaseEASTVisitor <|-- compiler.TypeCheckEASTVisitor
+compiler.lib.Node <|-- compiler.lib.DecNode
+compiler.lib.Visitable <|.. compiler.lib.Node
+compiler.BaseASTVisitor <|-- compiler.CodeGenerationASTVisitor
+compiler.Visitable <|.. compiler.STentry
+compiler.AST +.. compiler.AST$ExampleNode
+compiler.lib.Node <|-- compiler.AST$ExampleNode
+compiler.lib.Node o-- compiler.AST$ExampleNode
+compiler.lib.BaseASTVisitor <|-- compiler.lib.BaseEASTVisitor
+compiler.lib.Node <|-- compiler.lib.TypeNode
+compiler.lib.Node o-- compiler.AST
+compiler.CodeGenerationASTVisitor <|-- compiler.lib.BaseASTVisitor
+compiler.STentry <|-- compiler.visitable
+
+compiler.lib.Visitable --o compiler.lib.BaseASTVisitor
+
+compiler.Test --o compiler.gen.FOOLParser
+compiler.Test --o compiler.gen.FOOLlexer
+compiler.Test --o compiler.ASTGenerationSTVisitor
+compiler.Test --o compiler.lib.Node
+compiler.Test --o compiler.SymbolTableASTVisitor
+compiler.Test --o compiler.gen.SVMParser
+compiler.Test --o compiler.gen.SVMLexer
+@enduml
