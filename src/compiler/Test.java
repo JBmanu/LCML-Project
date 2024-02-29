@@ -11,8 +11,8 @@ public class Test {
 	static FOOLParser parser;
 	static FOOLLexer lexer;
 	static ASTGenerationSTVisitor visitor;
-	static ParseTree st;
-	static Node ast;
+	static ParseTree parseTree;
+	static Node ast; //nodo di partenza dell'AST
 	static SymbolTableASTVisitor symtableVisitor;
 	static SVMLexer lexerASM;
 	static SVMParser parserASM;
@@ -20,7 +20,7 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 		setFoolToCompile();
-		generateLexerAndCheckErrors();
+		generateSyntaxTreeAndCheckErrors();
 		generateAST();
 		viewAST();
 		checkTypes();
@@ -39,9 +39,9 @@ public class Test {
 		parser = new FOOLParser(tokens);
 	}
 
-	static void generateLexerAndCheckErrors(){
+	static void generateSyntaxTreeAndCheckErrors(){
 		System.out.println("Generating ST via lexer and parser.");
-		st = parser.prog();
+		parseTree = parser.prog();
 		System.out.println("You had "+lexer.lexicalErrors+" lexical errors and "+
 				parser.getNumberOfSyntaxErrors()+" syntax errors.\n");
 	}
@@ -49,7 +49,7 @@ public class Test {
 	static void generateAST(){
 		System.out.println("Generating AST.");
 		visitor = new ASTGenerationSTVisitor(); // use true to visualize the ST
-		ast = visitor.visit(st);
+		ast = visitor.visit(parseTree);
 		System.out.println("");
 
 		System.out.println("Enriching AST via symbol table.");

@@ -20,8 +20,8 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	private TypeNode ckvisit(TypeNode t) throws TypeException {
 		visit(t);
 		return t;
-	} 
-	
+	}
+
 	@Override
 	public TypeNode visitNode(ProgLetInNode n) throws TypeException {
 		if (print) printNode(n);

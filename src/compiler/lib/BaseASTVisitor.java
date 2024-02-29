@@ -10,7 +10,7 @@ public class BaseASTVisitor<S,E extends Exception> {
 	private boolean incomplExc; // enables throwing IncomplException
 	protected boolean print;    // enables printing
 	protected String indent;
-	
+
 	protected BaseASTVisitor() {}
 	protected BaseASTVisitor(boolean ie) { incomplExc = ie; } 
 	protected BaseASTVisitor(boolean ie, boolean p) { incomplExc = ie; print = p; } 
@@ -62,8 +62,7 @@ public class BaseASTVisitor<S,E extends Exception> {
 	public S visitNode(CallNode n) throws E {throw new UnimplException();}
 	public S visitNode(IdNode n) throws E {throw new UnimplException();}
 	public S visitNode(BoolNode n) throws E {throw new UnimplException();}
-	public S visitNode(IntNode n) throws E {throw new UnimplException();}	
-
+	public S visitNode(IntNode n) throws E {throw new UnimplException();}
 	public S visitNode(ArrowTypeNode n) throws E {throw new UnimplException();}
 	public S visitNode(BoolTypeNode n) throws E {throw new UnimplException();}
 	public S visitNode(IntTypeNode n) throws E {throw new UnimplException();}
