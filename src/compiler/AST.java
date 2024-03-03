@@ -346,7 +346,7 @@ public class AST {
             this.methods = Collections.unmodifiableList(mn);
         }
 
-        public void setTypeNode(TypeNode type) {
+        public void setTypeNode(ClassTypeNode type) {
             this.type = type;
         }
 
@@ -384,14 +384,20 @@ public class AST {
         }
     }
 
-    public static class ClassCallNode extends CallNode {
+    public static class ClassCallNode extends Node {
         final String objectId;
-        STentry objectEntry;
-        int nestingLevel;
+        final List<Node> args;
+        STentry entry;
+
+        final String methodId;
+        STentry methodEntry;
+
+        int nestingLevel = 0;
 
         ClassCallNode(final String objId, final String methodId, final List<Node> args) {
-            super(methodId, args);
             this.objectId = objId;
+            this.methodId = methodId;
+            this.args = Collections.unmodifiableList(args);
             this.nestingLevel = 0;
         }
 
@@ -402,12 +408,12 @@ public class AST {
     }
 
     public static class NewNode extends Node {
-        final String id;
+        final String classId;
         final List<Node> args;
         STentry entry;
 
-        NewNode(String i, final List<Node> args) {
-            this.id = i;
+        NewNode(String id, final List<Node> args) {
+            this.classId = id;
             this.args = Collections.unmodifiableList(args);
         }
 
@@ -479,9 +485,11 @@ public class AST {
         }
     }
 
-    public static class MethodTypeNode extends ArrowTypeNode {
+    public static class MethodTypeNode extends TypeNode {
+        final ArrowTypeNode functionalType;
+
         MethodTypeNode(List<TypeNode> p, TypeNode r) {
-            super(p, r);
+            this.functionalType = new ArrowTypeNode(p, r);
         }
 
         @Override
