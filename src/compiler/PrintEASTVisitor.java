@@ -232,10 +232,10 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
 
     @Override
     public Void visitNode(ClassCallNode n) {
-        printNode(n, n.objectId + "." + n.id + " at nestinglevel: " + n.nl);
-        visit(n.objectEntry);
+        printNode(n, n.objectId + "." + n.objectId + " at nestinglevel: " + n. nestingLevel);
         visit(n.entry);
-        for (Node arg : n.arglist) visit(arg);
+        visit(n.methodEntry);
+        for (Node arg : n.args) visit(arg);
         return null;
     }
 
@@ -264,8 +264,8 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
     @Override
     public Void visitNode(MethodTypeNode n) {
         printNode(n);
-        for (Node par : n.parlist) visit(par);
-        visit(n.ret, "->"); //marks return type
+        n.functionalType.parlist.forEach(this::visit);
+        visit(n.functionalType.ret, "->"); //marks return type
         return null;
     }
 
