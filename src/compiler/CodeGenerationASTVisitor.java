@@ -43,7 +43,7 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
     public String visitNode(FunNode n) {
         if (print) printNode(n, n.id);
         String declCode = null, popDecl = null, popParl = null;
-        for (Node dec : n.declist) {
+        for (Node dec : n.declarations) {
             declCode = nlJoin(declCode, visit(dec));
             popDecl = nlJoin(popDecl, "pop");
         }

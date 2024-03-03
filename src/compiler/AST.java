@@ -42,16 +42,16 @@ public class AST {
 
     public static class FunNode extends DecNode {
         final String id;
-        final TypeNode retType;
+        final TypeNode returnType;
         final List<ParNode> parlist;
-        final List<DecNode> declist;
+        final List<DecNode> declarations;
         final Node exp;
 
         FunNode(String i, TypeNode rt, List<ParNode> pl, List<DecNode> dl, Node e) {
             this.id = i;
-            this.retType = rt;
+            this.returnType = rt;
             this.parlist = Collections.unmodifiableList(pl);
-            this.declist = Collections.unmodifiableList(dl);
+            this.declarations = Collections.unmodifiableList(dl);
             this.exp = e;
         }
 
@@ -464,9 +464,9 @@ public class AST {
     // type nodes for OO
     public static class ClassTypeNode extends TypeNode {
         final List<TypeNode> fields;
-        final List<MethodTypeNode> methods;
+        final List<ArrowTypeNode> methods;
 
-        ClassTypeNode(final List<TypeNode> f, final List<MethodTypeNode> m) {
+        ClassTypeNode(final List<TypeNode> f, final List<ArrowTypeNode> m) {
             this.fields = Collections.unmodifiableList(f);
             this.methods = Collections.unmodifiableList(m);
         }

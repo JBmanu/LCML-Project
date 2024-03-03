@@ -9,11 +9,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class TypeRels {
-
-	// valuta se il tipo "a" e' <= al tipo "b", dove "a" e "b" sono tipi di base: IntTypeNode o BoolTypeNode
-
 	public static Map<String, String> superType = new HashMap<>();
-
 
 	private static Stream<String> superTypes(final String type) {
 		return Stream.iterate(type, Objects::nonNull, superType::get);

@@ -30,9 +30,9 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
     @Override
     public Void visitNode(FunNode n) {
         printNode(n, n.id);
-        visit(n.retType);
+        visit(n.returnType);
         for (ParNode par : n.parlist) visit(par);
-        for (Node dec : n.declist) visit(dec);
+        for (Node dec : n.declarations) visit(dec);
         visit(n.exp);
         return null;
     }
@@ -223,9 +223,9 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
     @Override
     public Void visitNode(MethodNode n) {
         printNode(n, n.id + " Offset: " + n.offset);
-        visit(n.retType);
+        visit(n.returnType);
         for (ParNode par : n.parlist) visit(par);
-        for (Node dec : n.declist) visit(dec);
+        for (Node dec : n.declarations) visit(dec);
         visit(n.exp);
         return null;
     }
@@ -256,8 +256,8 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
     @Override
     public Void visitNode(ClassTypeNode n) {
         printNode(n);
-        for (TypeNode field : n.fields) visit(field);
-        for (MethodTypeNode method : n.methods) visit(method);
+        n.fields.forEach(this::visit);
+        n.methods.forEach(this::visit);
         return null;
     }
 
