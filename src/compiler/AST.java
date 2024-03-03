@@ -336,12 +336,12 @@ public class AST {
         final List<FieldNode> fields;
         final List<MethodNode> methods;
 
-        final Optional<String> parentId;
-        STentry parentEntry;
+        final Optional<String> superId;
+        STentry superEntry;
 
         ClassNode(String classId, final Optional<String> parentId, List<FieldNode> fn, List<MethodNode> mn) {
             this.classId = classId;
-            this.parentId = parentId;
+            this.superId = parentId;
             this.fields = Collections.unmodifiableList(fn);
             this.methods = Collections.unmodifiableList(mn);
         }
@@ -433,12 +433,12 @@ public class AST {
 
     // Type nodes
     public static class ArrowTypeNode extends TypeNode {
-        final List<TypeNode> parlist;
-        final TypeNode ret;
+        final List<TypeNode> parameters;
+        final TypeNode returnType;
 
         ArrowTypeNode(List<TypeNode> p, TypeNode r) {
-            this.parlist = Collections.unmodifiableList(p);
-            this.ret = r;
+            this.parameters = Collections.unmodifiableList(p);
+            this.returnType = r;
         }
 
         @Override

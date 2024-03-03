@@ -122,8 +122,8 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
     @Override
     public Void visitNode(ArrowTypeNode n) {
         printNode(n);
-        for (Node par : n.parlist) visit(par);
-        visit(n.ret, "->"); //marks return type
+        for (Node par : n.parameters) visit(par);
+        visit(n.returnType, "->"); //marks return type
         return null;
     }
 
@@ -207,7 +207,7 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
     // OO nodes
     @Override
     public Void visitNode(ClassNode n) {
-        printNode(n, n.classId + " extends " + n.parentId.orElse("nothing"));
+        printNode(n, n.classId + " extends " + n.superId.orElse("nothing"));
         n.fields.forEach(this::visit);
         n.methods.forEach(this::visit);
         return null;
@@ -264,8 +264,8 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
     @Override
     public Void visitNode(MethodTypeNode n) {
         printNode(n);
-        n.functionalType.parlist.forEach(this::visit);
-        visit(n.functionalType.ret, "->"); //marks return type
+        n.functionalType.parameters.forEach(this::visit);
+        visit(n.functionalType.returnType, "->"); //marks return type
         return null;
     }
 
