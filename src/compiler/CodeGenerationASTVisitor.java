@@ -5,9 +5,13 @@ import compiler.lib.*;
 import compiler.exc.*;
 import compiler.lib.Node;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static compiler.lib.FOOLlib.*;
 
 public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidException> {
+  private final List<List<String>> dispatchTables = new ArrayList<>();
 
   CodeGenerationASTVisitor() {}
   CodeGenerationASTVisitor(boolean debug) {super(false,debug);} //enables print for debugging
@@ -32,6 +36,86 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 		return nlJoin(
 			visit(n.exp),
 			"halt"
+		);
+	}
+
+
+	@Override
+	public String visitNode(ClassNode n) {
+		if (print) printNode(n,n.classID);
+		List<String> distpatchTable = new ArrayList<>();
+
+		if(n.superID != null){ //inheritance
+			//copy of the dispatchTable of the superclass
+			distpatchTable.addAll(dispatchTables.get(-n.superEntry.offset-2));
+		}
+
+		for (int i = 0; i < n.functions.size(); i++) {
+			n.functions.get(i).label = "class" + dispatchTables.size() + "method" + i;
+			if (n.functions.get(i).offset >= distpatchTable.size()) { //non c'è overriding
+				distpatchTable.add(n.functions.get(i).label);
+			} else {
+				//overriding: substitution of the method label
+				distpatchTable.set(n.functions.get(i).offset, n.functions.get(i).label);
+			}
+
+			visit(n.functions.get(i)); //on the top of the stack there is the address of the method
+		}
+		String dispatchTableCode = null;
+		for (String label : distpatchTable){
+			dispatchTableCode = nlJoin(
+					dispatchTableCode,
+					"push " + label, //push on stack label(address)
+					"lhp", //push on stack heap pointer
+					"sw", //put in memory[heap pointer] the label
+
+					//hp increment (point to next free position, hp=hp+1)
+					"lhp",
+					"push 1",
+					"add",
+					"shp"
+			);
+		}
+		//aggiungo le dispatchtable della classe a dispatchtables
+		dispatchTables.add(distpatchTable);
+		// put the distpatch pointer on the stack
+		return nlJoin(
+				"lhp",
+				dispatchTableCode
+		);
+	}
+
+	@Override
+	public String visitNode(ClassCallNode n) {
+		if (print) printNode(n);
+		String argCode = "/* ClassCallNode */", getAR = null;
+
+		for (int i = n.arglist.size() - 1;i >= 0;i--) {
+			//string with arguments in reversed order
+			argCode = nlJoin(argCode, visit(n.arglist.get(i)));
+		}
+		for (int i = 0;i < (n.nl - n.classEntry.nl);i++) {
+			getAR=nlJoin(getAR,"lw");//access link, punta all'AR del chiamante
+		}
+
+		return nlJoin(
+				"lfp", // load Control Link (pointer to frame of function "id" caller)
+				argCode, // generate code for argument expressions in reversed order
+				"lfp", getAR, // retrieve address of frame containing "id" declaration
+				// by following the static chain (of Access Links)
+				"push "+n.classEntry.offset,
+				"add", // compute address of "id" declaration
+				"lw", // load value of "id" variable
+
+				"stm", // set $tm to popped value (with the aim of duplicating top of stack)
+				"ltm", // load Access Link (pointer to frame of function "id" declaration)
+				"ltm", // duplicate top of stack
+				"lw", // load value of "id" variable
+				"push "+n.methodEntry.offset,
+				"add", // compute address of "id" declaration
+				"lw", // load address of "id" function
+
+				"js"  // jump to popped address (saving address of subsequent instruction in $ra)
 		);
 	}
 

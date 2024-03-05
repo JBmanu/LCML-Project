@@ -20,8 +20,9 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 	private STentry stLookup(String id) {
 		int j = nestingLevel;
 		STentry entry = null;
-		while (j >= 0 && entry == null) 
-			entry = symTable.get(j--).get(id);	
+		while (j >= 0)// && entry == null
+			entry = symTable.get(j--).get(id);
+		System.out.println("j: " + j + "entry: " + entry);
 		return entry;
 	}
 
@@ -52,7 +53,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		this.manageAddedAttribute(node, virtualTable);
 		this.manageAddedFunctions(node, virtualTable);
 
-		decOffset=prevNLDecOffset; // restores counter for offset of declarations at previous nesting level
+		decOffset=prevNLDecOffset;
 		nestingLevel--;
 		symTable.remove(virtualTable);
 
@@ -92,12 +93,12 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		}
 
 		Map<String, STentry> virtualTable = new HashMap<>();//level 1
-		if (node.superID != null) {//se superID esiste aggiungo alla virtualTable i campi e i metodi ereditati
+		if (node.superID != null) {
 			virtualTable.putAll(classTable.get(node.superID));
 		}
 
-		classTable.put(node.classID, virtualTable);//inserisce nome classe e virtual table relativa (per riferimento)
-		symTable.add(virtualTable);//aggiungo nel NL 1 la virtual table
+		classTable.put(node.classID, virtualTable);
+		symTable.add(virtualTable);
 
 		return virtualTable;
 	}
@@ -117,14 +118,10 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		for (int i=0; i< node.attributes.size();i++){
 			AttributeNode attribute = node.attributes.get(i);
 			if(this.attributesId.add(attribute.id)){
-				//se il campo non è stato ancora dichiarato
 				if(virtualTable.containsKey(attribute.id)){
-					//overriding
 					STentry currentFieldEntry = virtualTable.get(attribute.id);
 					if(!(currentFieldEntry.type instanceof FunctionTypeNode)){
-						//overriding ok
 						virtualTable.put(attribute.id, new STentry(nestingLevel,attribute.getType(),currentFieldEntry.offset));
-						//mantieni offset del campo che stai overridando
 						attribute.offset=currentFieldEntry.offset;
 						node.classType.attributes.set((-attribute.offset -1),attribute.getType());
 					}else{
@@ -133,7 +130,6 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 						stErrors++;
 					}
 				}else{
-					//not overriding
 					virtualTable.put(attribute.id, new STentry(this.nestingLevel,attribute.getType(),this.decOffset));
 					attribute.offset=this.decOffset;
 					decOffset--;
@@ -175,6 +171,40 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		}
 
 	}
+
+	@Override
+	public Void visitNode(ClassCallNode n) {
+		if (print) printNode(n);
+
+		STentry objectEntry = this.stLookup(n.objectID);//cerco la STentry della classe
+
+		if (objectEntry == null) {
+			System.out.println("Class " + n.objectID + " at line "+ n.getLine() + " not declared");
+			stErrors++;
+		} else {//se objectEntry esiste
+			n.classEntry = objectEntry;
+			n.nl = nestingLevel;
+
+			String classID = ((RefTypeNode) objectEntry.type).classID;
+			STentry methodEntry = classTable.get(classID).get(n.methodID);
+
+			if (methodEntry == null) {
+				System.out.println("Method " + n.methodID + " at line " + n.getLine() + " not declared in class " + n.objectID);
+				stErrors++;
+			}
+			else {//se il metodo esiste
+				n.methodEntry = methodEntry;
+				n.nl = nestingLevel;
+			}
+
+			for (Node arg : n.arglist) {
+				visit(arg);
+			}
+		}
+		return null;
+	}
+
+
 
 	@Override
 	public Void visitNode(ProgNode n) {

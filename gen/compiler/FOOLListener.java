@@ -290,6 +290,18 @@ public interface FOOLListener extends ParseTreeListener {
 	 */
 	void exitId(FOOLParser.IdContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code dotCall}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void enterDotCall(FOOLParser.DotCallContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code dotCall}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void exitDotCall(FOOLParser.DotCallContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code if}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree
@@ -325,4 +337,16 @@ public interface FOOLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolType(FOOLParser.BoolTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code idType}
+	 * labeled alternative in {@link FOOLParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdType(FOOLParser.IdTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code idType}
+	 * labeled alternative in {@link FOOLParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdType(FOOLParser.IdTypeContext ctx);
 }

@@ -176,6 +176,13 @@ public interface FOOLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitId(FOOLParser.IdContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code dotCall}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDotCall(FOOLParser.DotCallContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code if}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree
@@ -196,4 +203,11 @@ public interface FOOLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBoolType(FOOLParser.BoolTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code idType}
+	 * labeled alternative in {@link FOOLParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdType(FOOLParser.IdTypeContext ctx);
 }

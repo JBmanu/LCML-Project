@@ -4,7 +4,21 @@ import java.util.*;
 import compiler.lib.*;
 
 public class AST {
-	
+
+	public static class RefTypeNode extends TypeNode {//ID
+
+		final String classID;
+
+		public RefTypeNode(String classID) {
+			this.classID = classID;
+		}
+
+		@Override
+		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+
+	}
+
+
 	public static class ProgLetInNode extends Node {
 		final List<DecNode> declist;
 		final Node exp;
@@ -344,4 +358,37 @@ public class AST {
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
 	}
 
+	public static class ClassCallNode extends Node {//classID.methodID()
+
+		final String objectID;
+		final String methodID;
+		final List<Node> arglist;
+		int nl;
+		STentry classEntry; //class entry
+		STentry methodEntry; //method entry
+
+		public ClassCallNode(String objectID, String methodID, List<Node> arglist) {
+			this.objectID = objectID;
+			this.methodID = methodID;
+			this.arglist = arglist;
+		}
+
+
+		@Override
+		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+
+	}
+
+	public static class ClassFunctionTypeNode extends TypeNode {
+
+		final ArrowTypeNode fun;
+
+		public ClassFunctionTypeNode(ArrowTypeNode fun) {
+			this.fun = fun;
+		}
+
+		@Override
+		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+
+	}
 }

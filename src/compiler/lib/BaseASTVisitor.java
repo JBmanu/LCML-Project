@@ -57,6 +57,10 @@ public class BaseASTVisitor<S,E extends Exception> {
 		throw new UnimplException();
 	}
 
+	public S visitNode(ClassCallNode node) throws E {
+		throw new UnimplException();
+	}
+
 	public S visitNode(AttributeNode node) throws E {
 		throw new UnimplException();
 	}
@@ -66,6 +70,14 @@ public class BaseASTVisitor<S,E extends Exception> {
 	}
 
 	public S visitNode(FunctionTypeNode n) throws E {
+		throw new UnimplException();
+	}
+
+	public S visitNode(ClassFunctionTypeNode n) throws E {
+		throw new UnimplException();
+	}
+
+	public S visitNode(RefTypeNode n) throws E {
 		throw new UnimplException();
 	}
 

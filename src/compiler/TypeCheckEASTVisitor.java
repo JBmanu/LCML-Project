@@ -265,7 +265,77 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 		return null;
 	}
 
-// STentry (ritorna campo type)
+	public TypeNode visitNode(ClassNode n) throws TypeException{
+		if (print) printNode(n);
+		TypeRels.superType.put(n.classID,n.superID);
+
+		// confronta suo tipo ClassTypeNode in campo "type"
+		//con quello del genitore in campo "superEntry" per
+		//controllare che eventuali overriding siano corretti
+		//• scorre tipi in array allFields/allMethods del genitore e
+		//controlla che il tipo alla stessa posizione nel proprio array
+		//allFields/allMethods sia sottotipo
+
+		if (n.superID !=null ) {
+
+			ClassTypeNode parentCT = ((ClassTypeNode) n.superEntry.type);
+
+			//fields
+			for (int i = 0; i < n.attributes.size(); i++) {
+
+				//offset del campo corrente (in modo che sia positivo)
+				int offset = -n.attributes.get(i).offset - 1;
+
+				//se l'offset ottenuto è di un campo ereditato e il fieldNode è stato inizializzato correttamente
+				if(offset <  parentCT.attributes.size() && offset >= 0) {
+					if (!isSubtype(n.classType.attributes.get(offset), parentCT.attributes.get(offset))) {
+						throw new TypeException("Wrong type for " + (i + 1) + "-th field in the inheritance of " + n.classID, n.getLine());
+					}
+				}
+			}
+
+			//methods
+			for (int i = 0; i < n.functions.size(); i++) {//per ogni metodo scritto nella classe (non ereditato)
+				int offset = n.functions.get(i).offset;//offset del metodo corrente
+
+				if(offset < parentCT.functions.size() && offset >= 0) {
+					if (!isSubtype(n.classType.functions.get(offset), parentCT.functions.get(offset))) {
+						throw new TypeException("Wrong type for " + (i + 1) + "-th method in the inheritance of " + n.classID, n.getLine());
+					}
+				}
+			}
+
+		}
+
+		for (Node method : n.functions) {
+			try {
+				visit(method);
+			} catch (IncomplException e) {
+			} catch (TypeException e) {
+				System.out.println("Type checking error in a declaration: " + e.text);
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public TypeNode visitNode(ClassCallNode n) throws TypeException {
+		String classCall = n.objectID +"."+n.methodID;
+		if (print) printNode(n, classCall);
+		TypeNode t = visit(n.methodEntry);//tipo del metodo
+		if ( t instanceof  ClassFunctionTypeNode) {//controllo che sia un metodo
+			ArrowTypeNode at = ((ClassFunctionTypeNode) t).fun;//se è un metodo estraggo arrowtype
+			if ( !(at.parlist.size() == n.arglist.size()) )
+				throw new TypeException("Wrong number of parameters in the class invocation of "+classCall,n.getLine());
+			for (int i = 0; i < n.arglist.size(); i++)
+				if ( !(isSubtype(visit(n.arglist.get(i)),at.parlist.get(i))) )
+					throw new TypeException("Wrong type for "+(i+1)+"-th parameter in the class invocation of "+classCall,n.getLine());
+			return at.ret;
+		} else {//se non è un metodo
+			throw new TypeException("Invocation of a non-method ",n.getLine());
+		}
+	}
 
 	@Override
 	public TypeNode visitSTentry(STentry entry) throws TypeException {
