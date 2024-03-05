@@ -48,6 +48,26 @@ public class BaseASTVisitor<S,E extends Exception> {
 		return v.accept(this);
 	}
 
+	//Classi
+	public S visitNode(ClassNode n) throws E {
+		throw new UnimplException();
+	}
+
+	public S visitNode(ClassTypeNode n) throws E {
+		throw new UnimplException();
+	}
+
+	public S visitNode(AttributeNode node) throws E {
+		throw new UnimplException();
+	}
+
+	public S visitNode(FunctionNode node) throws E {
+		throw new UnimplException();
+	}
+
+	public S visitNode(FunctionTypeNode n) throws E {
+		throw new UnimplException();
+	}
 
 	public S visitNode(ProgLetInNode n) throws E {throw new UnimplException();}
 	public S visitNode(ProgNode n) throws E {throw new UnimplException();}

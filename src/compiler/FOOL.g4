@@ -7,28 +7,41 @@ public int lexicalErrors=0;
 /*------------------------------------------------------------------
  * PARSER RULES
  *------------------------------------------------------------------*/
-  
-prog  : progbody EOF ;
-     
-progbody : LET dec+ IN exp SEMIC  #letInProg
-         | exp SEMIC              #noDecProg
-         ;
-  
-dec : VAR ID COLON type ASS exp SEMIC  #vardec
-    | FUN ID COLON type LPAR (ID COLON type (COMMA ID COLON type)* )? RPAR 
-        	(LET dec+ IN)? exp SEMIC   #fundec
-    ;
+prog : progbody EOF ;
+
+progbody : LET ( class+ dec* | dec+ ) IN exp SEMIC #letInProg
+       | exp SEMIC                               #noDecProg
+       ;
+
+class  : CLASS ID (EXTENDS ID)?
+            LPAR (ID COLON type (COMMA ID COLON type)* )? RPAR
+            CLPAR
+                 function*
+            CRPAR ;
+
+function : FUN ID COLON type
+            LPAR (ID COLON type (COMMA ID COLON type)* )? RPAR
+                 (LET dec+ IN)? exp
+            SEMIC ;
+
+dec : VAR ID COLON type ASS exp SEMIC #vardec
+  | FUN ID COLON type
+        LPAR (ID COLON type (COMMA ID COLON type)* )? RPAR
+             (LET dec+ IN)? exp
+        SEMIC #fundec
+  ;
+
            
 exp     : exp TIMES exp #times
         | exp DIVISION  exp #division
-        | exp PLUS  exp #plus
-        | exp MINUS  exp #minus
+        | exp PLUS exp #plus
+        | exp MINUS exp #minus
         | exp EQ  exp   #eq
         | exp MINOREQ exp #minoreq
         | exp GREATEREQ exp #greatereq
         | exp AND exp #and
         | exp OR exp #or
-        | NOT exp #notlex
+        | NOT exp #not
         | LPAR exp RPAR #pars
     	| MINUS? NUM #integer
 	    | TRUE #true     

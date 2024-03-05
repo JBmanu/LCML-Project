@@ -37,6 +37,49 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	}
 
 	@Override
+	public Node visitClass(ClassContext c) {
+		String superID = null;
+		if (print) printVarAndProdName(c);
+		int index = 0;
+		String classID = c.ID(index++).getText();
+
+		boolean heredity = this.checkHeredity(c, superID, index);
+		List<AttributeNode> attributes = this.findAttributeNodes(c, heredity, index);
+		List<FunctionNode> functions = this.foundFunctionNodes(c);
+
+		Node n = new ClassNode(classID, superID, attributes, functions);
+		n.setLine(c.ID(0).getSymbol().getLine());
+		return n;
+	}
+
+	public boolean checkHeredity(ClassContext c, String superID, int index){
+		if(c.EXTENDS() != null) {
+			superID = c.ID(index++).getText();
+			return true;
+		}
+		return false;
+	}
+
+	List<AttributeNode> findAttributeNodes(ClassContext c, boolean heredity, int index){
+		List<AttributeNode> attributes = new ArrayList<>();
+		for(; index < c.ID().size(); index++) {
+			AttributeNode n = new AttributeNode(c.ID(index).getText(),
+					(TypeNode) visit(c.type(heredity?index-2:index-1)));
+			n.setLine(c.ID(index).getSymbol().getLine());
+			attributes.add(n);
+		}
+		return attributes;
+	}
+
+	List<FunctionNode> foundFunctionNodes(ClassContext c){
+		List<FunctionNode> functions = new ArrayList<>();
+		for(FunctionContext function : c.function()) {
+			functions.add((FunctionNode) visit(function));
+		}
+		return functions;
+	}
+
+	@Override
 	public Node visitProg(ProgContext c) {
 		if (print) printVarAndProdName(c);
 		return visit(c.progbody());
