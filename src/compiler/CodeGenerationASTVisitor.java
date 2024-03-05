@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static compiler.lib.FOOLlib.*;
+import static svm.ExecuteVM.MEMSIZE;
 
 public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidException> {
   private final List<List<String>> dispatchTables = new ArrayList<>();
@@ -118,6 +119,48 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 				"js"  // jump to popped address (saving address of subsequent instruction in $ra)
 		);
 	}
+
+	@Override
+	public String visitNode(NewNode n) {
+		if (print) printNode(n, n.classID);
+		String argCode = "/* newNode*/";
+		//visit and push on the stack all the arguments
+		for (int i = 0; i < n.arglist.size(); i++) {
+			argCode = nlJoin(argCode, visit(n.arglist.get(i)));
+		}
+		//load of the arguments on heap
+		for (int i = 0; i < n.arglist.size(); i++){
+			argCode = nlJoin(argCode,
+					"lhp", //load heap pointer
+					"sw", //load the argument on the heap
+					//increment of heap pointer
+					"lhp",
+					"push 1",
+					"add",
+					"shp" //store heap pointer
+			);
+		}
+
+		return nlJoin(
+				argCode,
+				//get from MEMSIZE + offset (ID class) the dispatch pointer
+				"push " + MEMSIZE,
+				"push " + n.classEntry.offset,
+				"add",
+				"lw",
+				//load distpatch pointer on heap address
+				"lhp",
+				"sw",
+				//load on stack the hp address (object pointer)
+				"lhp",
+				//imcrement of heap pointer
+				"lhp",
+				"push 1",
+				"add",
+				"shp"
+		);
+	}
+
 
 	@Override
 	public String visitNode(FunNode n) {

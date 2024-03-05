@@ -43,6 +43,7 @@ exp     : exp TIMES exp #times
         | exp OR exp #or
         | NOT exp #not
         | LPAR exp RPAR #pars
+        | NEW ID LPAR (exp (COMMA exp)* )? RPAR #new
     	| MINUS? NUM #integer
 	    | TRUE #true
 	    | FALSE #false
@@ -89,7 +90,8 @@ THEN	: 'then';
 ELSE	: 'else' ;
 PRINT	: 'print';
 CLASS   : 'class';
-EXTENDS : 'extends' ;
+EXTENDS : 'extends';
+NEW     : 'new';
 LET     : 'let' ;
 IN      : 'in' ;
 VAR     : 'var' ;

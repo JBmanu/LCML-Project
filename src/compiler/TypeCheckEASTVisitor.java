@@ -320,6 +320,23 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	}
 
 	@Override
+	public TypeNode visitNode(NewNode n) throws TypeException {
+		if (print) printNode(n, n.classID);
+		TypeNode t =visit(n.classEntry);
+		if ( t instanceof ClassTypeNode) { //controllo che sia una classe
+			if (!(((ClassTypeNode) t).attributes.size() == n.arglist.size()))
+				throw new TypeException("Wrong number of parameters in the new class invocation of " + n.classID, n.getLine());
+			for (int i = 0; i < n.arglist.size(); i++) {
+				if (!(isSubtype(visit(n.arglist.get(i)), ((ClassTypeNode) t).attributes.get(i))))
+					throw new TypeException("Wrong type for " + (i + 1) + "-th parameter in the new class invocation of " + n.classID, n.getLine());
+			}
+			return new RefTypeNode(n.classID);
+		} else {
+			throw new TypeException("Invocation of a non-class ",n.getLine());
+		}
+	}
+
+	@Override
 	public TypeNode visitNode(ClassCallNode n) throws TypeException {
 		String classCall = n.objectID +"."+n.methodID;
 		if (print) printNode(n, classCall);

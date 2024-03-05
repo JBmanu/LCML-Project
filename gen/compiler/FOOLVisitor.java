@@ -57,6 +57,13 @@ public interface FOOLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFundec(FOOLParser.FundecContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code new}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNew(FOOLParser.NewContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code minus}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree

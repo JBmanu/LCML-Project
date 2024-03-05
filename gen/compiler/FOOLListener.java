@@ -86,6 +86,18 @@ public interface FOOLListener extends ParseTreeListener {
 	 */
 	void exitFundec(FOOLParser.FundecContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code new}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void enterNew(FOOLParser.NewContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code new}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void exitNew(FOOLParser.NewContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code minus}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree

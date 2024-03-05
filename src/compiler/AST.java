@@ -67,6 +67,23 @@ public class AST {
 
 	}
 
+
+	public static class NewNode extends Node {//new ID()
+
+		final String classID;
+		final List<Node> arglist;
+		STentry classEntry;
+
+		public NewNode(String classID, List<Node> arglist) {
+			this.classID = classID;
+			this.arglist = arglist;
+		}
+
+		@Override
+		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+
+	}
+
 	public static class AttributeNode extends DecNode {
 		final String id;
 		public int offset = 0;
