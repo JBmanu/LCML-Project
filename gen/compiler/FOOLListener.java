@@ -242,6 +242,18 @@ public interface FOOLListener extends ParseTreeListener {
 	 */
 	void exitTimes(FOOLParser.TimesContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code null}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void enterNull(FOOLParser.NullContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code null}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 */
+	void exitNull(FOOLParser.NullContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code and}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree

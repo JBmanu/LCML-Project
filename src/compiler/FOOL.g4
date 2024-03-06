@@ -47,6 +47,7 @@ exp     : exp TIMES exp #times
     	| MINUS? NUM #integer
 	    | TRUE #true
 	    | FALSE #false
+	    | NULL #null
 	    | IF exp THEN CLPAR exp CRPAR ELSE CLPAR exp CRPAR  #if
 	    | PRINT LPAR exp RPAR #print
 	    | ID #id
@@ -92,6 +93,7 @@ PRINT	: 'print';
 CLASS   : 'class';
 EXTENDS : 'extends';
 NEW     : 'new';
+NULL    : 'null';
 LET     : 'let' ;
 IN      : 'in' ;
 VAR     : 'var' ;

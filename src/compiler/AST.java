@@ -18,6 +18,16 @@ public class AST {
 
 	}
 
+	public static class EmptyNode extends Node {//null
+		@Override
+		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+	}
+
+	public static class EmptyTypeNode extends TypeNode {// tipo di null
+		@Override
+		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
+
+	}
 
 	public static class ProgLetInNode extends Node {
 		final List<DecNode> declist;

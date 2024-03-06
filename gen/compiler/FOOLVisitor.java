@@ -148,6 +148,13 @@ public interface FOOLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTimes(FOOLParser.TimesContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code null}
+	 * labeled alternative in {@link FOOLParser#exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNull(FOOLParser.NullContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code and}
 	 * labeled alternative in {@link FOOLParser#exp}.
 	 * @param ctx the parse tree

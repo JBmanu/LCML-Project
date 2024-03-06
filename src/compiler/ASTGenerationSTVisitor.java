@@ -37,7 +37,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	}
 
 	@Override
-	public Node visitClass(ClassContext c) {
+	public Node visitClass(ClassContext c) { //check
 		String superID = null;
 		if (print) printVarAndProdName(c);
 		int index = 0;
@@ -49,16 +49,6 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 
 		Node n = new ClassNode(classID, superID, attributes, functions);
 		n.setLine(c.ID(0).getSymbol().getLine());
-		return n;
-	}
-
-	@Override
-	public Node visitNew(NewContext c) {
-		if (print) printVarAndProdName(c);
-		List<Node> arglist = new ArrayList<>();
-		for (ExpContext arg : c.exp()) arglist.add(visit(arg));
-		Node n = new NewNode(c.ID().getText(), arglist);
-		n.setLine(c.ID().getSymbol().getLine());
 		return n;
 	}
 
@@ -87,6 +77,24 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 			functions.add((FunctionNode) visit(function));
 		}
 		return functions;
+	}
+
+	@Override
+	public Node visitNew(NewContext c) {
+		if (print) printVarAndProdName(c);
+		List<Node> arglist = new ArrayList<>();
+		for (ExpContext arg : c.exp()) arglist.add(visit(arg));
+		Node n = new NewNode(c.ID().getText(), arglist);
+		n.setLine(c.ID().getSymbol().getLine());
+		return n;
+	}
+
+	@Override
+	public Node visitNull(NullContext c) {
+		if (print) printVarAndProdName(c);
+		Node n = new EmptyNode();
+		n.setLine(c.NULL().getSymbol().getLine());
+		return n;
 	}
 
 	@Override
@@ -226,6 +234,12 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	public Node visitBoolType(BoolTypeContext c) {
 		if (print) printVarAndProdName(c);
 		return new BoolTypeNode();
+	}
+
+	@Override
+	public Node visitIdType(IdTypeContext c) {
+		if (print) printVarAndProdName(c);
+		return new RefTypeNode(c.ID().getText());
 	}
 
 	@Override
