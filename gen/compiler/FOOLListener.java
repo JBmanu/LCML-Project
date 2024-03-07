@@ -52,15 +52,15 @@ public interface FOOLListener extends ParseTreeListener {
 	 */
 	void exitClass(FOOLParser.ClassContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link FOOLParser#function}.
+	 * Enter a parse tree produced by {@link FOOLParser#classFunction}.
 	 * @param ctx the parse tree
 	 */
-	void enterFunction(FOOLParser.FunctionContext ctx);
+	void enterClassFunction(FOOLParser.ClassFunctionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link FOOLParser#function}.
+	 * Exit a parse tree produced by {@link FOOLParser#classFunction}.
 	 * @param ctx the parse tree
 	 */
-	void exitFunction(FOOLParser.FunctionContext ctx);
+	void exitClassFunction(FOOLParser.ClassFunctionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code vardec}
 	 * labeled alternative in {@link FOOLParser#dec}.

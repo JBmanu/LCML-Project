@@ -16,10 +16,10 @@ progbody : LET ( class+ dec* | dec+ ) IN exp SEMIC #letInProg
 class  : CLASS ID (EXTENDS ID)?
             LPAR (ID COLON type (COMMA ID COLON type)* )? RPAR
             CLPAR
-                 function*
+                 classFunction*
             CRPAR ;
 
-function : FUN ID COLON type
+classFunction : FUN ID COLON type
             LPAR (ID COLON type (COMMA ID COLON type)* )? RPAR
                  (LET dec+ IN)? exp
             SEMIC ;

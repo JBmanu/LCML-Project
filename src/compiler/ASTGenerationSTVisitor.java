@@ -37,6 +37,25 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	}
 
 	@Override
+	public Node visitClassFunction(ClassFunctionContext c) {//come FundecContext
+		if (print) printVarAndProdName(c);
+		List<ParNode> parList = new ArrayList<>();
+		for (int i = 1; i < c.ID().size(); i++) {
+			ParNode p = new ParNode(c.ID(i).getText(), (TypeNode) visit(c.type(i)));
+			p.setLine(c.ID(i).getSymbol().getLine());
+			parList.add(p);
+		}
+		List<DecNode> decList = new ArrayList<>();
+		for (DecContext dec : c.dec()) decList.add((DecNode) visit(dec));
+		Node n = null;
+		if (c.ID().size() > 0) { //non-incomplete ST
+			n = new ClassFunctionNode(c.ID(0).getText(), (TypeNode)visit(c.type(0)), parList, decList, visit(c.exp()));
+			n.setLine(c.FUN().getSymbol().getLine());
+		}
+		return n;
+	}
+
+	@Override
 	public Node visitClass(ClassContext c) { //check
 		String superID = null;
 		if (print) printVarAndProdName(c);
@@ -45,7 +64,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 
 		boolean heredity = this.checkHeredity(c, superID, index);
 		List<AttributeNode> attributes = this.findAttributeNodes(c, heredity, index);
-		List<FunctionNode> functions = this.foundFunctionNodes(c);
+		List<ClassFunctionNode> functions = this.foundFunctionNodes(c);
 
 		Node n = new ClassNode(classID, superID, attributes, functions);
 		n.setLine(c.ID(0).getSymbol().getLine());
@@ -71,10 +90,10 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 		return attributes;
 	}
 
-	List<FunctionNode> foundFunctionNodes(ClassContext c){
-		List<FunctionNode> functions = new ArrayList<>();
-		for(FunctionContext function : c.function()) {
-			functions.add((FunctionNode) visit(function));
+	List<ClassFunctionNode> foundFunctionNodes(ClassContext c){
+		List<ClassFunctionNode> functions = new ArrayList<>();
+		for(ClassFunctionContext function : c.classFunction()) {
+			functions.add((ClassFunctionNode) visit(function));
 		}
 		return functions;
 	}
@@ -106,7 +125,12 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 	@Override
 	public Node visitLetInProg(LetInProgContext c) {
 		if (print) printVarAndProdName(c);
+
 		List<DecNode> declist = new ArrayList<>();
+
+		// Visita le classi
+		for (ClassContext classContext : c.class_()) declist.add((DecNode) visit(classContext));
+
 		for (DecContext dec : c.dec()) declist.add((DecNode) visit(dec));
 		return new ProgLetInNode(declist, visit(c.exp()));
 	}

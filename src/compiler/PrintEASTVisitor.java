@@ -45,6 +45,14 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void,VoidException> {
 	}
 
 	@Override
+	public Void visitNode(FunctionTypeNode n) {
+		printNode(n);
+		visit(n.fun);//visita il suo arrowTypeNode
+		return null;
+	}
+
+
+	@Override
 	public Void visitNode(AttributeNode n) {
 		printNode(n, n.id);//stampa nome campo
 		visit(n.getType());//visita tipo campo
@@ -62,13 +70,19 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void,VoidException> {
 	}
 
 	@Override
-	public Void visitNode(FunctionNode n) {
+	public Void visitNode(ClassFunctionNode n) {
 		printNode(n, n.id);//stampa nome metodo
 		//come funNode
 		visit(n.retType);
 		for (ParNode par : n.parlist) visit(par);
 		for (Node dec : n.declist) visit(dec);
 		visit(n.exp);
+		return null;
+	}
+
+	@Override
+	public Void visitNode(ClassTypeNode n) {
+		printNode(n);
 		return null;
 	}
 

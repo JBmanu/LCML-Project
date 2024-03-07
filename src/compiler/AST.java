@@ -46,12 +46,11 @@ public class AST {
 		final String classID; //name
 		final String superID;  // ID classe padre
 		final List<AttributeNode> attributes;
-		final List<FunctionNode> functions;
+		final List<ClassFunctionNode> functions;
 		public ClassTypeNode classType;
-		//ClassTypeNode classType;
 		STentry superEntry;
 
-		public ClassNode(final String id, String superID, List<AttributeNode> attributes, final List<FunctionNode> functions) {
+		public ClassNode(final String id, String superID, List<AttributeNode> attributes, final List<ClassFunctionNode> functions) {
 			this.classID = id;
 			this.superID = superID;
 			this.attributes = Collections.unmodifiableList(attributes);
@@ -103,7 +102,7 @@ public class AST {
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
 	}
 
-	public static class FunctionNode extends DecNode {
+	public static class ClassFunctionNode extends DecNode {
 		final String id;
 		final TypeNode retType;
 		final List<ParNode> parlist;
@@ -113,7 +112,7 @@ public class AST {
 
 		public String label;
 
-		FunctionNode(String i, TypeNode rt, List<ParNode> pl, List<DecNode> dl, Node e) {
+		ClassFunctionNode(String i, TypeNode rt, List<ParNode> pl, List<DecNode> dl, Node e) {
 			id=i;
 			retType=rt;
 			parlist=Collections.unmodifiableList(pl);
@@ -400,19 +399,6 @@ public class AST {
 			this.arglist = arglist;
 		}
 
-
-		@Override
-		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
-
-	}
-
-	public static class ClassFunctionTypeNode extends TypeNode {
-
-		final ArrowTypeNode fun;
-
-		public ClassFunctionTypeNode(ArrowTypeNode fun) {
-			this.fun = fun;
-		}
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}

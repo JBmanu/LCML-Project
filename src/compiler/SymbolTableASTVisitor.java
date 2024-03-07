@@ -39,6 +39,8 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 	@Override
 	public Void visitNode(ClassNode node) {
+		System.out.println("classTable:" + classTable.toString());
+
 		if (print) printNode(node);
 		this.attributesId = new HashSet<>();
 		this.checkNestingLevel0(node);
@@ -70,6 +72,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 	public void defineClassType(ClassNode node, ClassTypeNode classType){
 		if (node.superID != null){//superID esiste
+			System.out.println("classTable:" + classTable.toString());
 			if (classTable.get(node.superID)!= null) {
 
 				node.superEntry=symTable.get(0).get(node.superID);
@@ -95,6 +98,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 			virtualTable.putAll(classTable.get(node.superID));
 		}
 
+		System.out.println("added " + node.classID + " in the class table: " + classTable.toString());
 		classTable.put(node.classID, virtualTable);
 		symTable.add(virtualTable);
 
@@ -150,7 +154,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 		int lastOffset = decOffset;
 		for (int i =0;i<node.attributes.size();i++){
-			FunctionNode function =  node.functions.get(i);
+			ClassFunctionNode function =  node.functions.get(i);
 			if(!(attributesId.add(function.id))){
 				System.out.println("Method id "+function.id + " at line " + node.getLine() +" already declared" );
 				stErrors++;
@@ -171,6 +175,75 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 	}
 
 	@Override
+	public Void visitNode(ClassFunctionNode n) {
+		if (print) printNode(n);
+
+		//creazione methodType
+		List<TypeNode> parTypes = new ArrayList<>();
+		for (ParNode par : n.parlist) parTypes.add(par.getType());
+
+		FunctionTypeNode methodTypeNode = new FunctionTypeNode(
+				new ArrowTypeNode(parTypes, n.retType));
+
+
+		Map<String,STentry> virtualTable=symTable.get(1);
+
+		if (!virtualTable.containsKey(n.id)) {
+			//virtual table non contiene il metodo (not overriding)
+			virtualTable.put(n.id, new STentry(nestingLevel, methodTypeNode, decOffset));
+			n.offset = decOffset;
+			decOffset++;
+			//classType.allMethods.add(((MethodTypeNode) methodTypeNode).fun);
+		} else {
+			//override
+			STentry currentMethodEntry = virtualTable.get(n.id);
+			if (currentMethodEntry.type instanceof FunctionTypeNode) {
+				//overriding ok
+				virtualTable.put(n.id, new STentry(nestingLevel, methodTypeNode, currentMethodEntry.offset));
+				n.offset = currentMethodEntry.offset;
+				//classType.allMethods.set(n.offset, ((MethodTypeNode) n.getType()).fun);
+			} else {
+				//overriding not ok
+				System.out.println("cannot override a field with the method " + n.id);
+				stErrors++;
+			}
+		}
+
+
+
+		//gestione parametri
+		int prevNLOffset = decOffset;
+		decOffset = 1;
+
+		Map<String,STentry> nestedHashMap = new HashMap<>();
+		nestingLevel++; //level 2
+		symTable.add(nestedHashMap); //added level 2 currently empty
+
+		//insert parameter STentry and check if parameter is already declared
+		for (ParNode par: n.parlist) {
+			if (nestedHashMap.put(par.id, new STentry(nestingLevel, par.getType(), decOffset++)) != null) {
+				System.out.println("Par id " + par.id + " at line " + par.getLine() + " already declared");
+				stErrors++;
+			}
+		}
+
+		//visit declaration
+		for (DecNode dec : n.declist) {
+			visit(dec);
+		}
+
+		//visit body
+		visit(n.exp);
+
+		decOffset = prevNLOffset;
+		nestingLevel--;
+		symTable.remove(nestedHashMap);
+
+		return null;
+	}
+
+
+	@Override
 	public Void visitNode(NewNode n){
 		if (print) printNode(n);
 
@@ -179,8 +252,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		if (classEntry == null) {
 			System.out.println("Class " + n.classID + " at line "+ n.getLine() + " not declared");
 			stErrors++;
-		}
-		else {
+		} else {
 			n.classEntry = classEntry;
 		}
 
@@ -193,6 +265,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 	@Override
 	public Void visitNode(ClassCallNode n) {
 		if (print) printNode(n);
+		System.out.println("classTable:" + classTable.toString());
 
 		STentry objectEntry = this.stLookup(n.objectID);//cerco la STentry della classe
 

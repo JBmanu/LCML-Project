@@ -23,11 +23,11 @@ public class FOOLParser extends Parser {
 		PRINT=25, CLASS=26, EXTENDS=27, NEW=28, NULL=29, LET=30, IN=31, VAR=32, 
 		FUN=33, INT=34, BOOL=35, NUM=36, ID=37, WHITESP=38, COMMENT=39, ERR=40;
 	public static final int
-		RULE_prog = 0, RULE_progbody = 1, RULE_class = 2, RULE_function = 3, RULE_dec = 4, 
-		RULE_exp = 5, RULE_type = 6;
+		RULE_prog = 0, RULE_progbody = 1, RULE_class = 2, RULE_classFunction = 3, 
+		RULE_dec = 4, RULE_exp = 5, RULE_type = 6;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"prog", "progbody", "class", "function", "dec", "exp", "type"
+			"prog", "progbody", "class", "classFunction", "dec", "exp", "type"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -355,11 +355,11 @@ public class FOOLParser extends Parser {
 		public TypeContext type(int i) {
 			return getRuleContext(TypeContext.class,i);
 		}
-		public List<FunctionContext> function() {
-			return getRuleContexts(FunctionContext.class);
+		public List<ClassFunctionContext> classFunction() {
+			return getRuleContexts(ClassFunctionContext.class);
 		}
-		public FunctionContext function(int i) {
-			return getRuleContext(FunctionContext.class,i);
+		public ClassFunctionContext classFunction(int i) {
+			return getRuleContext(ClassFunctionContext.class,i);
 		}
 		public List<TerminalNode> COMMA() { return getTokens(FOOLParser.COMMA); }
 		public TerminalNode COMMA(int i) {
@@ -454,7 +454,7 @@ public class FOOLParser extends Parser {
 				{
 				{
 				setState(68);
-				function();
+				classFunction();
 				}
 				}
 				setState(73);
@@ -477,7 +477,7 @@ public class FOOLParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class FunctionContext extends ParserRuleContext {
+	public static class ClassFunctionContext extends ParserRuleContext {
 		public TerminalNode FUN() { return getToken(FOOLParser.FUN, 0); }
 		public List<TerminalNode> ID() { return getTokens(FOOLParser.ID); }
 		public TerminalNode ID(int i) {
@@ -511,28 +511,28 @@ public class FOOLParser extends Parser {
 		public DecContext dec(int i) {
 			return getRuleContext(DecContext.class,i);
 		}
-		public FunctionContext(ParserRuleContext parent, int invokingState) {
+		public ClassFunctionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_function; }
+		@Override public int getRuleIndex() { return RULE_classFunction; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterFunction(this);
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).enterClassFunction(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitFunction(this);
+			if ( listener instanceof FOOLListener ) ((FOOLListener)listener).exitClassFunction(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitFunction(this);
+			if ( visitor instanceof FOOLVisitor ) return ((FOOLVisitor<? extends T>)visitor).visitClassFunction(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final FunctionContext function() throws RecognitionException {
-		FunctionContext _localctx = new FunctionContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_function);
+	public final ClassFunctionContext classFunction() throws RecognitionException {
+		ClassFunctionContext _localctx = new ClassFunctionContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_classFunction);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);

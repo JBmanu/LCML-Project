@@ -207,10 +207,14 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 		return new BoolTypeNode();
 	}
 
+
 	@Override
 	public TypeNode visitNode(CallNode n) throws TypeException {
 		if (print) printNode(n,n.id);
-		TypeNode t = visit(n.entry); 
+		TypeNode t = visit(n.entry);
+		if ( t instanceof  FunctionTypeNode) {//ottengo arrowtype da methodtype
+			t = ((FunctionTypeNode) t).fun;
+		}
 		if ( !(t instanceof ArrowTypeNode) )
 			throw new TypeException("Invocation of a non-function "+n.id,n.getLine());
 		ArrowTypeNode at = (ArrowTypeNode) t;
@@ -225,8 +229,8 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	@Override
 	public TypeNode visitNode(IdNode n) throws TypeException {
 		if (print) printNode(n,n.id);
-		TypeNode t = visit(n.entry); 
-		if (t instanceof ArrowTypeNode)
+		TypeNode t = visit(n.entry);
+		if (t instanceof ArrowTypeNode || t instanceof ClassTypeNode || t instanceof FunctionTypeNode)
 			throw new TypeException("Wrong usage of function identifier " + n.id,n.getLine());
 		return t;
 	}
@@ -243,8 +247,24 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 		return new IntTypeNode();
 	}
 
-// gestione tipi incompleti	(se lo sono lancia eccezione)
-	
+	@Override
+	public TypeNode visitNode(ClassFunctionNode n) throws TypeException {
+		if (print) printNode(n,n.id);
+		for (Node dec : n.declist)
+			try {
+				visit(dec);
+			} catch (IncomplException e) {
+			} catch (TypeException e) {
+				System.out.println("Type checking error in a declaration: " + e.text);
+			}
+
+		//controlla che il tipo del risultato di n.exp sia uguale a n.retType o che sia un suo sottotipo
+		if (!isSubtype(visit(n.exp),ckvisit(n.retType)) )
+			throw new TypeException("Wrong return type for method " + n.id,n.getLine());
+		return null;
+	}
+
+
 	@Override
 	public TypeNode visitNode(ArrowTypeNode n) throws TypeException {
 		if (print) printNode(n);
@@ -353,8 +373,8 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 		String classCall = n.objectID +"."+n.methodID;
 		if (print) printNode(n, classCall);
 		TypeNode t = visit(n.methodEntry);//tipo del metodo
-		if ( t instanceof  ClassFunctionTypeNode) {//controllo che sia un metodo
-			ArrowTypeNode at = ((ClassFunctionTypeNode) t).fun;//se è un metodo estraggo arrowtype
+		if ( t instanceof  FunctionTypeNode) {//controllo che sia un metodo
+			ArrowTypeNode at = ((FunctionTypeNode) t).fun;//se è un metodo estraggo arrowtype
 			if ( !(at.parlist.size() == n.arglist.size()) )
 				throw new TypeException("Wrong number of parameters in the class invocation of "+classCall,n.getLine());
 			for (int i = 0; i < n.arglist.size(); i++)
@@ -364,6 +384,18 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 		} else {//se non è un metodo
 			throw new TypeException("Invocation of a non-method ",n.getLine());
 		}
+	}
+
+	@Override
+	public TypeNode visitNode(FunctionTypeNode n) throws TypeException {
+		if (print) printNode(n);
+		return null;
+	}
+
+	@Override
+	public TypeNode visitNode(ClassTypeNode n) throws TypeException {
+		if (print) printNode(n);
+		return null;
 	}
 
 	@Override

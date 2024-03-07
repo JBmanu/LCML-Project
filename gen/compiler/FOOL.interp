@@ -88,7 +88,7 @@ rule names:
 prog
 progbody
 class
-function
+classFunction
 dec
 exp
 type
