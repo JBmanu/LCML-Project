@@ -16,7 +16,7 @@ public class Test {
 	static SymbolTableASTVisitor symtableVisitor;
 	static SVMLexer lexerASM;
 	static SVMParser parserASM;
-	static final String FILENAME = "res/quicksort.fool";
+	static final String FILENAME = "res/bankloan.fool";
 
     public static void main(String[] args) throws Exception {
 		setFoolToCompile();

@@ -46,8 +46,7 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 		if (print) printNode(n,n.classID);
 		List<String> distpatchTable = new ArrayList<>();
 
-		if(n.superID != null){ //inheritance
-			//copy of the dispatchTable of the superclass
+		if(n.superID != null){
 			distpatchTable.addAll(dispatchTables.get(-n.superEntry.offset-2));
 		}
 

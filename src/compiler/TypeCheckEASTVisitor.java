@@ -289,13 +289,6 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 		if (print) printNode(n);
 		TypeRels.superType.put(n.classID,n.superID);
 
-		// confronta suo tipo ClassTypeNode in campo "type"
-		//con quello del genitore in campo "superEntry" per
-		//controllare che eventuali overriding siano corretti
-		//• scorre tipi in array allFields/allMethods del genitore e
-		//controlla che il tipo alla stessa posizione nel proprio array
-		//allFields/allMethods sia sottotipo
-
 		if (n.superID !=null ) {
 
 			ClassTypeNode parentCT = ((ClassTypeNode) n.superEntry.type);
@@ -347,6 +340,12 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 
 	@Override
 	public TypeNode visitNode(EmptyTypeNode n) throws TypeException {
+		if (print) printNode(n);
+		return null;
+	}
+
+	@Override
+	public TypeNode visitNode(RefTypeNode n) throws TypeException {
 		if (print) printNode(n);
 		return null;
 	}
