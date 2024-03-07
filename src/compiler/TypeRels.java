@@ -12,16 +12,18 @@ public class TypeRels {
 	static Map<String,String> superType = new HashMap<>();
 	// valuta se il tipo "a" e' <= al tipo "b", dove "a" e "b" sono tipi di base: IntTypeNode o BoolTypeNode
 	public static boolean isSubtype(TypeNode a, TypeNode b) {
+		if(b==null){
+			System.out.println("b is null");
+		}
 		if(a instanceof RefTypeNode && b instanceof RefTypeNode){
 			//subtyping tra classi
 			String aID=((RefTypeNode)a).classID;
 			String bID=((RefTypeNode)b).classID;
+			System.out.println("bID: " + bID + " b: " + b);
 
 			if (superType.get(aID) == null) {
-				//caso tipi di classi senza ereditarietà
 				return aID.equals(bID);
 			} else {
-				//caso tipi di classi con ereditarietà
 				if (aID.equals((bID))) {
 					return true;
 				}

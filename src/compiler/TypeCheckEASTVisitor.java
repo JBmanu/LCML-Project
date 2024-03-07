@@ -5,12 +5,6 @@ import compiler.exc.*;
 import compiler.lib.*;
 import static compiler.TypeRels.*;
 
-//visitNode(n) fa il type checking di un Node n e ritorna:
-//- per una espressione, il suo tipo (oggetto BoolTypeNode o IntTypeNode)
-//- per una dichiarazione, "null"; controlla la correttezza interna della dichiarazione
-//(- per un tipo: "null"; controlla che il tipo non sia incompleto) 
-//
-//visitSTentry(s) ritorna, per una STentry s, il tipo contenuto al suo interno
 public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException> {
 
 	TypeCheckEASTVisitor() { super(true); } // enables incomplete tree exceptions 
@@ -59,7 +53,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	@Override
 	public TypeNode visitNode(VarNode n) throws TypeException {
 		if (print) printNode(n,n.id);
-		if ( !isSubtype(visit(n.exp),ckvisit(n.getType())) )
+		if (!isSubtype(visit(n.exp),ckvisit(n.getType())))
 			throw new TypeException("Incompatible value for variable " + n.id,n.getLine());
 		return null;
 	}
@@ -353,11 +347,14 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode,TypeException
 	@Override
 	public TypeNode visitNode(NewNode n) throws TypeException {
 		if (print) printNode(n, n.classID);
-		TypeNode t =visit(n.classEntry);
+		TypeNode t = visit(n.classEntry);
 		if ( t instanceof ClassTypeNode) { //controllo che sia una classe
 			if (!(((ClassTypeNode) t).attributes.size() == n.arglist.size()))
 				throw new TypeException("Wrong number of parameters in the new class invocation of " + n.classID, n.getLine());
+			System.out.println("arglist: " + n.arglist);
+			System.out.println("attributes: " + (((ClassTypeNode) t).attributes));
 			for (int i = 0; i < n.arglist.size(); i++) {
+				System.out.println("i: " + i + " ((ClassTypeNode) t).attributes.get(i))): " + ((ClassTypeNode) t).attributes.get(i));
 				if (!(isSubtype(visit(n.arglist.get(i)), ((ClassTypeNode) t).attributes.get(i))))
 					throw new TypeException("Wrong type for " + (i + 1) + "-th parameter in the new class invocation of " + n.classID, n.getLine());
 			}

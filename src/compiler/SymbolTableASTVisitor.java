@@ -40,6 +40,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 	@Override
 	public Void visitNode(ClassNode node) {
 		System.out.println("classTable:" + classTable.toString());
+		System.out.println("node.superID: " + node.superID);
 
 		if (print) printNode(node);
 		this.attributesId = new HashSet<>();
@@ -49,7 +50,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 		ClassTypeNode classType = new ClassTypeNode(new ArrayList<>(), new ArrayList<>());
 		node.classType = this.defineClassType(node, classType);
 
-		STentry entry = new STentry(nestingLevel, classType, decOffset--);
+		STentry entry = new STentry(this.nestingLevel, classType, this.decOffset--);
 		Map<String, STentry> virtualTable = this.addVirtualTable(node, level0HashMap, entry);
 		int prevNLDecOffset = this.modifyOffsetForVisit(node);
 
@@ -77,8 +78,8 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 				node.superEntry=symTable.get(0).get(node.superID);
 
-				classType.attributes.addAll(((ClassTypeNode)symTable.get(0).get(node.superID).type).attributes);
 				classType.functions.addAll(((ClassTypeNode)symTable.get(0).get(node.superID).type).functions);
+				classType.attributes.addAll(((ClassTypeNode)symTable.get(0).get(node.superID).type).attributes);
 			} else {
 				System.out.println("SuperClass id " + node.superID + " at line "+ node.getLine() +" is not declared");
 				stErrors++;
@@ -120,6 +121,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 	public void manageAddedAttribute(ClassNode node, ClassTypeNode classType, Map<String, STentry> virtualTable){
 		for (int i=0; i< node.attributes.size();i++){
 			AttributeNode attribute = node.attributes.get(i);
+			System.out.println("attribute: " + attribute);
 			if(this.attributesId.add(attribute.id)){
 				if(virtualTable.containsKey(attribute.id)){
 					STentry currentFieldEntry = virtualTable.get(attribute.id);
@@ -172,7 +174,6 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 				}
 			}
 		}
-
 	}
 
 	@Override
@@ -202,7 +203,6 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 				//overriding ok
 				virtualTable.put(n.id, new STentry(nestingLevel, methodTypeNode, currentMethodEntry.offset));
 				n.offset = currentMethodEntry.offset;
-				//classType.allMethods.set(n.offset, ((MethodTypeNode) n.getType()).fun);
 			} else {
 				//overriding not ok
 				System.out.println("cannot override a field with the method " + n.id);

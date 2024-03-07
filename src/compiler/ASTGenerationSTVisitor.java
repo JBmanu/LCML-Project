@@ -57,12 +57,16 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 
 	@Override
 	public Node visitClass(ClassContext c) { //check
-		String superID = null;
 		if (print) printVarAndProdName(c);
 		int index = 0;
+		boolean heredity = false;
 		String classID = c.ID(index++).getText();
 
-		boolean heredity = this.checkHeredity(c, superID, index);
+		String superID = null;
+		if(c.EXTENDS() != null) {
+			superID = c.ID(index++).getText();
+			heredity = true;
+		}
 		List<AttributeNode> attributes = this.findAttributeNodes(c, heredity, index);
 		List<ClassFunctionNode> functions = this.foundFunctionNodes(c);
 

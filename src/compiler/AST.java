@@ -50,7 +50,7 @@ public class AST {
 		public ClassTypeNode classType;
 		STentry superEntry;
 
-		public ClassNode(final String id, String superID, List<AttributeNode> attributes, final List<ClassFunctionNode> functions) {
+		public ClassNode(final String id, final String superID, List<AttributeNode> attributes, final List<ClassFunctionNode> functions) {
 			this.classID = id;
 			this.superID = superID;
 			this.attributes = Collections.unmodifiableList(attributes);
@@ -58,7 +58,6 @@ public class AST {
 		}
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
-
 	}
 
 	public static class ClassTypeNode extends TypeNode {
@@ -137,7 +136,6 @@ public class AST {
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
-
 	}
 
 	public static class ProgNode extends Node {
@@ -402,6 +400,5 @@ public class AST {
 
 		@Override
 		public <S,E extends Exception> S accept(BaseASTVisitor<S,E> visitor) throws E {return visitor.visitNode(this);}
-
 	}
 }

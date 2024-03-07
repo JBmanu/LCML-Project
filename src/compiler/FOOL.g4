@@ -10,7 +10,7 @@ public int lexicalErrors=0;
 prog : progbody EOF ;
 
 progbody : LET ( class+ dec* | dec+ ) IN exp SEMIC #letInProg
-       | exp SEMIC                               #noDecProg
+       | exp SEMIC                                 #noDecProg
        ;
 
 class  : CLASS ID (EXTENDS ID)?
