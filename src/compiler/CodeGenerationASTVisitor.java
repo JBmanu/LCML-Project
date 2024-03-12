@@ -47,7 +47,7 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
             declCode = nlJoin(declCode, visit(dec));
             popDecl = nlJoin(popDecl, "pop");
         }
-        for (int i = 0; i < n.parlist.size(); i++) popParl = nlJoin(popParl, "pop");
+        for (int i = 0; i < n.parameters.size(); i++) popParl = nlJoin(popParl, "pop");
         String funl = freshFunLabel();
         putCode(
                 nlJoin(

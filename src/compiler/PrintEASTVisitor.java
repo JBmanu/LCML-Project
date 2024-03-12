@@ -4,7 +4,6 @@ import compiler.AST.*;
 import compiler.exc.VoidException;
 import compiler.lib.BaseEASTVisitor;
 import compiler.lib.Node;
-import compiler.lib.TypeNode;
 
 public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
 
@@ -31,7 +30,7 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
     public Void visitNode(FunNode n) {
         printNode(n, n.id);
         visit(n.returnType);
-        for (ParNode par : n.parlist) visit(par);
+        for (ParNode par : n.parameters) visit(par);
         for (Node dec : n.declarations) visit(dec);
         visit(n.exp);
         return null;
@@ -224,8 +223,8 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
     public Void visitNode(MethodNode n) {
         printNode(n, n.id + " Offset: " + n.offset);
         visit(n.returnType);
-        for (ParNode par : n.parlist) visit(par);
-        for (Node dec : n.declarations) visit(dec);
+        n.parameters.forEach(this::visit);
+        n.declarations.forEach(this::visit);
         visit(n.exp);
         return null;
     }
@@ -235,14 +234,14 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
         printNode(n, n.objectId + "." + n.objectId + " at nestinglevel: " + n. nestingLevel);
         visit(n.entry);
         visit(n.methodEntry);
-        for (Node arg : n.args) visit(arg);
+        n.args.forEach(this::visit);
         return null;
     }
 
     @Override
     public Void visitNode(NewNode n) {
         printNode(n, n.classId + " at nestinglevel: " + n.entry.nl);
-        for(Node node : n.args) visit(node);
+        n.args.forEach(this::visit);
         visit(n.entry);
         return null;
     }
@@ -264,8 +263,8 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
     @Override
     public Void visitNode(MethodTypeNode n) {
         printNode(n);
-        n.functionalType.parameters.forEach(this::visit);
-        visit(n.functionalType.returnType, "->"); //marks return type
+        n.functionType.parameters.forEach(this::visit);
+        visit(n.functionType.returnType, "->"); //marks return type
         return null;
     }
 

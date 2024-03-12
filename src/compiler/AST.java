@@ -43,14 +43,14 @@ public class AST {
     public static class FunNode extends DecNode {
         final String id;
         final TypeNode returnType;
-        final List<ParNode> parlist;
+        final List<ParNode> parameters;
         final List<DecNode> declarations;
         final Node exp;
 
         FunNode(String i, TypeNode rt, List<ParNode> pl, List<DecNode> dl, Node e) {
             this.id = i;
             this.returnType = rt;
-            this.parlist = Collections.unmodifiableList(pl);
+            this.parameters = Collections.unmodifiableList(pl);
             this.declarations = Collections.unmodifiableList(dl);
             this.exp = e;
         }
@@ -330,7 +330,7 @@ public class AST {
         }
     }
 
-    // OO nodes
+    // OBJECT-ORIENTED EXTENSION
     public static class ClassNode extends DecNode {
         final String classId;
         final List<FieldNode> fields;
@@ -339,11 +339,11 @@ public class AST {
         final Optional<String> superId;
         STentry superEntry;
 
-        ClassNode(String classId, final Optional<String> parentId, List<FieldNode> fn, List<MethodNode> mn) {
+        ClassNode(String classId, final Optional<String> parentId, List<FieldNode> fields, List<MethodNode> methods) {
             this.classId = classId;
             this.superId = parentId;
-            this.fields = Collections.unmodifiableList(fn);
-            this.methods = Collections.unmodifiableList(mn);
+            this.fields = Collections.unmodifiableList(fields);
+            this.methods = Collections.unmodifiableList(methods);
         }
 
         public void setTypeNode(ClassTypeNode type) {
@@ -392,7 +392,7 @@ public class AST {
         final String methodId;
         STentry methodEntry;
 
-        int nestingLevel = 0;
+        int nestingLevel;
 
         ClassCallNode(final String objId, final String methodId, final List<Node> args) {
             this.objectId = objId;
@@ -486,10 +486,10 @@ public class AST {
     }
 
     public static class MethodTypeNode extends TypeNode {
-        final ArrowTypeNode functionalType;
+        final ArrowTypeNode functionType;
 
         MethodTypeNode(List<TypeNode> p, TypeNode r) {
-            this.functionalType = new ArrowTypeNode(p, r);
+            this.functionType = new ArrowTypeNode(p, r);
         }
 
         @Override

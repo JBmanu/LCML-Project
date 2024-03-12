@@ -323,7 +323,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode, TypeExceptio
 
         // visit method, if it is a method type, get the functional type
         if (type instanceof MethodTypeNode methodTypeNode) {
-            type = methodTypeNode.functionalType;
+            type = methodTypeNode.functionType;
         }
 
         // if it is not an arrow type, throw an exception
@@ -381,8 +381,8 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode, TypeExceptio
     public TypeNode visitNode(final MethodTypeNode node) throws TypeException {
         if (print) printNode(node);
         // Visit all parameters and the return type
-        for (final TypeNode parameter : node.functionalType.parameters) visit(parameter);
-        visit(node.functionalType.returnType, "->");
+        for (final TypeNode parameter : node.functionType.parameters) visit(parameter);
+        visit(node.functionType.returnType, "->");
         return null;
     }
 

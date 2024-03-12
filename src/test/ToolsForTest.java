@@ -45,9 +45,9 @@ public class ToolsForTest {
         return null;
     }
 
-    private void generateST(FOOLParser parser, FOOLLexer lexer) {
+    private void generateST() {
         System.out.println("Generating ST via lexer and parser.");
-        this.st = parser.prog();
+        this.st = this.parser.prog();
 //        System.out.println("You had " + lexer.lexicalErrors + " lexical errors and " +
 //                parser.getNumberOfSyntaxErrors() + " syntax errors.\n");
     }
@@ -129,7 +129,7 @@ public class ToolsForTest {
         CommonTokenStream tokens = new CommonTokenStream(this.lexer);
         this.parser = new FOOLParser(tokens);
 
-        this.generateST(this.parser, this.lexer);
+        this.generateST();
 
         Node ast = this.generateASTAndGetRoot();
         this.enrichASTSymbolTable(ast, printAST);
