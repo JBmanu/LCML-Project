@@ -3,11 +3,8 @@ package compiler;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
 public class FOOLParser extends Parser {
@@ -170,16 +167,16 @@ public class FOOLParser extends Parser {
 			return getRuleContext(ExpContext.class,0);
 		}
 		public TerminalNode SEMIC() { return getToken(FOOLParser.SEMIC, 0); }
-		public List<CldecContext> cldec() {
+		public List<CldecContext> classDeclarations() {
 			return getRuleContexts(CldecContext.class);
 		}
-		public CldecContext cldec(int i) {
+		public CldecContext classDeclarations(int i) {
 			return getRuleContext(CldecContext.class,i);
 		}
-		public List<DecContext> dec() {
+		public List<DecContext> declarations() {
 			return getRuleContexts(DecContext.class);
 		}
-		public DecContext dec(int i) {
+		public DecContext declarations(int i) {
 			return getRuleContext(DecContext.class,i);
 		}
 		public LetInProgContext(ProgbodyContext ctx) { copyFrom(ctx); }
@@ -355,10 +352,10 @@ public class FOOLParser extends Parser {
 		public TypeContext type(int i) {
 			return getRuleContext(TypeContext.class,i);
 		}
-		public List<MethdecContext> methdec() {
+		public List<MethdecContext> methodsDeclarations() {
 			return getRuleContexts(MethdecContext.class);
 		}
-		public MethdecContext methdec(int i) {
+		public MethdecContext methodsDeclarations(int i) {
 			return getRuleContext(MethdecContext.class,i);
 		}
 		public List<TerminalNode> COMMA() { return getTokens(FOOLParser.COMMA); }

@@ -1,15 +1,20 @@
 package compiler;
 
-import java.util.*;
-
+import compiler.AST.*;
+import compiler.FOOLParser.*;
+import compiler.lib.DecNode;
+import compiler.lib.Node;
+import compiler.lib.TypeNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import compiler.AST.*;
-import compiler.FOOLParser.*;
-import compiler.lib.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
-import static compiler.lib.FOOLlib.*;
+import static compiler.lib.FOOLlib.extractCtxName;
+import static compiler.lib.FOOLlib.lowerizeFirstChar;
 
 public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 
@@ -48,11 +53,24 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitLetInProg(LetInProgContext c) {
-        if (print) printVarAndProdName(c);
-        List<DecNode> declist = new ArrayList<>();
-        for (DecContext dec : c.dec()) declist.add((DecNode) visit(dec));
-        return new ProgLetInNode(declist, visit(c.exp()));
+    public Node visitLetInProg(LetInProgContext context) {
+        if (print) printVarAndProdName(context);
+
+        final List<DecNode> classDeclarations = context.classDeclarations().stream()
+                .map(this::visit)
+                .map(node -> (DecNode) node)
+                .toList();
+
+        final List<DecNode> declarations = context.declarations().stream()
+                .map(this::visit)
+                .map(node -> (DecNode) node)
+                .toList();
+
+        final List<DecNode> declist = new ArrayList<>();
+        declist.addAll(classDeclarations);
+        declist.addAll(declarations);
+
+        return new ProgLetInNode(declist, visit(context.exp()));
     }
 
     @Override
@@ -111,7 +129,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitAnd_Or(FOOLParser.And_OrContext c) {
+    public Node visitAnd_Or(And_OrContext c) {
         if (print) printVarAndProdName(c);
 
         if (c.OR() != null) {
@@ -126,7 +144,7 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitNot(FOOLParser.NotContext c) {
+    public Node visitNot(NotContext c) {
         if (print) printVarAndProdName(c);
         Node n = new NotNode(visit(c.exp()));
         n.setLine(c.NOT().getSymbol().getLine());
@@ -134,33 +152,38 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitVardec(VardecContext c) {
-        if (print) printVarAndProdName(c);
-        Node n = null;
-        if (c.ID() != null) { //non-incomplete ST
-            n = new VarNode(c.ID().getText(), (TypeNode) visit(c.type()), visit(c.exp()));
-            n.setLine(c.VAR().getSymbol().getLine());
-        }
+    public Node visitVardec(VardecContext context) {
+        if (print) printVarAndProdName(context);
+        //non-incomplete ST
+        if (Objects.isNull(context.ID())) return null;
+
+        final VarNode n = new VarNode(context.ID().getText(), (TypeNode) visit(context.type()), visit(context.exp()));
+        n.setLine(context.VAR().getSymbol().getLine());
         return n;
     }
 
     @Override
-    public Node visitFundec(FundecContext c) {
-        if (print) printVarAndProdName(c);
-        List<ParNode> parList = new ArrayList<>();
-        for (int i = 1; i < c.ID().size(); i++) {
-            ParNode p = new ParNode(c.ID(i).getText(), (TypeNode) visit(c.type(i)));
-            p.setLine(c.ID(i).getSymbol().getLine());
-            parList.add(p);
+    public Node visitFundec(FundecContext context) {
+        if (print) printVarAndProdName(context);
+        //incomplete ST
+        if (context.ID().isEmpty()) return null;
+
+        List<ParNode> parametersList = new ArrayList<>();
+        for (int i = 1; i < context.ID().size(); i++) {
+            ParNode p = new ParNode(context.ID(i).getText(), (TypeNode) visit(context.type(i)));
+            p.setLine(context.ID(i).getSymbol().getLine());
+            parametersList.add(p);
         }
-        List<DecNode> decList = new ArrayList<>();
-        for (DecContext dec : c.dec()) decList.add((DecNode) visit(dec));
-        Node n = null;
-        if (c.ID().size() > 0) { //non-incomplete ST
-            n = new FunNode(c.ID(0).getText(), (TypeNode) visit(c.type(0)), parList, decList, visit(c.exp()));
-            n.setLine(c.FUN().getSymbol().getLine());
-        }
-        return n;
+
+        final List<DecNode> declarationsList = context.dec().stream()
+                .map(dec -> (DecNode) visit(dec))
+                .toList();
+
+        final String id = context.ID(0).getText();
+        final TypeNode type = (TypeNode) visit(context.type(0));
+        final FunNode node = new FunNode(id, type, parametersList, declarationsList, visit(context.exp()));
+        node.setLine(context.FUN().getSymbol().getLine());
+        return node;
     }
 
     @Override
@@ -178,8 +201,8 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
     @Override
     public Node visitInteger(IntegerContext c) {
         if (print) printVarAndProdName(c);
-        int v = Integer.parseInt(c.NUM().getText());
-        return new IntNode(c.MINUS() == null ? v : -v);
+        int value = Integer.parseInt(c.NUM().getText());
+        return new IntNode(Objects.isNull(c.MINUS()) ? value : -value);
     }
 
     @Override
@@ -228,10 +251,113 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
     @Override
     public Node visitCall(CallContext c) {
         if (print) printVarAndProdName(c);
-        List<Node> arglist = new ArrayList<>();
-        for (ExpContext arg : c.exp()) arglist.add(visit(arg));
+        List<Node> arglist = c.exp().stream().map(this::visit).toList();
+
         Node n = new CallNode(c.ID().getText(), arglist);
         n.setLine(c.ID().getSymbol().getLine());
         return n;
     }
+
+    // OBJECT-ORIENTED EXTENSION
+    @Override
+    public Node visitCldec(final CldecContext context) {
+        if (print) printVarAndProdName(context);
+        if (context.ID().isEmpty()) return null; // Incomplete ST
+
+        final Optional<String> superId = Objects.isNull(context.EXTENDS()) ?
+                Optional.empty() : Optional.of(context.ID(1).getText());
+        final int idSuperPadding = superId.isPresent() ? 2 : 1;
+
+        final List<FieldNode> fields = new ArrayList<>();
+        for (int i = idSuperPadding; i < context.ID().size(); i++) {
+            final String id = context.ID(i).getText();
+            final TypeNode type = (TypeNode) visit(context.type(i - idSuperPadding));
+            final FieldNode f = new FieldNode(id, type);
+            f.setLine(context.ID(i).getSymbol().getLine());
+            fields.add(f);
+        }
+        final List<MethodNode> methods = context.methodsDeclarations().stream()
+                .map(x -> (MethodNode) visit(x))
+                .toList();
+
+        final String classId = context.ID(0).getText();
+        final ClassNode classNode = new ClassNode(classId, superId, fields, methods);
+        classNode.setLine(context.ID(0).getSymbol().getLine());
+        return classNode;
+    }
+
+    @Override
+    public Node visitMethdec(final MethdecContext context) {
+        if (print) printVarAndProdName(context);
+        if (context.ID().isEmpty()) return null; // Incomplete ST
+        final String methodId = context.ID(0).getText();
+        final TypeNode returnType = (TypeNode) visit(context.type(0));
+
+        final int idPadding = 1;
+        final List<ParNode> params = new ArrayList<>();
+        for (int i = idPadding; i < context.ID().size(); i++) {
+            final String id = context.ID(i).getText();
+            final TypeNode type = (TypeNode) visit(context.type(i));
+            final ParNode p = new ParNode(id, type);
+            p.setLine(context.ID(i).getSymbol().getLine());
+            params.add(p);
+        }
+
+        final List<DecNode> declarations = context.dec().stream()
+                .map(x -> (DecNode) visit(x))
+                .toList();
+
+        final Node exp = visit(context.exp());
+        final MethodNode methodNode = new MethodNode(methodId, returnType, params, declarations, exp);
+        methodNode.setLine(context.ID(0).getSymbol().getLine());
+        return methodNode;
+    }
+
+    @Override
+    public Node visitNull(final NullContext context) {
+        if (print) printVarAndProdName(context);
+        return new EmptyNode();
+    }
+
+    @Override
+    public Node visitDotCall(final DotCallContext context) {
+        if (print) printVarAndProdName(context);
+        if (context.ID().size() != 2) return null; // Incomplete ST
+
+        final String objectId = context.ID(0).getText();
+        final String methodId = context.ID(1).getText();
+        final List<Node> args = context.exp().stream()
+                .map(this::visit)
+                .toList();
+
+        final ClassCallNode classCallNode = new ClassCallNode(objectId, methodId, args);
+        classCallNode.setLine(context.ID(0).getSymbol().getLine());
+        return classCallNode;
+    }
+
+    @Override
+    public Node visitNew(final NewContext context) {
+        if (print) printVarAndProdName(context);
+        if (Objects.isNull(context.ID())) return null; // Incomplete ST
+
+        final String classId = context.ID().getText();
+        final List<Node> args = context.exp().stream()
+                .map(this::visit)
+                .toList();
+
+        final NewNode newNode = new NewNode(classId, args);
+        newNode.setLine(context.ID().getSymbol().getLine());
+        return newNode;
+    }
+
+    @Override
+    public Node visitIdType(final IdTypeContext context) {
+        if (print) printVarAndProdName(context);
+
+        final String id = context.ID().getText();
+        final RefTypeNode node = new RefTypeNode(id);
+        node.setLine(context.ID().getSymbol().getLine());
+        return node;
+    }
+
 }

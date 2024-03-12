@@ -339,9 +339,9 @@ public class AST {
         final Optional<String> superId;
         STentry superEntry;
 
-        ClassNode(String classId, final Optional<String> parentId, List<FieldNode> fields, List<MethodNode> methods) {
+        ClassNode(String classId, final Optional<String> superId, List<FieldNode> fields, List<MethodNode> methods) {
             this.classId = classId;
-            this.superId = parentId;
+            this.superId = superId;
             this.fields = Collections.unmodifiableList(fields);
             this.methods = Collections.unmodifiableList(methods);
         }
