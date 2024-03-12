@@ -486,10 +486,10 @@ public class AST {
     }
 
     public static class MethodTypeNode extends TypeNode {
-        final ArrowTypeNode functionType;
+        final ArrowTypeNode functionalType;
 
         MethodTypeNode(List<TypeNode> p, TypeNode r) {
-            this.functionType = new ArrowTypeNode(p, r);
+            this.functionalType = new ArrowTypeNode(p, r);
         }
 
         @Override

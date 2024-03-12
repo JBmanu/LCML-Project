@@ -75,11 +75,6 @@ public class TypeRels {
 				return false;
 			}
 		}
-//		for (int i = 0; i < firstArrowTypeNode.parameters.size(); i++) {
-//			if (!isSupertype(firstArrowTypeNode.parameters.get(i), secondArrowTypeNode.parameters.get(i))) {
-//				return false;
-//			}
-//		}
 
 		return true;
 	}

@@ -263,8 +263,8 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
     @Override
     public Void visitNode(MethodTypeNode n) {
         printNode(n);
-        n.functionType.parameters.forEach(this::visit);
-        visit(n.functionType.returnType, "->"); //marks return type
+        n.functionalType.parameters.forEach(this::visit);
+        visit(n.functionalType.returnType, "->"); //marks return type
         return null;
     }
 
