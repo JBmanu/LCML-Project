@@ -95,7 +95,7 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
     public Void visitNode(CallNode n) {
         printNode(n, n.id + " at nestinglevel " + n.nl);
         visit(n.entry);
-        for (Node arg : n.arglist) visit(arg);
+        for (Node arg : n.arguments) visit(arg);
         return null;
     }
 

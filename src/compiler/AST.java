@@ -170,13 +170,13 @@ public class AST {
 
     public static class CallNode extends Node {
         final String id;
-        final List<Node> arglist;
+        final List<Node> arguments;
         STentry entry;
         int nl;
 
         CallNode(String i, List<Node> p) {
             this.id = i;
-            this.arglist = Collections.unmodifiableList(p);
+            this.arguments = Collections.unmodifiableList(p);
         }
 
         @Override

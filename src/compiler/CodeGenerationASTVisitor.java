@@ -143,7 +143,7 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
     public String visitNode(CallNode n) {
         if (print) printNode(n, n.id);
         String argCode = null, getAR = null;
-        for (int i = n.arglist.size() - 1; i >= 0; i--) argCode = nlJoin(argCode, visit(n.arglist.get(i)));
+        for (int i = n.arguments.size() - 1; i >= 0; i--) argCode = nlJoin(argCode, visit(n.arguments.get(i)));
         for (int i = 0; i < n.nl - n.entry.nl; i++) getAR = nlJoin(getAR, "lw");
         return nlJoin(
                 "lfp", // load Control Link (pointer to frame of function "id" caller)
