@@ -240,10 +240,246 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
         return null;
     }
 
-//    @Override
-//    public Void visitNode(ClassNode node) {
-//        if (print) printNode(node);
-//
-//    }
+    // OBJECT-ORIENTED EXTENSION
+    @Override
+    public Void visitNode(final ClassNode node) {
+        if (print) printNode(node);
+
+        ClassTypeNode tempClassTypeNode = new ClassTypeNode();
+        final boolean isSubClass = node.superId.isPresent();
+        final String superId = isSubClass ? node.superId.get() : null;
+
+        if (isSubClass) {
+            // Check if the super class is declared
+            if (classTable.containsKey(superId)) {
+                final STentry superSTEntry = symbolTable.getFirst().get(superId);
+                final ClassTypeNode superTypeNode = (ClassTypeNode) superSTEntry.type;
+                tempClassTypeNode = new ClassTypeNode(superTypeNode);
+                node.superEntry = superSTEntry;
+            } else {
+                System.out.println("Class " + superId + " at line " + node.getLine() + " not declared");
+                stErrors++;
+            }
+        }
+
+        final ClassTypeNode classTypeNode = tempClassTypeNode;
+        node.setTypeNode(classTypeNode);
+
+        // Add the class id to the global scope table checking for duplicates
+        final STentry entry = new STentry(0, classTypeNode, decOffset--);
+        final Map<String, STentry> globalScopeTable = symbolTable.getFirst();
+        if (!Objects.isNull(globalScopeTable.put(node.classId, entry))) {
+            System.out.println("Class id " + node.classId + " at line " + node.getLine() + " already declared");
+            stErrors++;
+        }
+
+        // Add the class to the class table
+        final Set<String> visitedClassNames = new HashSet<>();
+        final VirtualTable virtualTable = new VirtualTable();
+        if (isSubClass) {
+            final VirtualTable superClassVirtualTable = classTable.get(superId);
+            virtualTable.putAll(superClassVirtualTable);
+        }
+        classTable.put(node.classId, virtualTable);
+        symbolTable.add(virtualTable);
+
+        // Setting the field offset
+        nestingLevel++;
+        int fieldOffset = -1;
+        if (isSubClass) {
+            final ClassTypeNode superTypeNode = (ClassTypeNode) symbolTable.getFirst().get(superId).type;
+            fieldOffset = -superTypeNode.fields.size() - 1;
+        }
+
+        // Handle field declaration.
+        for (final FieldNode field : node.fields) {
+            if (visitedClassNames.contains(field.id)) {
+                System.out.println("Field with id " + field.id + " on line " + field.getLine() + " was already declared");
+                stErrors++;
+            } else {
+                visitedClassNames.add(field.id);
+            }
+            visit(field);
+
+            STentry fieldEntry = new STentry(nestingLevel, field.getType(), fieldOffset--);
+            final boolean isFieldOverridden = isSubClass && virtualTable.containsKey(field.id);
+            if (isFieldOverridden) {
+                final STentry overriddenFieldEntry = virtualTable.get(field.id);
+                final boolean isOverridingAMethod = overriddenFieldEntry.type instanceof MethodTypeNode;
+                if (isOverridingAMethod) {
+                    System.out.println("Cannot override method " + field.id + " with a field");
+                    stErrors++;
+                } else {
+                    fieldEntry = new STentry(nestingLevel, field.getType(), overriddenFieldEntry.offset);
+                    classTypeNode.fields.set(-fieldEntry.offset - 1, fieldEntry.type);
+                }
+            } else {
+                classTypeNode.fields.add(-fieldEntry.offset - 1, fieldEntry.type);
+            }
+
+            // Add the field to the virtual table
+            virtualTable.put(field.id, fieldEntry);
+            field.offset = fieldEntry.offset;
+        }
+
+        // Setting the method offset
+        int prevDecOffset = decOffset;
+        decOffset = 0;
+        if (isSubClass) {
+            final ClassTypeNode superTypeNode = (ClassTypeNode) symbolTable.getFirst().get(superId).type;
+            decOffset = superTypeNode.methods.size();
+        }
+
+        for (final MethodNode method : node.methods) {
+            if (visitedClassNames.contains(method.id)) {
+                System.out.println("Method with id " + method.id + " on line " + method.getLine() + " was already declared");
+                stErrors++;
+            } else {
+                visitedClassNames.add(method.id);
+            }
+            visit(method);
+            final MethodTypeNode methodTypeNode = (MethodTypeNode) symbolTable.get(nestingLevel).get(method.id).type;
+            classTypeNode.methods.add(method.offset, methodTypeNode.functionalType);
+        }
+
+        // Remove the class from the symbol table
+        symbolTable.remove(nestingLevel--);
+        decOffset = prevDecOffset;
+        return null;
+    }
+
+    @Override
+    public Void visitNode(final FieldNode node) {
+        if (print) printNode(node);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(final EmptyNode node) {
+        if (print) printNode(node);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(final MethodNode node) {
+        if (print) printNode(node);
+        final Map<String, STentry> currentTable = symbolTable.get(nestingLevel);
+        final List<TypeNode> params = node.parameters.stream().map(ParNode::getType).toList();
+        final boolean isOverriding = currentTable.containsKey(node.id);
+        final TypeNode methodType = new MethodTypeNode(params, node.returnType);
+        STentry entry = new STentry(nestingLevel, methodType, decOffset++);
+
+        if (isOverriding) {
+            final var overriddenMethodEntry = currentTable.get(node.id);
+            final boolean isOverridingAMethod = !Objects.isNull(overriddenMethodEntry) && overriddenMethodEntry.type instanceof MethodTypeNode;
+            if (isOverridingAMethod) {
+                entry = new STentry(nestingLevel, methodType, overriddenMethodEntry.offset);
+                decOffset--;
+            } else {
+                System.out.println("Cannot override a class attribute with a method: " + node.id);
+                stErrors++;
+            }
+        }
+
+        node.offset = entry.offset;
+        currentTable.put(node.id, entry);
+
+        // Create a new table for the method.
+        nestingLevel++;
+        final Map<String, STentry> methodTable = new HashMap<>();
+        symbolTable.add(methodTable);
+
+        // Set the declaration offset
+        int prevDecOffset = decOffset;
+        decOffset = -2;
+        int parameterOffset = 1;
+
+        for (final ParNode parameter : node.parameters) {
+            final STentry parameterEntry = new STentry(nestingLevel, parameter.getType(), parameterOffset++);
+            if (Objects.isNull(methodTable.put(parameter.id, parameterEntry))) {
+                System.out.println("Par id " + parameter.id + " at line " + node.getLine() + " already declared");
+                stErrors++;
+            }
+        }
+        node.declarations.forEach(this::visit);
+        visit(node.exp);
+
+        // Remove the current nesting level symbolTable.
+        symbolTable.remove(nestingLevel--);
+        decOffset = prevDecOffset;
+        return null;
+    }
+
+    // OPERATION NODES
+    @Override
+    public Void visitNode(final ClassCallNode node) {
+        if (print) printNode(node);
+        final STentry entry = stLookup(node.objectId);
+
+        if (Objects.isNull(entry)) {
+            System.out.println("Object id " + node.objectId + " was not declared");
+            stErrors++;
+        }
+
+        if (entry.type instanceof final RefTypeNode refTypeNode) {
+            node.entry = entry;
+            node.nestingLevel = nestingLevel;
+            final VirtualTable virtualTable = classTable.get(refTypeNode.typeId);
+            if (virtualTable.containsKey(node.methodId)) {
+                node.methodEntry = virtualTable.get(node.methodId);
+            } else {
+                System.out.println("Object id " + node.objectId + " at line " + node.getLine() + " has no method " + node.methodId);
+                stErrors++;
+            }
+        } else {
+            System.out.println("Object id " + node.objectId + " at line " + node.getLine() + " is not a RefType");
+            stErrors++;
+        }
+
+        node.args.forEach(this::visit);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(final NewNode node) {
+        if (print) printNode(node);
+        if (!classTable.containsKey(node.classId)) {
+            System.out.println("Class id " + node.classId + " was not declared");
+            stErrors++;
+        }
+
+        node.entry = symbolTable.getFirst().get(node.classId);
+        node.args.forEach(this::visit);
+        return null;
+    }
+
+    // OOP Type Nodes
+    @Override
+    public Void visitNode(final ClassTypeNode node) {
+        if (print) printNode(node);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(final MethodTypeNode node) {
+        if (print) printNode(node);
+        return null;
+    }
+
+    @Override
+    public Void visitNode(final RefTypeNode node) {
+        if (print) printNode(node);
+        if (!this.classTable.containsKey(node.typeId)) {
+            System.out.println("Class with id: " + node.typeId + " on line: " + node.getLine() + " was not declared");
+            stErrors++;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitNode(EmptyTypeNode node) {
+        if (print) printNode(node);
+        return null;
+    }
 
 }
