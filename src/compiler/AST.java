@@ -372,6 +372,7 @@ public class AST {
 
     public static class MethodNode extends FunNode {
         int offset;
+        public String label;
 
         MethodNode(String i, TypeNode rt, List<ParNode> pl, List<DecNode> dl, Node e) {
             super(i, rt, pl, dl, e);
