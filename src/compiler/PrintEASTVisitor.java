@@ -38,7 +38,7 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void,VoidException> {
 		for (Node field : n.attributes) {//visita campi
 			visit(field);
 		}
-		for (Node method : n.attributes) {//visita metodi
+		for (Node method : n.functions) {//visita metodi
 			visit(method);
 		}
 		return null;

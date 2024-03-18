@@ -157,7 +157,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void,VoidException> {
 
 		int lastOffset = decOffset;
 		for (int i =0;i<node.functions.size();i++){
-			ClassFunctionNode function =  node.functions.get(i);
+			ClassFunctionNode function = node.functions.get(i);
 			if(!(attributesId.add(function.id))){
 				System.out.println("Method id "+function.id + " at line " + node.getLine() +" already declared" );
 				stErrors++;
