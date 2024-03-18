@@ -114,8 +114,8 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
     public Void visitNode(IfNode node) {
         if (print) printNode(node);
         visit(node.cond);
-        visit(node.th);
-        visit(node.el);
+        visit(node.thenBranch);
+        visit(node.elseBranch);
         return null;
     }
 
@@ -152,7 +152,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
             stErrors++;
         } else {
             node.entry = entry;
-            node.nl = nestingLevel;
+            node.nestingLevel = nestingLevel;
         }
         node.arguments.forEach(this::visit);
         return null;

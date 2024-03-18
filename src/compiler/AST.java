@@ -108,13 +108,13 @@ public class AST {
 
     public static class IfNode extends Node {
         final Node cond;
-        final Node th;
-        final Node el;
+        final Node thenBranch;
+        final Node elseBranch;
 
         IfNode(Node c, Node t, Node e) {
             this.cond = c;
-            this.th = t;
-            this.el = e;
+            this.thenBranch = t;
+            this.elseBranch = e;
         }
 
         @Override
@@ -172,7 +172,7 @@ public class AST {
         final String id;
         final List<Node> arguments;
         STentry entry;
-        int nl;
+        int nestingLevel;
 
         CallNode(String i, List<Node> p) {
             this.id = i;

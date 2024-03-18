@@ -85,8 +85,8 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode, TypeExceptio
             throw new TypeException("Non boolean condition in if", node.getLine());
         }
 
-        TypeNode thenBranch = this.visit(node.th);
-        TypeNode elseBranch = this.visit(node.el);
+        TypeNode thenBranch = this.visit(node.thenBranch);
+        TypeNode elseBranch = this.visit(node.elseBranch);
         if (isSubtype(thenBranch, elseBranch)) return elseBranch;
         if (isSubtype(elseBranch, thenBranch)) return thenBranch;
 
