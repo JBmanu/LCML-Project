@@ -331,7 +331,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
         }
 
         for (final MethodNode method : node.methods) {
-            if (visitedClassNames.contains(method.id)) {
+            if (!visitedClassNames.contains(method.id)) {
                 System.out.println("Method with id " + method.id + " on line " + method.getLine() + " was already declared");
                 stErrors++;
             } else {
@@ -339,7 +339,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
             }
             visit(method);
             final MethodTypeNode methodTypeNode = (MethodTypeNode) symbolTable.get(nestingLevel).get(method.id).type;
-            classTypeNode.methods.add(method.offset, methodTypeNode.functionalType);
+            classTypeNode.methods.add(method.offset, methodTypeNode);
         }
 
         // Remove the class from the symbol table

@@ -400,7 +400,7 @@ public class TypeCheckEASTVisitor extends BaseEASTVisitor<TypeNode, TypeExceptio
         if (this.print) this.printNode(node);
         // Visit all fields and methods
         for (final TypeNode field : node.fields) this.visit(field);
-        for (final ArrowTypeNode method : node.methods) this.visit(method);
+        for (final MethodTypeNode method : node.methods) this.visit(method);
         return null;
     }
 

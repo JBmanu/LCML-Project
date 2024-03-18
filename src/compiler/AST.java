@@ -465,9 +465,9 @@ public class AST {
     // type nodes for OO
     public static class ClassTypeNode extends TypeNode {
         final List<TypeNode> fields;
-        final List<ArrowTypeNode> methods;
+        final List<MethodTypeNode> methods;
 
-        ClassTypeNode(final List<TypeNode> f, final List<ArrowTypeNode> m) {
+        ClassTypeNode(final List<TypeNode> f, final List<MethodTypeNode> m) {
             this.fields = Collections.unmodifiableList(f);
             this.methods = Collections.unmodifiableList(m);
         }

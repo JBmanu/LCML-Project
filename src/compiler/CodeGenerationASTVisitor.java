@@ -320,14 +320,13 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
         }
 
         for (final MethodNode methodEntry : node.methods) {
-            visit(methodEntry);
-
             final boolean isOverriding = methodEntry.offset < dispatchTable.size();
             if (isOverriding) {
                 dispatchTable.set(methodEntry.offset, methodEntry.label);
             } else {
                 dispatchTable.add(methodEntry.label);
             }
+            visit(methodEntry);
         }
 
         String dispatchTableHeapCode = "";

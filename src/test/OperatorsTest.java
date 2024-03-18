@@ -14,6 +14,8 @@ public class OperatorsTest {
     private static final String ROOT_AND_TEST_FILES = "res/test/operators/and/";
     private static final String ROOT_OR_TEST_FILES = "res/test/operators/or/";
 
+    private static final String ROOT_OO = "res/test/oo/";
+
     @Test
     public void test5Minus3() {
         String fileName = ROOT_MINUS_TEST_FILES + "5minus3.fool";
@@ -229,6 +231,15 @@ public class OperatorsTest {
 
         ToolsForTest tools = new ToolsForTest();
         tools.createFOOLFile(fileName, "let var x:bool = !false; in print(x);");
+        tools.buildASTAndSVMAndCheckErrors(fileName, false);
+        tools.runningSVM();
+    }
+
+    //
+    @Test
+    public void testQuickSort() {
+        String fileName = ROOT_OO + "bankloan.fool";
+        ToolsForTest tools = new ToolsForTest();
         tools.buildASTAndSVMAndCheckErrors(fileName, false);
         tools.runningSVM();
     }
