@@ -357,11 +357,11 @@ public class AST {
     }
 
     public static class FieldNode extends DecNode {
-        final String id;
+        final String fieldId;
         int offset;
 
         FieldNode(String i, TypeNode t) {
-            this.id = i;
+            this.fieldId = i;
             this.type = t;
         }
 
