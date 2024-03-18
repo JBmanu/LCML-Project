@@ -1,7 +1,7 @@
 push 0
 lhp
 
-push null
+push function0
 lhp
 sw
 lhp
@@ -10,30 +10,14 @@ add
 shp
 lhp
 
-push null
+push function0
 lhp
 sw
 lhp
 push 1
 add
 shp
-push null
-lhp
-sw
-lhp
-push 1
-add
-shp
-lhp
-
-push null
-lhp
-sw
-lhp
-push 1
-add
-shp
-push null
+push function1
 lhp
 sw
 lhp
@@ -42,22 +26,41 @@ add
 shp
 lhp
 
-push null
+push function2
 lhp
 sw
 lhp
 push 1
 add
 shp
-push null
+push function3
 lhp
 sw
 lhp
 push 1
 add
 shp
+lhp
+
+push function2
+lhp
+sw
+lhp
+push 1
+add
+shp
+push function4
+lhp
+sw
+lhp
+push 1
+add
+shp
+
+
 push 50000
 push 40000
+
 lhp
 sw
 lhp
@@ -79,6 +82,7 @@ lhp
 push 1
 add
 shp
+
 lhp
 sw
 lhp
@@ -94,8 +98,10 @@ lhp
 push 1
 add
 shp
+
 push 20000
 push 5000
+
 lhp
 sw
 lhp
@@ -257,6 +263,7 @@ beq label0
 push -1
 b label1
 label0:
+
 lfp
 lfp
 lw
@@ -271,6 +278,7 @@ push 0
 add
 lw
 js
+
 lhp
 sw
 lhp
@@ -324,6 +332,7 @@ beq label4
 push -1
 b label5
 label4:
+
 lfp
 lfp
 lw
@@ -352,6 +361,7 @@ push 1
 add
 lw
 js
+
 lhp
 sw
 lhp

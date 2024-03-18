@@ -108,13 +108,13 @@ public class PrintEASTVisitor extends BaseEASTVisitor<Void, VoidException> {
 
     @Override
     public Void visitNode(BoolNode n) {
-        printNode(n, n.val.toString());
+        printNode(n, n.value.toString());
         return null;
     }
 
     @Override
     public Void visitNode(IntNode n) {
-        printNode(n, n.val.toString());
+        printNode(n, n.value.toString());
         return null;
     }
 

@@ -201,10 +201,10 @@ public class AST {
     }
 
     public static class BoolNode extends Node {
-        final Boolean val;
+        final Boolean value;
 
         BoolNode(boolean n) {
-            this.val = n;
+            this.value = n;
         }
 
         @Override
@@ -214,10 +214,10 @@ public class AST {
     }
 
     public static class IntNode extends Node {
-        final Integer val;
+        final Integer value;
 
         IntNode(Integer n) {
-            this.val = n;
+            this.value = n;
         }
 
         @Override
