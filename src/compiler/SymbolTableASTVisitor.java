@@ -11,8 +11,8 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
     static class VirtualTable extends HashMap<String, STentry> {
     }
 
-    private List<Map<String, STentry>> symbolTable = new ArrayList<>();
     private final Map<String, VirtualTable> classTable = new HashMap<>();
+    private final List<Map<String, STentry>> symbolTable = new ArrayList<>();
 
     private int nestingLevel = 0; // current nesting level
     private int decOffset = -2; // counter for offset of local declarations at current nesting level
@@ -22,7 +22,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
     }
 
     SymbolTableASTVisitor(boolean debug) {
-        super(debug);
+        super(true, debug);
     } // enables print for debugging
 
     private STentry stLookup(String id) {
@@ -36,9 +36,8 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
     @Override
     public Void visitNode(ProgLetInNode node) {
         if (print) printNode(node);
-        Map<String, STentry> hm = new HashMap<>();
-        symbolTable.add(hm);
-        node.declist.forEach(this::visit);
+        symbolTable.add(new HashMap<>());
+        node.declarations.forEach(this::visit);
         visit(node.exp);
         symbolTable.remove(0);
         return null;
@@ -61,20 +60,21 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
         final STentry entry = new STentry(nestingLevel, arrowTypeNode, decOffset--);
 
         //inserimento di ID nella symtable
-        if (!Objects.isNull(currentSymbolTable.put(node.id, entry))) {
+        if (currentSymbolTable.put(node.id, entry) != null) {
             System.out.println("Fun id " + node.id + " at line " + node.getLine() + " already declared");
             stErrors++;
         }
         //creare una nuova hashmap per la symTable
         nestingLevel++;
-        final Map<String, STentry> newSymbolTable = new HashMap<>();
-        symbolTable.add(newSymbolTable);
         int prevNLDecOffset = decOffset; // stores counter for offset of declarations at previous nesting level
         decOffset = -2;
+        final Map<String, STentry> newSymbolTable = new HashMap<>();
+        symbolTable.add(newSymbolTable);
 
         int parOffset = 1;
         for (ParNode par : node.parameters) {
-            if (newSymbolTable.put(par.id, new STentry(nestingLevel, par.getType(), parOffset++)) != null) {
+            final STentry parEntry = new STentry(nestingLevel, par.getType(), parOffset++);
+            if (newSymbolTable.put(par.id, parEntry) != null) {
                 System.out.println("Par id " + par.id + " at line " + node.getLine() + " already declared");
                 stErrors++;
             }
@@ -83,8 +83,9 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
         visit(node.exp);
 
         //rimuovere la hashmap corrente poiche' esco dallo scope
-        symbolTable.remove(nestingLevel--);
+        symbolTable.remove(nestingLevel);
         decOffset = prevNLDecOffset; // restores counter for offset of declarations at previous nesting level
+        nestingLevel--;
         return null;
     }
 
@@ -95,7 +96,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
         final Map<String, STentry> currentSymbolTable = symbolTable.get(nestingLevel);
         final STentry entry = new STentry(nestingLevel, node.getType(), decOffset--);
         //inserimento di ID nella symtable
-        if (!Objects.isNull(currentSymbolTable.put(node.id, entry))) {
+        if (currentSymbolTable.put(node.id, entry) != null) {
             System.out.println("Var id " + node.id + " at line " + node.getLine() + " already declared");
             stErrors++;
         }

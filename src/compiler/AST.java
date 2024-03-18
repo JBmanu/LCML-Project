@@ -13,11 +13,11 @@ import java.util.Optional;
 public class AST {
 
     public static class ProgLetInNode extends Node {
-        final List<DecNode> declist;
+        final List<DecNode> declarations;
         final Node exp;
 
         ProgLetInNode(List<DecNode> d, Node e) {
-            this.declist = Collections.unmodifiableList(d);
+            this.declarations = Collections.unmodifiableList(d);
             this.exp = e;
         }
 
@@ -356,11 +356,13 @@ public class AST {
         }
     }
 
-    public static class FieldNode extends ParNode {
+    public static class FieldNode extends DecNode {
+        final String fieldId;
         int offset;
 
         FieldNode(String i, TypeNode t) {
-            super(i, t);
+            this.fieldId = i;
+            this.type = t;
         }
 
         @Override
