@@ -252,7 +252,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
         if (isSubClass) {
             // Check if the super class is declared
             if (classTable.containsKey(superId)) {
-                final STentry superSTEntry = symbolTable.getFirst().get(superId);
+                final STentry superSTEntry = symbolTable.get(0).get(superId);
                 final ClassTypeNode superTypeNode = (ClassTypeNode) superSTEntry.type;
                 tempClassTypeNode = new ClassTypeNode(superTypeNode);
                 node.superEntry = superSTEntry;
@@ -263,12 +263,12 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
         }
 
         final ClassTypeNode classTypeNode = tempClassTypeNode;
-        node.setTypeNode(classTypeNode);
+        node.setType(classTypeNode);
 
         // Add the class id to the global scope table checking for duplicates
         final STentry entry = new STentry(0, classTypeNode, decOffset--);
-        final Map<String, STentry> globalScopeTable = symbolTable.getFirst();
-        if (!Objects.isNull(globalScopeTable.put(node.classId, entry))) {
+        final Map<String, STentry> globalScopeTable = symbolTable.get(0);
+        if (globalScopeTable.put(node.classId, entry) != null) {
             System.out.println("Class id " + node.classId + " at line " + node.getLine() + " already declared");
             stErrors++;
         }
@@ -281,20 +281,24 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
             virtualTable.putAll(superClassVirtualTable);
         }
         classTable.put(node.classId, virtualTable);
-        symbolTable.add(virtualTable);
 
+        symbolTable.add(virtualTable);
         // Setting the field offset
         nestingLevel++;
         int fieldOffset = -1;
         if (isSubClass) {
-            final ClassTypeNode superTypeNode = (ClassTypeNode) symbolTable.getFirst().get(superId).type;
+            final ClassTypeNode superTypeNode = (ClassTypeNode) symbolTable.get(0).get(superId).type;
             fieldOffset = -superTypeNode.fields.size() - 1;
         }
 
-        // Handle field declaration.
+        /*
+         * Handle field declaration.
+         */
         for (final FieldNode field : node.fields) {
             if (visitedClassNames.contains(field.id)) {
-                System.out.println("Field with id " + field.id + " on line " + field.getLine() + " was already declared");
+                System.out.println(
+                        "Field with id " + field.id + " on line " + field.getLine() + " was already declared"
+                );
                 stErrors++;
             } else {
                 visitedClassNames.add(field.id);
@@ -326,13 +330,15 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
         int prevDecOffset = decOffset;
         decOffset = 0;
         if (isSubClass) {
-            final ClassTypeNode superTypeNode = (ClassTypeNode) symbolTable.getFirst().get(superId).type;
+            final ClassTypeNode superTypeNode = (ClassTypeNode) symbolTable.get(0).get(superId).type;
             decOffset = superTypeNode.methods.size();
         }
 
         for (final MethodNode method : node.methods) {
-            if (!visitedClassNames.contains(method.id)) {
-                System.out.println("Method with id " + method.id + " on line " + method.getLine() + " was already declared");
+            if (visitedClassNames.contains(method.id)) {
+                System.out.println(
+                        "Method with id " + method.id + " on line " + method.getLine() + " was already declared"
+                );
                 stErrors++;
             } else {
                 visitedClassNames.add(method.id);

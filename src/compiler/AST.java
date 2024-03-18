@@ -346,7 +346,7 @@ public class AST {
             this.methods = Collections.unmodifiableList(methods);
         }
 
-        public void setTypeNode(ClassTypeNode type) {
+        public void setType(ClassTypeNode type) {
             this.type = type;
         }
 
@@ -361,7 +361,6 @@ public class AST {
 
         FieldNode(String i, TypeNode t) {
             super(i, t);
-            this.offset = -1;
         }
 
         @Override
@@ -370,13 +369,22 @@ public class AST {
         }
     }
 
-    public static class MethodNode extends FunNode {
-        int offset;
-        public String label;
+    public static class MethodNode extends DecNode {
+        final String id;
+        final TypeNode returnType;
+        final List<ParNode> parameters;
+        final List<DecNode> declarations;
+        final Node exp;
+        int offset = 0;
 
-        MethodNode(String i, TypeNode rt, List<ParNode> pl, List<DecNode> dl, Node e) {
-            super(i, rt, pl, dl, e);
-            this.offset = -1;
+        String label;
+
+        MethodNode(String id, TypeNode rt, List<ParNode> pl, List<DecNode> dl, Node e) {
+            this.id = id;
+            this.returnType = rt;
+            this.parameters = pl;
+            this.declarations = dl;
+            this.exp = e;
         }
 
         @Override
