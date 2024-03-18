@@ -147,8 +147,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
     public Void visitNode(CallNode node) {
         if (print) printNode(node);
         final STentry entry = stLookup(node.id);
-
-        if (Objects.isNull(entry)) {
+        if (entry == null) {
             System.out.println("Fun id " + node.id + " at line " + node.getLine() + " not declared");
             stErrors++;
         } else {
@@ -163,12 +162,12 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
     public Void visitNode(IdNode node) {
         if (print) printNode(node);
         STentry entry = stLookup(node.id);
-        if (Objects.isNull(entry)) {
+        if (entry == null) {
             System.out.println("Var or Par id " + node.id + " at line " + node.getLine() + " not declared");
             stErrors++;
         } else {
             node.entry = entry;
-            node.nl = nestingLevel;
+            node.nestingLevel = nestingLevel;
         }
         return null;
     }
@@ -378,7 +377,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
 
         if (isOverriding) {
             final var overriddenMethodEntry = currentTable.get(node.id);
-            final boolean isOverridingAMethod = !Objects.isNull(overriddenMethodEntry) && overriddenMethodEntry.type instanceof MethodTypeNode;
+            final boolean isOverridingAMethod = overriddenMethodEntry != null && overriddenMethodEntry.type instanceof MethodTypeNode;
             if (isOverridingAMethod) {
                 entry = new STentry(nestingLevel, methodType, overriddenMethodEntry.offset);
                 decOffset--;
@@ -403,7 +402,7 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
 
         for (final ParNode parameter : node.parameters) {
             final STentry parameterEntry = new STentry(nestingLevel, parameter.getType(), parameterOffset++);
-            if (Objects.isNull(methodTable.put(parameter.id, parameterEntry))) {
+            if (methodTable.put(parameter.id, parameterEntry) != null) {
                 System.out.println("Par id " + parameter.id + " at line " + node.getLine() + " already declared");
                 stErrors++;
             }
@@ -423,12 +422,10 @@ public class SymbolTableASTVisitor extends BaseASTVisitor<Void, VoidException> {
         if (print) printNode(node);
         final STentry entry = stLookup(node.objectId);
 
-        if (Objects.isNull(entry)) {
+        if (entry == null) {
             System.out.println("Object id " + node.objectId + " was not declared");
             stErrors++;
-        }
-
-        if (entry.type instanceof final RefTypeNode refTypeNode) {
+        } else if (entry.type instanceof final RefTypeNode refTypeNode) {
             node.entry = entry;
             node.nestingLevel = nestingLevel;
             final VirtualTable virtualTable = classTable.get(refTypeNode.typeId);

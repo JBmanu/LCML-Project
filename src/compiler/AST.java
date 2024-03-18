@@ -188,7 +188,7 @@ public class AST {
     public static class IdNode extends Node {
         final String id;
         STentry entry;
-        int nl;
+        int nestingLevel;
 
         IdNode(String i) {
             this.id = i;
@@ -478,8 +478,8 @@ public class AST {
         final List<MethodTypeNode> methods;
 
         ClassTypeNode(final List<TypeNode> f, final List<MethodTypeNode> m) {
-            this.fields = Collections.unmodifiableList(f);
-            this.methods = Collections.unmodifiableList(m);
+            this.fields = new ArrayList<>(f);
+            this.methods = new ArrayList<>(m);
         }
 
         ClassTypeNode(final ClassTypeNode parent) {
@@ -499,8 +499,8 @@ public class AST {
     public static class MethodTypeNode extends TypeNode {
         final ArrowTypeNode functionalType;
 
-        MethodTypeNode(List<TypeNode> p, TypeNode r) {
-            this.functionalType = new ArrowTypeNode(p, r);
+        MethodTypeNode(List<TypeNode> typeParams, TypeNode typeReturn) {
+            this.functionalType = new ArrowTypeNode(typeParams, typeReturn);
         }
 
         @Override

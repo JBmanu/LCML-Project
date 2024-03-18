@@ -18,8 +18,8 @@ import static compiler.lib.FOOLlib.lowerizeFirstChar;
 
 public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 
-    String indent;
     public boolean print;
+    String indent;
 
     public ASTGenerationSTVisitor() {
     }
@@ -30,9 +30,12 @@ public class ASTGenerationSTVisitor extends FOOLBaseVisitor<Node> {
 
     private void printVarAndProdName(ParserRuleContext ctx) {
         String prefix = "";
-        Class<?> ctxClass = ctx.getClass(), parentClass = ctxClass.getSuperclass();
-        if (!parentClass.equals(ParserRuleContext.class)) // parentClass is the var context (and not ctxClass itself)
+        final Class<?> ctxClass = ctx.getClass();
+        final Class<?> parentClass = ctxClass.getSuperclass();
+        if (!parentClass.equals(ParserRuleContext.class)) {
+            // parentClass is the var context (and not ctxClass itself)
             prefix = lowerizeFirstChar(extractCtxName(parentClass.getName())) + ": production #";
+        }
         System.out.println(indent + prefix + lowerizeFirstChar(extractCtxName(ctxClass.getName())));
     }
 
