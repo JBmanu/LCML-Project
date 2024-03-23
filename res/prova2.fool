@@ -1,5 +1,29 @@
-let 
-  var x:int = (3-1)/2;
-  var b:bool = true;
-in
-  print(if(!0) then {1} else {0} );
+let
+
+  class Account (money:int) {
+    fun getMon:int () money;
+  }
+
+  class TradingAcc extends Account (invested:int) {
+    fun getInv:int () invested;
+  }
+
+  class BankLoan (loan: Account) {
+    fun getLoan2:Account () loan;
+    fun getLoan:Account () getLoan2();
+    fun openLoan:Account (m:TradingAcc) if ((m.getMon()+m.getInv())>=30000)
+      then {new Account(loan.getMon())}
+      else {null};
+  }
+
+  class MyBankLoan extends BankLoan (loan: TradingAcc) {
+    fun openLoan:TradingAcc (l:Account) if (l.getMon()>=20000)
+      then {new TradingAcc(loan.getMon(),loan.getInv())}
+      else {null};
+  }
+
+  var bl:BankLoan = new MyBankLoan(new TradingAcc(50000,40000));
+  var myTradingAcc:TradingAcc = new TradingAcc(20000,5000);
+  var myLoan:Account = bl.openLoan(myTradingAcc);
+
+in print(if (myLoan==null) then {0} else {myLoan.getMon()});

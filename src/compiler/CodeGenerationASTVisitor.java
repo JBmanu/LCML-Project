@@ -4,12 +4,19 @@ import compiler.AST.*;
 import compiler.lib.*;
 import compiler.exc.*;
 import compiler.lib.Node;
+import svm.ExecuteVM;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static compiler.lib.FOOLlib.*;
 
 public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidException> {
 
-  CodeGenerationASTVisitor() {}
+	private List<List<String>> dispatchTables = new ArrayList<>();
+
+	CodeGenerationASTVisitor() {}
   CodeGenerationASTVisitor(boolean debug) {super(false,debug);} //enables print for debugging
 
 	@Override
@@ -225,7 +232,7 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 	}
 
 	@Override
-	public String visitNode(SplitNode n) {
+	public String visitNode(DivNode n) {
 		if (print) printNode(n);
 		return nlJoin(
 				visit(n.left),
@@ -274,6 +281,131 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 		);
 	}
 
+	public String visitNode(final MethodNode n) {
+		if (print) printNode(n);
+
+		String declarationsCode = "";
+		for (final DecNode declaration : n.declist) {
+			declarationsCode = nlJoin(
+					declarationsCode,
+					visit(declaration)
+			);
+		}
+
+		String popDeclarationsCode = "";
+		for (final DecNode declaration : n.declist) {
+			popDeclarationsCode = nlJoin(
+					popDeclarationsCode,
+					"pop"
+			);
+		}
+
+		String popParametersCode = "";
+		for (final ParNode parameter : n.parlist) {
+			popParametersCode = nlJoin(
+					popParametersCode,
+					"pop"
+			);
+		}
+
+		final String methodLabel = freshFunLabel();
+
+		n.label = methodLabel; // set the label of the method
+
+		// Generate code for the method body
+		putCode(
+				nlJoin(
+						methodLabel + ":",   // method label
+
+						// Set up the stack frame with FP, RA, and declarations
+						"cfp",                    // copy $sp to $fp, the new frame pointer
+						"lra",                    // push return address
+						declarationsCode,           // generate code for declarations
+
+						// Generate code for the body and store the result in $tm
+						visit(n.exp),            // generate code for the expression
+						"stm",                   // set $tm to popped value (function result)
+
+						// Frame cleanup
+						popDeclarationsCode,        // pop declarations
+						"sra",                   // pop return address to $ra (for return)
+						"pop",                        // pop $fp
+						popParametersCode,          // pop parameters
+						"sfp",                   // pop $fp (restore old frame pointer)
+
+						// Return
+						"ltm",                    // push function result
+						"lra",                    // push return address
+						"js"                  // jump to return address
+				)
+		);
+
+		return null;
+	}
+
+
+	@Override
+	public String visitNode(final NewNode n) {
+		if (print) printNode(n);
+
+		String argumentsCode = "";
+		for (final Node argument : n.arglist) {
+			argumentsCode = nlJoin(
+					argumentsCode,
+					visit(argument)
+			);
+		}
+
+		String moveArgumentsOnHeapCode = "";
+		for (final Node argument : n.arglist) {
+			moveArgumentsOnHeapCode = nlJoin(
+					moveArgumentsOnHeapCode,
+
+					// Store argument on the heap
+					"lhp",    // push $hp on the stack
+					"sw",           // store argument on the heap
+
+					// Update $hp = $hp + 1
+					"lhp",    // push $hp on the stack
+					"push " + 1,             // push 1 on the stack
+					"add",                  // add 1 to $hp
+					"shp"           // store $hp
+			);
+		}
+
+		return nlJoin(
+
+				// Set up arguments on the stack and move them on the heap
+				argumentsCode,      // generate arguments
+				moveArgumentsOnHeapCode,  // move arguments on the heap
+
+				// Load the address of the dispatch table in the heap
+				"push "+ (ExecuteVM.MEMSIZE + n.entry.offset), // push class address on the stack
+				"lw",          // load dispatch table address
+				"lhp",  // push $hp on the stack
+				"sw",         // store dispatch table address on the heap
+
+				// Put the result on the stack (object address)
+				"lhp",  // push $hp on the stack (object address)
+
+				// Update $hp = $hp + 1
+				"lhp",  // push $hp on the stack
+				"push " + 1,           // push 1 on the stack
+				"add ",                // add 1 to $hp
+				"shp "            // store $hp
+		);
+
+	}
+
+
+	@Override
+	public String visitNode(EmptyTypeNode n) {
+		if (print) printNode(n, "Null");
+		return nlJoin(
+				"push -1"
+		);
+	}
+
 	@Override
 	public String visitNode(IdNode n) {
 		if (print) printNode(n,n.id);
@@ -282,7 +414,8 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 		return nlJoin(
 			"lfp", getAR, // retrieve address of frame containing "id" declaration
 			              // by following the static chain (of Access Links)
-			"push "+n.entry.offset, "add", // compute address of "id" declaration
+			"push "+n.entry.offset,
+			"add", // compute address of "id" declaration
 			"lw" // load value of "id" variable
 		);
 	}
@@ -298,4 +431,113 @@ public class CodeGenerationASTVisitor extends BaseASTVisitor<String, VoidExcepti
 		if (print) printNode(n,n.val.toString());
 		return "push "+n.val;
 	}
+
+	@Override
+	public String visitNode(final ClassNode n) {
+		if (print) printNode(n);
+
+		final List<String> dispatchTable = new ArrayList<>();
+		dispatchTables.add(dispatchTable);
+
+		final boolean isSubclass = n.superEntry != null;
+
+		if (isSubclass) {
+			final List<String> superDispatchTable = dispatchTables.get(-n.superEntry.offset - 2);
+			dispatchTable.addAll(superDispatchTable);
+		}
+
+		for (final MethodNode methodEntry : n.methodList) {
+			visit(methodEntry);
+
+			final boolean isOverriding = methodEntry.offset < dispatchTable.size();
+			if (isOverriding) {
+				dispatchTable.set(methodEntry.offset, methodEntry.label);
+			} else {
+				dispatchTable.add(methodEntry.label);
+			}
+		}
+
+		String dispatchTableHeapCode = "";
+		for (final String label : dispatchTable) {
+			dispatchTableHeapCode = nlJoin(
+					dispatchTableHeapCode,
+
+					// Store method label in heap
+					"push " + label,       // push method label
+					"lhp",  // push heap pointer
+					"sw",         // store method label in heap
+
+					// Increment heap pointer
+					"lhp",  // push heap pointer
+					"push " + 1,           // push 1
+					"add",                // heap pointer + 1
+					"shp"           // store heap pointer
+
+			);
+		}
+
+		return nlJoin(
+				"lhp",      // push heap pointer, the address of the dispatch table
+				dispatchTableHeapCode   // generated code for creating the dispatch table in the heap
+		);
+
+	}
+
+	@Override
+	public String visitNode(final EmptyNode n) {
+		if (print) printNode(n);
+		return "push " + "-1";
+	}
+
+	@Override
+	public String visitNode(final ClassCallNode n) {
+		if (print) printNode(n);
+
+		String argumentsCode = "";
+		for (int i = n.argList.size() - 1; i >= 0; i--) {
+			argumentsCode = nlJoin(
+					argumentsCode,
+					visit(n.argList.get(i))
+			);
+		}
+
+		String getARCode = "";
+		for (int i = 0; i < n.nestingLevel - n.entry.nl; i++) {
+			getARCode = nlJoin(
+					getARCode,
+					"lw"
+			);
+		}
+
+		return nlJoin(
+
+				// Set up the stack frame
+				"lfp",     // push $fp on the stack
+				argumentsCode,      // generate arguments
+
+				// Get the address of the object
+				"lfp", getARCode,         // get AR
+				"push "+ n.entry.offset,   // push class offset on the stack
+				"add",                        // add class offset to $ar
+				"lw",                  // load object address
+
+
+				// Duplicate class address
+				"stm",     // set $tm to popped value (class address)
+				"ltm",      // push class address on the stack
+				"ltm",      // duplicate class address
+
+				// Get the address of the method
+				"lw",    // load dispatch table address
+				"push " + n.methodEntry.offset, // push method offset on the stack
+				"add",          // add method offset to dispatch table address
+				"lw",    // load method address
+
+				// Call the method
+				"js"
+		);
+
+	}
+
+
 }
